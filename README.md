@@ -82,6 +82,72 @@ Task: Add an e-gift card to bag of $100 for recipient John ... (site: underarmou
   step8: [button] Add to Bag        -> CLICK
 ```
 
+## Prompts
+
+L1 抽取 `judge_step` —— system:
+
+```
+You label ONE web-navigation step into a reusable DECISION RULE. The CORRECT control is ALREADY GIVEN (parsed from gold). Do NOT decide correctness; only describe how to recognize it and the trap.
+Given: sub-goal, page candidates, agent REASONING and chosen ACTION, verdict, and CORRECT_CONTROL={role,label}.
+Return JSON {"genuine":bool,"reason":str,"intent":str,"cue":str,"trap":str}.
+- genuine: WRONG -> false. CORRECT -> true only if the reasoning names the real discriminative cue for CORRECT_CONTROL (else false = lucky guess).
+- reason: one short clause on why the step failed or was lucky.
+- intent: the GENERIC user sub-goal this control serves, 3-6 word verb phrase. If the sub-goal names a specific place/product/show/date/number, GENERALIZE it: say 'find events in a city' NOT 'in New York City'; 'search for a vehicle' NOT 'for Honda'. BAD (never output): a control name; the words button/filter/link/element; 'page-state'/'sub-goal'.
+- cue: how to recognize CORRECT_CONTROL by its visible text/role/position, <=15 words; same generalization rule.
+- trap: ONLY the visible label of the WRONG control the agent picked, <=5 words, and it MUST differ from CORRECT_CONTROL.label; if the pick equals the correct control or no distinct wrong control is identifiable, set trap to "".
+- HARD: CORRECT_CONTROL.label is ground truth; NEVER name a different control as correct. intent and cue MUST be non-empty. NEVER copy any product name, place, date, number, color, or size into intent or cue.
+```
+
+L1 —— user:
+
+```
+SUB-GOAL: {task}
+PAGE candidates: {obs[:600]}
+AGENT reasoning: {thought}
+AGENT chose: {action}
+CORRECT_CONTROL: role={role} label={label}
+Verdict: {CORRECT|WRONG}
+```
+
+抽出的 JSON 经确定性后处理拼成 statement：`When {intent}: use '{label}' ({role})[, not '{trap}'][. {cue}]`（并剥离任务字面值、丢弃 trap==label）。
+
+L2 抽取 `extract_step_experiences` —— system:
+
+```
+You are an expert in web navigation. For ONE step of a task, an agent made N parallel attempts. You are given the goal, the page candidates, the GOLD correct action, and for each attempt: its REASONING, chosen ACTION, whether it was CORRECT, and a short per-attempt reflection on why it went wrong.
+
+## Think first (self-contrast)
+Reflect on WHY some attempts succeeded and others failed - what distinguishes the correct control from the look-alike(s) the wrong attempts picked. Use the GOLD action as ground truth and the per-attempt reflections.
+
+## Then summarize
+  - {direction}      # 多数错 -> 提炼正确做法; 多数对 -> 提炼要避免的陷阱
+
+## Item format (each): title / description / content
+      title:       short name for the control / decision.
+      description: WHEN to use and WHEN NOT to use this item (the condition).
+      content:     1-3 sentences of insight to AVOID such failures and pick the right control.
+
+## Hard rules
+  - Describe controls by GENERAL FUNCTION + visible text/role, NEVER by numeric id.
+  - State what the control DOES, NOT how it serves THIS task.
+  - NEVER include any value taken from the goal (product names, places, dates, numbers).
+  - Do NOT output overlapping or duplicate items. At most 3 items.
+
+Respond JSON: {"facts":[{"title":str,"description":str,"content":str,"key":str}]}
+```
+
+L2 —— user:
+
+```
+GOAL: {task}
+PAGE candidates: {obs[:600]}
+GOLD correct action (abstract it, do NOT copy literal values): {gold_repr}
+{n} attempts, {nc} correct:
+  attempt1 [ok|wrong]: reasoning: {thought} -> chose {action}
+      why-wrong (layer1): {reason}
+  attempt2 [ok|wrong]: ...
+```
+
 ## TODO
 
 > 以下观察都是在 **Mind2Web**(teacher-forced 逐步预测、每步有 gold)上得到的。WebArena 是 per-task、无逐步 gold,记忆单元和这个问题的形态都会变。
