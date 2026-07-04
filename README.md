@@ -38,6 +38,50 @@
 7. **测试时冻结记忆复用**  
    测试阶段不再写新记忆。每一步只检索、注入、行动,再和无记忆版本对比,看这些被筛出来的经验是否真的改善后续决策。
 
+## Examples
+
+真实 run 里抽出的记忆（Mind2Web）。
+
+L1（`judge_step`，格式 `When {子目标}: use '{正确控件}' ({role}), not '{陷阱}'. {线索}`）:
+
+```
+[kohls]    When filter for women's dresses: use 'Category' (div), not 'Featured'. a section labeled with 'Category'
+[kohls]    When find clothing options: use 'Shop by Category' (span), not 'check out'. visible text indicating category navigation
+[kohls]    When browse toys for kids: use 'Age Range' (div), not 'Menu Expandable'. look for a section indicating age suitability
+[budget]   When find a car rental location: use 'Enter your pick-up location or zip code' (textbox). textbox prompting for pick-up location or zip code
+[budget]   When choose a car for a day: use 'Select My Car' (button). button labeled 'Select My Car'
+[budget]   When filter vehicle types for rental: use 'Vehicle Type *' (generic), not 'SUVs & Wagons'. a control prompting vehicle type selection
+[seatgeek] When find events in a city: use 'Change Location' (button). button to modify the selected location
+[seatgeek] When find events in a city: use 'Search by city...' (searchbox), not 'Sports by City'. search box with prompt for city input
+```
+
+L2（`extract_step_experiences`，N 次尝试对比，多步 / 带条件 / 带"避免"）:
+
+```
+[budget]       To select the vehicle type, click the 'Vehicle Type *' element, then choose 'SUVs & Wagons' from the dropdown. This applies when you need to filter for specific vehicle types.
+[budget]       Avoid clicking on the 'return time' dropdown when trying to select the vehicle type, as it does not pertain to filtering vehicle types.
+[delta]        to enter the last name, click in the input field labeled 'Last Name (Required)' after entering the confirmation number. Avoid trying to enter the last name before selecting the confirmation number.
+[viator]       to find the highest rated activity, ensure you click 'Traveler Rating' and not 'Price (Low to High)' or 'Price (High to Low)' as these do not sort by rating.
+[sixflags]     To proceed with the purchase after selecting the diamond pass, click the 'Next' button. Avoid clicking the 'Purchase Pass' link as it does not lead to the next step.
+[newegg]       To apply the selected component, click the button labeled 'Apply'. This is necessary after making a selection to proceed with the build.
+[ticketcenter] To browse the venues playing the show, click the option labeled with the show name in the list. This applies when you want to see specific venue listings.
+```
+
+一个任务的 gold 轨迹（teacher-forced，每步给 gold 历史）:
+
+```
+Task: Add an e-gift card to bag of $100 for recipient John ... (site: underarmour)
+  step0: [link]   Gift Cards        -> CLICK
+  step1: [div]    SHOP NOW          -> CLICK      (gold 不在候选 top-k 内 → 该步判 0)
+  step2: [input]  (recipient name)  -> TYPE: John
+  step3: [input]  (email)           -> TYPE: abc@test.com
+  step4: [input]  (from)            -> TYPE: buckeye.foobar@gmail.com
+  step5: [input]  (amount)          -> TYPE: 100
+  step6: [input]                    -> CLICK
+  step7: [input]  (message)         -> TYPE: gift card
+  step8: [button] Add to Bag        -> CLICK
+```
+
 ## TODO
 
 > 以下观察都是在 **Mind2Web**(teacher-forced 逐步预测、每步有 gold)上得到的。WebArena 是 per-task、无逐步 gold,记忆单元和这个问题的形态都会变。
