@@ -1,0 +1,60 @@
+# hippo-agent default config. All A/B switches live here; CLI flags override.
+
+run:
+  name: smoke
+  seed: 0
+  out_dir: runs
+  concurrency: 8            # parallel tasks (and parallel trajectories within a task)
+  budget_usd: 5.0          # hard stop per run
+
+llm:
+  model: openai/gpt-4o-mini
+  embed_model: openai/text-embedding-3-small
+  temperature: 0.7         # >0 so N trajectories diverge
+  max_tokens: 1024
+  cache: true              # cache by prompt hash to save money / be reproducible
+
+agent:
+  max_steps: 15
+  n_traj: 5                # MaTTS-style: N trajectories per task
+
+# --- the ablation matrix (what/when we store) ---
+memory:
+  mode: both               # off | fact_only | reasoning_only | both
+  reasoning_write: append  # append-only for v1 (dedup/merge later)
+  retrieve_k_reasoning: 2   # ReasoningBank: retrieving too many items hurts; keep small
+  retrieve_k_fact: 4
+  relevance_threshold: 0.0  # cosine gate: only inject memory at least this relevant (0 = off)
+  token_budget: 4000       # cap on injected memory tokens (whole-item cap, not mid-cut)
+
+# --- Mind2Web evaluation knobs (step_evolve = our two-layer step surprise) ---
+m2w:
+  protocol: step_evolve     # step_evolve (learn/test holdout) | stream (边学边升级: one pass, memory grows) | "" (task-level)
+  parallelism: task         # task = concurrent tasks; step = concurrent N samples within each step
+  layer1: on                # single-attempt per-step surprise: wrong OR correct-but-lucky
+  layer2: on                # across-N contrast: majority-wrong->do-right / majority-correct->avoid
+  record_mode: aggregate    # layer2 extraction: aggregate | all
+  per_step_retrieval: on    # test-time retrieval granularity (on=per step, off=once per task)
+  top_k: 5                  # candidate elements per step (MindAct/AWM ranker cut)
+  holdout: 0.5
+
+surprise:
+  source: traj_divergence  # traj_divergence | memory_pred | store_all
+  # weights for the combined v1 score
+  w_outcome_mix: 0.6       # success/failure disagreement across N trajectories
+  w_mem_pred: 0.4          # memory-prediction error (predicted-solvable vs actual)
+  threshold: 0.5           # write iff score >= threshold
+
+replay:
+  enabled: true
+  schedule: batch          # batch ("sleep") | online (per task)
+  batch_size: 8            # consolidate every N tasks
+  priority: surprise       # prioritized replay key: surprise | fifo
+
+judge:
+  model: openai/gpt-4o-mini   # LLM-as-a-Judge (label-free, grounded on execution result)
+
+logging:
+  level: info
+  jsonl: true              # structured event log for post-hoc analysis
+  trace: false             # if true, log FULL thoughts + full injected memory per step

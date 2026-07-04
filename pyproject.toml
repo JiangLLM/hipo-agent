@@ -1,0 +1,29 @@
+[project]
+name = "hippo-agent"
+version = "0.1.0"
+description = "Hippocampus-style self-evolving agent: surprise-gated dual (fact + reasoning) memory with prioritized replay consolidation, in the CLS framing."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "litellm>=1.55",
+    "numpy>=1.26",
+    "pandas>=2.2",
+    "python-dotenv>=1.0",
+    "pyyaml>=6.0",
+    "tqdm>=4.66",
+    "tenacity>=9.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+data = ["datasets>=3.0", "huggingface-hub>=0.25"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/hippo"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
