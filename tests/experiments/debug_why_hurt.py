@@ -77,6 +77,43 @@ def delist(text, terms):
             text = re.sub(r"\b" + re.escape(t) + r"\b", "", text, flags=re.I)
     return re.sub(r"\s{2,}", " ", text).strip(" ,.;:-\u2013")
 
+def extract_l2(goal, obs, attempts, gold_repr, use_gold):
+    n = len(attempts); nc = sum(1 for a in attempts if a["correct"])
+    if not (0 < nc < n):
+        return []
+    majority = "correct" if nc * 2 >= n else "wrong"
+    direction = ("MOST attempts FAILED and a few succeeded -> summarize HOW to do this step CORRECTLY."
+                 if majority == "wrong" else
+                 "MOST attempts SUCCEEDED and a few failed -> summarize the trap the failing attempt(s) fell into.")
+    gold_line = (f"GROUND TRUTH (gold) correct action: {gold_repr}\n" if use_gold else
+                 "You are NOT given the gold answer. Infer the reliable pattern ONLY from which "
+                 "self-judged attempts succeeded vs failed.\n")
+    sysp = ("You are an expert in web navigation. For ONE step, an agent made N parallel attempts (some "
+        "correct, some wrong). " + ("Use the gold action as ground truth. " if use_gold else "") +
+        "Contrast why some succeeded and others failed.\n" + direction + "\n"
+        "Each item: title / description(WHEN to use) / content(1-3 sentences).\n"
+        "Rules: describe controls by general function + visible text, NEVER numeric id; NEVER copy any "
+        "value from the goal. At most 3 items.\n"
+        'Return JSON {"facts":[{"title":str,"description":str,"content":str,"key":str}]}')
+    lines = [f"GOAL: {goal}", f"PAGE candidates: {obs[:600]}", gold_line, f"{n} attempts, {nc} correct:"]
+    for i, a in enumerate(attempts):
+        lines.append(f"  attempt{i+1} [{'ok' if a['correct'] else 'wrong'}]: {a['thought'][:160]} -> chose {a['chosen']}")
+    out = js(chat([{"role": "system", "content": sysp}, {"role": "user", "content": "\n".join(lines)}], 0.0))
+    lit = dangerous(goal, gold_repr if use_gold else goal)
+    _, gl, _ = parse_control(gold_repr)
+    items = []
+    for f in out.get("facts", []):
+        if not isinstance(f, dict):
+            continue
+        title = (f.get("title") or "").strip(); content = (f.get("content") or "").strip()
+        body = content or title
+        if not body:
+            continue
+        stmt = delist(f"{title}: {body}" if title else body, lit)
+        if stmt:
+            items.append({"statement": stmt, "key": f.get("key"), "gold_label": gl.lower()})
+    return items
+
 def extract_l1_new(goal, obs, thought, action, is_correct, gold_repr):
     role, label, _ = parse_control(gold_repr)
     verdict = "CORRECT" if is_correct else "WRONG"
@@ -137,6 +174,10 @@ def main():
     limit = 20
     if "--limit" in sys.argv:
         limit = int(sys.argv[sys.argv.index("--limit") + 1])
+    VARIANT = "L1new"
+    if "--variant" in sys.argv:
+        VARIANT = sys.argv[sys.argv.index("--variant") + 1]
+    NR = 1 if VARIANT == "L1new" else 3
     tasks = json.load(open(os.path.join(HERE, "data", "eval_tasks_49.json")))[:limit]
     steps = []
     for ti, t in enumerate(tasks):
@@ -146,7 +187,7 @@ def main():
                 steps.append(dict(ti=ti, si=si, goal=t["goal"], site=t["site"], obs=st["obs"], hist=hist,
                                   pos=st["pos_ids"], tgt=st["target_act"], repr=st["act_repr"]))
             hist += f"Observation: `{st['target_obs']}`\nAction: `{st['target_act']}` ({st['act_repr']})\n"
-    print(f"debug: {len(tasks)} tasks, {len(steps)} solvable steps, variant=L1new", flush=True)
+    print(f"debug: {len(tasks)} tasks, {len(steps)} solvable steps, variant={VARIANT}, NR={NR}", flush=True)
     q = embed([f"{s['goal']}\n{s['obs'][:400]}" for s in steps])
     qmap = {(s["ti"], s["si"]): q[i] for i, s in enumerate(steps)}
     bytask = defaultdict(list)
@@ -176,22 +217,30 @@ def main():
                 return "", []
             top = sorted(snap, key=lambda f: -cos(qmap[(s["ti"], s["si"])], f["e"]))[:4]
             return "\n".join("[fact] " + f["stmt"] for f in top), top
-        def wm_pred(s):
+        def wm_roll(s):
             mt, top = mtext_and_facts(s)
-            _, act = predict(s["goal"], s["hist"], s["obs"], mt, 0.0)
-            return s, act, top
+            outs = []
+            for r in range(NR):
+                th, act = predict(s["goal"], s["hist"], s["obs"], mt, 0.0 if r == 0 else 0.7 + 0.01 * r)
+                outs.append({"r": r, "thought": th, "chosen": act, "correct": bool(eaf(act, s["pos"]))})
+            return s, outs, top
         with ThreadPoolExecutor(16) as ex:
-            preds = list(ex.map(wm_pred, ts))
-        for s, act, top in preds:
+            packed = list(ex.map(wm_roll, ts))
+        for s, outs, top in packed:
             k = (s["ti"], s["si"])
-            wm_ok[k] = eaf(act, s["pos"]); wm_act[k] = act
+            g = next((o for o in outs if o["r"] == 0), outs[0])
+            wm_ok[k] = 1 if g["correct"] else 0; wm_act[k] = g["chosen"]
             injected[k] = [(f["stmt"], f.get("gold_label", "")) for f in top]
-        # learn (greedy nomem-independent: use the withmem greedy? use nomem greedy for faithfulness)
-        def learn(s):
-            th, act = predict(s["goal"], s["hist"], s["obs"], mtext_and_facts(s)[0], 0.0)
-            return extract_l1_new(s["goal"], s["obs"], th, act, bool(eaf(act, s["pos"])), s["repr"])
+        def learn(pk):
+            s, outs, _top = pk
+            if VARIANT == "L1new":
+                g = next((o for o in outs if o["r"] == 0), outs[0])
+                r = extract_l1_new(s["goal"], s["obs"], g["thought"], g["chosen"], g["correct"], s["repr"])
+                return [r] if r else []
+            return extract_l2(s["goal"], s["obs"], outs, s["repr"], use_gold=(VARIANT == "L2gold"))
         with ThreadPoolExecutor(16) as ex:
-            newf = [x for x in ex.map(learn, ts) if x]
+            newlists = list(ex.map(learn, packed))
+        newf = [x for sub in newlists for x in sub]
         facts_all += newf
         if newf:
             E = embed([x["statement"] for x in newf])
