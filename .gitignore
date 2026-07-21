@@ -12,3 +12,5 @@ runs/
 data/
 .cache/
 *.log
+logs/
+sb-cli-reports/

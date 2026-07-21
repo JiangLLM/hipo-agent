@@ -12,6 +12,11 @@ dependencies = [
     "pyyaml>=6.0",
     "tqdm>=4.66",
     "tenacity>=9.0",
+    "mini-swe-agent>=2.4.5",
+    "datasets>=5.0.0",
+    "lxml>=6.1.1",
+    "fastembed>=0.8.0",
+    "swebench>=4.1.0",
 ]
 
 [project.optional-dependencies]
@@ -27,3 +32,9 @@ packages = ["src/hippo"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "sb-cli>=0.1.4",
+]

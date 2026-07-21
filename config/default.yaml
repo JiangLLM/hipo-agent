@@ -22,9 +22,11 @@ agent:
 memory:
   mode: both               # off | fact_only | reasoning_only | both
   reasoning_write: append  # append-only for v1 (dedup/merge later)
-  retrieve_k_reasoning: 2   # ReasoningBank: retrieving too many items hurts; keep small
+  retrieve_k_reasoning: 1   # ReasoningBank ablation: SR peaks at k=1, degrades with more
+                            # (marginal items dilute context / mislead); do not raise blindly
   retrieve_k_fact: 4
   relevance_threshold: 0.0  # cosine gate: only inject memory at least this relevant (0 = off)
+  scope_reasoning: false    # restrict reasoning retrieval to task.scope (swe runs turn this on)
   token_budget: 4000       # cap on injected memory tokens (whole-item cap, not mid-cut)
 
 # --- Mind2Web evaluation knobs (step_evolve = our two-layer step surprise) ---
@@ -37,6 +39,54 @@ m2w:
   per_step_retrieval: on    # test-time retrieval granularity (on=per step, off=once per task)
   top_k: 5                  # candidate elements per step (MindAct/AWM ranker cut)
   holdout: 0.5
+
+# --- SWE-bench-Verified knobs (task-level two-layer memory; see hippo/swe/run.py) ---
+swe:
+  dataset: princeton-nlp/SWE-bench_Verified
+  split: test
+  repos: django            # comma-separated repo substrings; "" = all repos
+  limit: 0                 # 0 = no cap
+  arch: arm64              # Epoch AI image arch (arm64 on Apple Silicon; 420/500 coverage)
+  agent_model: openai/gpt-5-mini   # rollout model; judge/extract use llm.model
+  step_limit: 60           # agent steps per attempt
+  attempt_cost_limit: 0.5  # USD hard stop per attempt (mini-swe-agent cost guard)
+  arms: nomem,withmem      # which passes to run, in order
+  layer1: on               # per-attempt reflection on surprise (failed / unverified success)
+  layer2: on               # cross-attempt contrast on divergence
+  l1_max_per_task: 2       # anti-flooding: max L1 writes per task
+  vote_margin: 2           # L2 only when |#success*2 - N| >= margin (3:2 splits skipped)
+  judge_max_tokens: 8000   # reasoning models spend tokens thinking before the JSON
+  # --- injection-side (read) knobs; arms=frozenmem + memory_in for fixed-bank ablations ---
+  injection_gate: none     # none | llm (embedding top fetch_k -> LLM keeps only condition-matching items)
+  retrieve_fetch_k: 10     # candidate pool size before the llm gate
+  injection_style: plain   # plain | attend (force the agent to state which items it will use)
+
+# --- WebArena knobs (task-level two-layer memory on autonomous web nav; hippo/wa/run.py) ---
+wa:
+  base_url: ""             # e.g. http://10.44.12.29 (self-hosted sites; required)
+  reset_url: ""            # WA_FULL_RESET endpoint (e.g. http://10.44.12.29:7565/reset)
+  site: shopping           # shopping | shopping_admin | reddit | gitlab | map | wikipedia
+  limit: 0                 # 0 = all single-site tasks for this site
+  arms: nomem,withmem      # nomem | withmem | frozenmem
+  memory_in: ""            # frozenmem/resume: path to a saved memory.json
+  max_steps: 30            # agent turns per episode
+  timeout: 10000           # per-action browser timeout (ms)
+  step_timeout: 90         # hard wall-clock cap (s) on one env.step — kills wedged browser ops
+  max_tokens: 8000         # shared budget: judge/extract need headroom (reasoning models
+                           # burn tokens thinking); agent actions are short so this is free
+  layer1: on
+  layer2: on
+  l1_fluke: on             # L1 records failures + 蒙对 flukes (reward=1 but judge: reasoning unsound); off = failures only
+  vote_margin: 1           # L2 when |2*nc-n|>=margin (1 = any divergence triggers it)
+  divergence_signal: reward  # reward | judge — what counts a rollout success for L1/L2 gating
+  readonly_only: false     # keep only pure string_match tasks (no state mutation, robust eval)
+  shard: ""                # "i/n" round-robin task partition for PARALLEL readonly runs (K
+                           # processes, each own browser, merge event logs after). Leave "" for
+                           # streaming/withmem (memory accumulates in order — must not shard).
+  eval_rollouts: 1         # rollouts per task for scoring-only arms (nomem/frozenmem). Set >1
+                           # (e.g. 5) for a low-variance A/B: compare MEAN success rate (nc/n)
+                           # per task instead of a single noisy rollout[0]. write arms use n_traj.
+  seed: 0                  # bump for independent replicates (sampling-noise discipline)
 
 surprise:
   source: traj_divergence  # traj_divergence | memory_pred | store_all

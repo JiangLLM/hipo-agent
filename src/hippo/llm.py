@@ -48,6 +48,11 @@ class LLMClient:
         self.calls = 0
         self._lock = threading.Lock()
         self._last_call = 0.0
+        # Optional OpenAI-compatible gateway (e.g. Zillow ZGAI). When LLM_API_BASE is set,
+        # route chat/embeds through it with LLM_API_KEY. litellm needs the "openai/" prefix
+        # to treat an arbitrary model id as an OpenAI-compatible chat call.
+        self.api_base = os.environ.get("LLM_API_BASE") or None
+        self.api_key = os.environ.get("LLM_API_KEY") or None
         if cache:
             os.makedirs(os.path.join(cache_dir, "chat"), exist_ok=True)
             os.makedirs(os.path.join(cache_dir, "embed"), exist_ok=True)
@@ -99,7 +104,8 @@ class LLMClient:
     def chat(self, messages: list[dict], temperature: float | None = None, **kw: Any) -> str:
         temp = self.temperature if temperature is None else temperature
         payload = {"model": self.model, "messages": messages, "temperature": temp,
-                   "max_tokens": self.max_tokens, **kw}
+                   "max_tokens": self.max_tokens,
+                   "timeout": float(os.environ.get("LLM_TIMEOUT", "120")), **kw}
         # Only cache deterministic calls; temperature>0 should vary across trajectories.
         cacheable = temp == 0.0
         key = self._key(payload)
@@ -113,14 +119,36 @@ class LLMClient:
         return text
 
     @retry(retry=retry_if_not_exception_type(BudgetExceeded),
-           stop=stop_after_attempt(5), wait=wait_exponential(multiplier=1, min=1, max=30))
+           stop=stop_after_attempt(8), wait=wait_exponential(multiplier=1, min=2, max=60))
     def _call_chat(self, payload: dict) -> str:
         import litellm
 
         self._throttle()
-        resp = litellm.completion(**payload)
-        self._charge(resp)
-        return resp["choices"][0]["message"]["content"] or ""
+        if self.api_base:
+            payload = {**payload, "api_base": self.api_base, "api_key": self.api_key,
+                       "drop_params": True}   # reasoning models (gpt-5.x) reject temperature/etc.
+            if not payload["model"].startswith("openai/"):
+                payload["model"] = "openai/" + payload["model"]
+        # gateway (ZGAI) intermittently 404s / 5xxs a single backend instance; tenacity
+        # retries the same model first, then we fall back to sibling models (all verified
+        # available) so one flaky instance can't zero out a task. LLM_FALLBACK_MODELS is a
+        # comma list, e.g. "gpt-5.6-terra,gpt-5.6-luna".
+        models = [payload["model"]]
+        for fb in (os.environ.get("LLM_FALLBACK_MODELS", "") or "").split(","):
+            fb = fb.strip()
+            if fb:
+                models.append(fb if fb.startswith("openai/") or not self.api_base else "openai/" + fb)
+        last = None
+        for m in models:
+            try:
+                resp = litellm.completion(**{**payload, "model": m})
+                self._charge(resp)
+                return resp["choices"][0]["message"]["content"] or ""
+            except BudgetExceeded:
+                raise
+            except Exception as exc:  # noqa: BLE001 - try next sibling, else re-raise for tenacity
+                last = exc
+        raise last
 
     def embed(self, texts: list[str]) -> list[list[float]]:
         out: list[list[float]] = [None] * len(texts)  # type: ignore[list-item]
@@ -142,8 +170,22 @@ class LLMClient:
     @retry(retry=retry_if_not_exception_type(BudgetExceeded),
            stop=stop_after_attempt(5), wait=wait_exponential(multiplier=1, min=1, max=30))
     def _call_embed(self, texts: list[str]) -> list[list[float]]:
+        # "local/<model>" runs on-device via fastembed (ONNX) — no API key, no cost;
+        # anything else goes through litellm as before.
+        if self.embed_model.startswith("local/"):
+            return [v.tolist() for v in self._local_embedder().embed(texts)]
         import litellm
 
         self._throttle()
-        resp = litellm.embedding(model=self.embed_model, input=texts)
+        kw = {}
+        if self.api_base:
+            kw = {"api_base": self.api_base, "api_key": self.api_key}
+        resp = litellm.embedding(model=self.embed_model, input=texts, **kw)
         return [d["embedding"] for d in resp["data"]]
+
+    def _local_embedder(self):
+        if getattr(self, "_fastembed", None) is None:
+            from fastembed import TextEmbedding
+
+            self._fastembed = TextEmbedding(model_name=self.embed_model.removeprefix("local/"))
+        return self._fastembed

@@ -37,11 +37,16 @@ class ReasoningStore:
         with self._lock:
             self.items.append(item)
 
-    def topk(self, query: str, k: int, threshold: float = 0.0) -> list[ReasoningItem]:
+    def topk(self, query: str, k: int, threshold: float = 0.0,
+             scope: str | None = None) -> list[ReasoningItem]:
+        """`scope=None` searches everything (legacy); a scope string restricts the pool
+        to items written under that scope (e.g. one repo / one website)."""
         if k <= 0:
             return []
         with self._lock:
             items = list(self.items)                            # snapshot under lock
+        if scope is not None:
+            items = [it for it in items if getattr(it, "scope", "") == scope]
         if not items:
             return []                                           # skip embedding when empty
         q = np.asarray(self._embed([query])[0], dtype=float)   # embed outside lock
@@ -50,6 +55,18 @@ class ReasoningStore:
         order = np.argsort(-sims)
         # threshold gate: only return items relevant enough (can return nothing)
         return [items[i] for i in order if sims[i] >= threshold][:k]
+
+    def topk_scored(self, query: str, k: int, threshold: float = 0.0,
+                    scope: str | None = None) -> list[tuple[ReasoningItem, float]]:
+        """Like topk but returns (item, cosine) pairs — for retrieval-quality logging
+        and downstream relevance gating."""
+        items = self.topk(query, k, threshold, scope)
+        if not items:
+            return []
+        q = np.asarray(self._embed([query])[0], dtype=float)
+        mat = np.asarray([it.embedding for it in items], dtype=float)
+        sims = _cos(q, mat)
+        return list(zip(items, [float(s) for s in sims]))
 
 
 class FactStore:
@@ -102,7 +119,9 @@ class Memory:
 
     def retrieve(self, task) -> dict:
         thr = float(self.cfg.memory.get("relevance_threshold", 0.0))
-        r = self.reasoning.topk(task.prompt, self.cfg.memory.retrieve_k_reasoning, thr) if self.use_reasoning else []
+        r_scope = task.scope if bool(self.cfg.memory.get("scope_reasoning", False)) else None
+        r = (self.reasoning.topk(task.prompt, self.cfg.memory.retrieve_k_reasoning, thr, scope=r_scope)
+             if self.use_reasoning else [])
         f = self.fact.query(task.scope, task.prompt, self.cfg.memory.retrieve_k_fact, thr) if self.use_fact else []
         return {"reasoning": r, "fact": f}
 
@@ -121,7 +140,8 @@ class Memory:
             sign = "NOT " if it.polarity == "negative" else ""
             candidates.append(f"[fact] {sign}{it.statement}")
         for it in retrieved.get("reasoning", []):
-            candidates.append(f"[strategy] {it.title}: {it.content}")
+            when = f" (applies when: {it.description})" if it.description else ""
+            candidates.append(f"[strategy] {it.title}: {it.content}{when}")
         # cap by whole items (never cut an item mid-text)
         lines, total = [], 0
         for line in candidates:
