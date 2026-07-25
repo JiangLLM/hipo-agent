@@ -14,11 +14,16 @@ cd "$(dirname "$0")/.."
 BASE="${BASE:-http://10.44.12.29}"
 SITES=("$@"); [ ${#SITES[@]} -eq 0 ] && SITES=(shopping_admin shopping reddit)
 
-declare -A PORT=( [shopping]=7770 [shopping_admin]=7780 [reddit]=9999 [gitlab]=8023 )
-
 echo "== will run (sequential): ${SITES[*]}  base=$BASE =="
 for S in "${SITES[@]}"; do
-  P="${PORT[$S]}"
+  # macOS ships bash 3.2 (no associative arrays) — plain case, works everywhere
+  case "$S" in
+    shopping)        P=7770 ;;
+    shopping_admin)  P=7780 ;;
+    reddit)          P=9999 ;;
+    gitlab)          P=8023 ;;
+    *)               P="" ;;
+  esac
   if [ -z "$P" ]; then echo "!! unknown site '$S' (skip)"; continue; fi
   code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 6 "$BASE:$P" 2>/dev/null || echo 000)
   if [ "$code" = "000" ]; then
