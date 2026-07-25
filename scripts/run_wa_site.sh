@@ -30,6 +30,6 @@ caffeinate -i .venv-wa/bin/python -m hippo.wa.run \
   --memory.retrieve_k_reasoning 1 \
   --wa.max_steps 30 --wa.step_timeout 90 --wa.reset_timeout 120 \
   $EXTRA_ARGS \
-  --run.budget_usd 500 --run.name "$RUN" 2>&1 | tee "$LOG"
+  --run.budget_usd "${BUDGET:-1000000}" --run.name "$RUN" 2>&1 | tee "$LOG"
 echo "== [$SITE] DONE -> runs/$RUN"
 echo "== analyse: .venv-wa/bin/python scripts/analyze_wa.py runs/$RUN"

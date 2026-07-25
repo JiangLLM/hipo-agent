@@ -18,6 +18,29 @@ BrowserGym is imported lazily so importing this module never pulls it into the m
 from __future__ import annotations
 
 import re
+import urllib.parse
+
+
+def _guard_host(action: str, origin: str) -> str:
+    """Agents sometimes hallucinate an external host (gitlab.com, gitlab.local, github.com) inside
+    a goto() when a project/branch isn't found on the dashboard/search — landing off the
+    self-hosted env (login page or ERR_NAME_NOT_RESOLVED) and losing the episode. Rewrite any
+    goto() whose host differs from the CURRENT page origin back onto that origin, so the agent's
+    direct-navigation fallback lands on the real site instead of the public one."""
+    if not origin or "goto(" not in action:
+        return action
+    m = re.search(r"""goto\(\s*(['"])(.*?)\1""", action)
+    if not m:
+        return action
+    try:
+        u = urllib.parse.urlparse(m.group(2))
+        b = urllib.parse.urlparse(origin)
+    except Exception:  # noqa: BLE001
+        return action
+    if u.scheme in ("http", "https") and u.netloc and u.netloc != b.netloc:
+        fixed = urllib.parse.urlunparse(u._replace(scheme=b.scheme, netloc=b.netloc))
+        return action[:m.start(2)] + fixed + action[m.end(2):]
+    return action
 
 
 def _action_set():
@@ -75,7 +98,10 @@ def build_sys(action_set) -> str:
         "Band, with 5 sold.\" If a list is asked for, send just the items separated by commas, "
         "matching the wording the page uses. Copy names/labels verbatim from the page.\n"
         "When it asks to perform an action, finish once the change is confirmed on the page. "
-        "Element ids (bids) MUST be quoted, e.g. click('a51').\n\n"
+        "Element ids (bids) MUST be quoted, e.g. click('a51').\n"
+        "Stay on THIS server: everything the task needs is on the site you are already on. If a "
+        "project isn't on the dashboard, navigate to it by path on the CURRENT host (or use "
+        "Explore) — NEVER goto an external host such as gitlab.com, gitlab.local, or github.com.\n\n"
         "Respond in this format:\nThought: <your reasoning, as many sentences as needed>\n"
         "Action: <exactly one action call, e.g. click('a5') or send_msg_to_user(\"answer\")>\n"
         "The Action line MUST be a function call. To give your final answer, wrap it: "
@@ -133,15 +159,18 @@ def _parse(resp: str) -> tuple[str, str]:
     return thought, action
 
 
-def _history(steps: list[dict]) -> str:
-    """Full history with THOUGHT + action + error per step — without the reasoning trail the
-    agent forgets what it already tried and repeats failed actions. No cap: every step, full
-    reasoning (no truncation anywhere in this project)."""
+def _history(steps: list[dict], k: int = 15) -> str:
+    """The AGENT's own live working history (thought + action + error per step) — its scratchpad,
+    NOT the evidence the judge/L1/L2 read (that is compact_trace, kept FULL). Keep it BOUNDED:
+    last k steps, thought clipped. Feeding the agent its entire full-reasoning history on a long
+    task balloons the prompt and makes it lose the plot — the 16-page enumeration family went 8/8
+    -> 0/8 when this was un-truncated. Truncation-freedom belongs on the learning/judging path;
+    here (the agent's working memory) it hurts."""
     if not steps:
         return "(none yet)"
     out = []
-    for i, s in enumerate(steps, start=1):
-        line = f"{i}. thought: {s.get('thought','')}\n   action: {s['action']}"
+    for i, s in enumerate(steps[-k:], start=max(1, len(steps) - k + 1)):
+        line = f"{i}. thought: {s.get('thought','')[:200]}\n   action: {s['action']}"
         if s.get("err"):
             line += f"\n   -> ERROR: {s['err']}"
         out.append(line)
@@ -200,13 +229,21 @@ def run_episode(task_id: int, memory_text: str, cfg, llm, logger=None, log_ctx: 
                              {"role": "user", "content": usr}],
                             temperature=cfg.llm.temperature)
             thought, action = _parse(resp)
+            # off-host navigation guard: keep goto() on the current env origin (see _guard_host)
+            _cur = obs.get("url") if isinstance(obs, dict) else None
+            if _cur:
+                _p = urllib.parse.urlparse(_cur)
+                _g = _guard_host(action, f"{_p.scheme}://{_p.netloc}")
+                if _g != action:
+                    ev("wa_host_guard", step=si, was=action, now=_g)
+                    action = _g
             try:
                 obs, reward, terminated, truncated, info = _call_with_timeout(
                     lambda: env.step(action), int(wa.get("step_timeout", 90)))
             except _StepTimeout as exc:   # wedged browser op — env may be corrupt, end episode
                 steps.append({"thought": thought, "action": action,
                               "err": str(exc), "url": "", "obs": ""})
-                ev("wa_step", step=si, thought=thought, action=action,
+                ev("wa_step", step=si, thought=thought, action=action, raw=resp,
                    url="", reward=int(reward or 0), action_error=str(exc), terminated=True)
                 break
             err = obs.get("last_action_error") or ""
@@ -214,7 +251,7 @@ def run_episode(task_id: int, memory_text: str, cfg, llm, logger=None, log_ctx: 
             # exactly what the page showed — verified-gating (real vs fluke) depends on this.
             steps.append({"thought": thought, "action": action, "err": err,
                           "url": obs.get("url", ""), "obs": _obs_text(obs)})
-            ev("wa_step", step=si, thought=thought, action=action,
+            ev("wa_step", step=si, thought=thought, action=action, raw=resp,
                url=obs.get("url", ""), reward=int(reward or 0),
                action_error=err, terminated=bool(terminated or truncated))
             if terminated or truncated:
@@ -243,17 +280,32 @@ def run_episode(task_id: int, memory_text: str, cfg, llm, logger=None, log_ctx: 
                 pass
 
 
-def compact_trace(steps: list[dict]) -> str:
-    """Judge/extractor-readable trace WITH FULL page evidence — the verified check (real vs
-    fluked correct) needs to see exactly what the agent observed, and L1/L2 read this trace.
-    Nothing is truncated: full thought, full action, full page per step."""
+def compact_trace(steps: list[dict], obs_budget: int = 200000) -> str:
+    """Judge/extractor-readable trace with FULL page evidence — the verified check (real vs
+    fluked correct) and L1/L2 read this trace. Normal traces are un-truncated. ONLY when the
+    concatenated page obs would overflow the judge model's context (huge Magento grids x many
+    steps -> ContextWindowExceeded, which hard-fails the whole task) do we bound it: spend the
+    obs budget on the LATEST steps first (the answer is read there — the evidence the verified
+    label needs most) and OMIT the oldest steps' pages once the budget is spent."""
+    obs_keep: dict = {}
+    used = 0
+    for i in range(len(steps) - 1, -1, -1):        # newest -> oldest: give recent steps the budget
+        obs = steps[i].get("obs", "") or ""
+        if not obs:
+            continue
+        if used >= obs_budget:
+            obs_keep[i] = None                     # omit this old page entirely
+        elif used + len(obs) <= obs_budget:
+            obs_keep[i] = obs; used += len(obs)
+        else:
+            obs_keep[i] = obs[: obs_budget - used] + "…[clipped]"; used = obs_budget
     lines = []
     for i, s in enumerate(steps):
         head = (f"step {i+1}: {s['thought']} -> {s['action']}"
                 + (f"  [ERR: {s['err']}]" if s.get("err") else "")
                 + (f"  @ {s.get('url','')}" if s.get("url") else ""))
-        obs = s.get("obs", "")
-        if obs:
-            head += f"\n  page: {obs}"
+        if s.get("obs"):
+            kept = obs_keep.get(i, "")
+            head += f"\n  page: {kept}" if kept else "\n  page: [omitted — trace too long for the judge]"
         lines.append(head)
     return "\n".join(lines)

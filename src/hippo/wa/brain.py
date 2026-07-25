@@ -1,17 +1,16 @@
-"""Task-level judging + two-layer extraction for WebArena (label-free).
+"""Task-level judging + two-layer extraction for WebArena.
 
-Direct translation of swe/brain.py to the web-navigation domain:
-  * judge_trajectory  — label-free verdict from the trace, evidence-gated (an
-    info-seeking task's answer must be traceable to something the agent actually saw;
-    a state-change task must show the change happened). Same "verified vs claimed"
-    split that guards against memory-amplified false successes.
-  * reflect_trajectory (L1) — one reflection per surprising rollout (failed, or
-    succeeded-unverified). Site-scoped, generalizable UI/procedure knowledge.
-  * contrast_rollouts (L2) — cross-rollout contrast on divergence, majority-directed,
-    vote-margin gated.
+  * judge_trajectory  — the env grader (reward) has ALREADY decided correct/incorrect; this
+    only labels HOW a rollout got there: failure / genuine (really derived) / fluke (correct
+    by luck, e.g. a shallow match).
+  * reflect_trajectory (L1) — one reflection per genuine FAILURE (reward=0). Written answer-BLIND
+    (no reference answer) so the lesson stays a general procedure.
+  * contrast_rollouts (L2) — cross-rollout contrast by the genuine-success ratio; FLUKE rollouts
+    are dropped upstream (no-op). Also written answer-BLIND.
 
-Native reward (from env.step) is NEVER passed in here — judging stays label-free like
-deployment; native reward is only used downstream to score, never to learn.
+The reference answer is used ONLY by judge_trajectory (to label success/genuine/fluke); the
+experience WRITERS never see it, so lessons generalize instead of encoding one task's output.
+The AGENT never sees the answer while solving (deployment-realistic).
 """
 from __future__ import annotations
 
@@ -40,44 +39,43 @@ _ITEM_FORMAT = (  # doubled braces: goes through str.format()
 )
 
 _JUDGE_SYS = (
-    "You judge whether a web agent COMPLETED its task, label-free, from the trace only. "
-    "There is no ground truth.\n"
-    "Task types: (1) information-seeking — the final answer the agent sent to the user must "
-    "contain the asked info and it must be traceable to a page the agent actually observed; (2) navigation — "
-    "the agent must have reached the target page; (3) content-modification — the trace must "
-    "show the change was submitted and confirmed.\n"
-    "Before calling it success, verify ALL of:\n"
-    "- Completeness: if the task implies an EXHAUSTIVE result (\"list ALL reviewers who...\", "
-    "\"how many...\", a range/aggregate), the agent must have inspected the FULL source "
-    "(scrolled through every review / all pages), not stopped after the first few. A partial "
-    "list is a FAILURE even if the items it names are correct.\n"
-    "- Grounding: every value/name the agent reports is visible in an observation in the "
-    "trace; anything inferred or guessed without a visible source is a failure.\n"
-    "- Right target: the agent acted on the exact entity the task named, not an adjacent one.\n"
-    'Respond JSON {"success": bool, "verified": bool, "reason": str, "evidence": str}.\n'
-    "- verified: TRUE only if the answer is both visible in the trace AND the agent's REASONING "
-    "actually derived it from what it observed — not guessed, not a coincidental right answer. "
-    "Read the full reasoning: if the agent landed on the correct answer without sound, grounded "
-    "reasoning (a lucky/蒙对 hit), set success=true verified=false. Cite the step.\n"
-    "- When uncertain prefer success=false. A false success is more harmful than a false "
-    "failure, because memory amplifies it."
+    "An agent attempted a web task. The OFFICIAL grader has ALREADY scored this rollout against "
+    "the reference answer — that CORRECT/INCORRECT verdict (given in the message) is GROUND "
+    "TRUTH; do NOT re-judge whether the final answer matches.\n"
+    "Your only job is to read the trace and label HOW the outcome came about.\n"
+    'Respond JSON {"outcome": str, "reason": str}:\n'
+    '- If the grader says INCORRECT -> outcome="failure"; reason = the concrete cause it went '
+    "wrong and what it would have needed to do to reach the reference answer.\n"
+    '- If the grader says CORRECT -> decide how the right answer was reached:\n'
+    '    outcome="genuine" if the trace shows the agent actually navigated to and READ the '
+    "value(s) that yield the reference answer;\n"
+    '    outcome="fluke" if the correct answer was reached by luck — the agent dumped/listed a '
+    "lot of content that merely happened to contain it, guessed, or never grounded the specific "
+    "value. reason = why it is a fluke.\n"
+    '- When the grader says CORRECT but you are unsure how, prefer "genuine".'
 )
 
 _L1_SYS = (
-    "You are an expert web-navigation analyst distilling lessons from ONE rollout. It "
-    "{outcome_clause}\nReflect on WHY, then extract lessons that prevent this failure (or "
-    "turn luck into a reliable procedure) on future tasks on this site.\n" + _ITEM_FORMAT
+    "You are an expert web-navigation analyst distilling a lesson from ONE failed rollout. It "
+    "{outcome_clause}\nExtract lessons that would prevent this failure on future tasks on this "
+    "site.\n" + _ITEM_FORMAT
 )
 
 _L2_SYS = (
-    "An agent made N independent PARALLEL rollouts of the SAME web task, with mixed outcomes. "
-    "For each rollout you see its verdict (OK/WRONG) and EITHER the lesson distilled from it (its "
-    "L1 — written only for failures and lucky/蒙对 hits) OR, for a genuine success (which has no "
-    "L1), its full TRACE so you can inspect WHY it worked.\n"
-    "Contrast the {minority} rollout(s) against the {majority}: if most were WRONG, study the "
-    "successful rollout(s)' TRACES and work out the reliable procedure that made them succeed; if "
-    "most were RIGHT, study the failing rollout(s)' lessons and name the trap to avoid.\n"
-    "Then write it as higher-level guidance: {direction}\n" + _ITEM_FORMAT
+    "An agent made N independent PARALLEL rollouts of the SAME web task. For each rollout you see "
+    "its verdict (OK/WRONG, with the judge's reason) and EITHER the lesson distilled from it (its "
+    "L1) OR, for a genuine success we want to learn from, its full TRACE.\n"
+    "Look across ALL N outcomes and the success/failure ratio, then write ONE higher-level lesson:\n"
+    "{direction}\n" + _ITEM_FORMAT
+)
+
+_L2_SELECT_SYS = (
+    "Given the CURRENT web task and a numbered list of candidate past lessons, pick the ONE most "
+    "APPLICABLE lesson. It must genuinely fit this task's goal and the controls/pages it needs — "
+    "matching topic words is NOT enough (e.g. a task about the 'main' branch needs the branch-"
+    "specific lesson, not a generic Contributors one). If NONE genuinely applies, return -1 — "
+    "injecting nothing is better than a misleading lesson.\n"
+    'Respond JSON {"idx": int} (the 0-based index, or -1).'
 )
 
 
@@ -97,86 +95,114 @@ class WaBrain:
                 continue
         return {}
 
-    def _items(self, out, scope, outcome, max_items):
+    def _items(self, out, scope, outcome, max_items, layer=""):
         items = []
         for d in out.get("items", [])[:max_items]:
             if isinstance(d, dict) and d.get("title") and d.get("content"):
                 items.append(ReasoningItem(title=str(d["title"]).strip(),
                                            description=str(d.get("description", "")).strip(),
                                            content=str(d["content"]).strip(),
-                                           scope=scope, outcome=outcome))
+                                           scope=scope, outcome=outcome, layer=layer))
         return items
 
-    def judge_trajectory(self, intent: str, trace: str, stop_answer: str) -> dict:
+    def judge_trajectory(self, intent, trace, stop_answer, reward, reference=None):
+        # The env grader already decided correct/incorrect (reward). We only label HOW:
+        #   failure (incorrect) / genuine (correct, really derived) / fluke (correct by luck).
+        correct = bool(reward)
         if not trace.strip():
-            return {"success": False, "verified": False, "reason": "empty trace", "evidence": ""}
-        usr = f"TASK: {intent}\n\nTRACE:\n{trace}\n\nFINAL ANSWER: {stop_answer or '(none)'}"
+            return {"outcome": "genuine" if correct else "failure", "reason": "empty trace"}
+        ref = json.dumps(reference, ensure_ascii=False) if reference else "(not provided)"
+        usr = (f"TASK: {intent}\n\nREFERENCE ANSWER (ground truth): {ref}\n"
+               f"OFFICIAL GRADER VERDICT: {'CORRECT' if correct else 'INCORRECT'}\n\n"
+               f"AGENT FINAL ANSWER: {stop_answer or '(none)'}\n\nTRACE:\n{trace}")
         out = self._json(self.llm.chat(
             [{"role": "system", "content": _JUDGE_SYS}, {"role": "user", "content": usr}],
             temperature=0.0, **_JSON_KW))
-        return {"success": bool(out.get("success", False)),
-                "verified": bool(out.get("verified", False)),
-                "reason": str(out.get("reason", "")).strip(),
-                "evidence": str(out.get("evidence", "")).strip()}
-
-    def reflect_trajectory(self, site, intent, trace, verdict, outcome_hint=None, max_items=1):
-        # L1 only reflects the two "surprising" outcomes (the caller skips genuine successes):
-        #   outcome_hint="fluke": got the right answer but the judge found the REASONING did not
-        #     actually establish it (a lucky/蒙对 hit) -> record as a CAUTION, not a procedure.
-        #   otherwise (reward=0 failure) -> what went wrong / how to avoid it.
-        if outcome_hint == "fluke":
-            clause = ("reached the correct answer but the REASONING did not actually establish it — "
-                      "the judge found it a lucky/guessed (蒙对) hit, not truly derived. Record a "
-                      "CAUTION: what looked right but was not really known, so future tasks do not "
-                      "trust this shortcut and instead verify the answer properly.")
-            outcome = "unverified"
-        else:
-            clause = f"FAILED: {verdict['reason']}"
+        outcome = str(out.get("outcome", "")).strip().lower()
+        # Never contradict the grader: incorrect -> failure; correct -> genuine|fluke only.
+        if not correct:
             outcome = "failure"
+        elif outcome not in ("genuine", "fluke"):
+            outcome = "genuine"
+        return {"outcome": outcome, "reason": str(out.get("reason", "")).strip()}
+
+    def reflect_trajectory(self, site, intent, trace, verdict, max_items=1):
+        # L1 reflects a genuine FAILURE (env reward=0). The WRITER is deliberately answer-BLIND —
+        # it never sees the reference answer — so the lesson stays a GENERAL procedure instead of
+        # encoding this task's specific output (e.g. "answer N/A"). Genuine successes and flukes
+        # never reach here. (The env grader still decides success/failure upstream; only the
+        # experience TEXT is written blind.)
+        clause = f"FAILED: {verdict.get('reason', '')}"
         sys = _L1_SYS.format(outcome_clause=clause, max_items=max_items)
         usr = f"SITE: {site}\nTASK: {intent}\n\nTRACE:\n{trace}"
         out = self._json(self.llm.chat(
             [{"role": "system", "content": sys}, {"role": "user", "content": usr}],
             temperature=0.0, **_JSON_KW))
-        return self._items(out, f"site:{site}", outcome, max_items)
+        return self._items(out, f"site:{site}", "failure", max_items, layer="L1")
 
     def contrast_rollouts(self, site, intent, rollouts, verdicts, l1_items, max_items=1, ok=None):
-        # L2 operates OVER the per-rollout L1 lessons (`l1_items[i]` = list of L1 items distilled
-        # from rollout i), NOT the raw traces: read the N distilled lessons + their OK/WRONG labels,
-        # contrast minority vs majority, promote to higher-level guidance. `ok` is the per-rollout
-        # success label that triggered L2 (reward- or judge-based); direction/tags MUST use it.
+        # L2 = ONE cross-rollout lesson, chosen by the success/failure RATIO across the N rollouts:
+        #   all wrong (nc==0)  -> summarize the COMMON cause; USE the judge verdicts — if they ran out
+        #                         of the step budget / never answered, say the path is too long to
+        #                         finish and advise a cheaper route or a best-effort partial answer
+        #                         (NOT "be more exhaustive"); if they took a wrong path, name it to avoid.
+        #   half (nc*2==n)     -> state BOTH what the successful did right AND the trap the failing hit.
+        #   majority right     -> NOTE the specific mistake the failing minority made, as a caution.
+        #   majority wrong     -> REMEMBER the reliable procedure the successful minority used.
+        # Input per rollout: its L1 lesson (failure/蒙对), or — for a genuine success we must learn
+        # FROM (half or majority-wrong) — its full TRACE. Items are tagged layer="L2".
         n = len(rollouts)
         if ok is None:
-            ok = [bool(v["success"] and v["verified"]) for v in verdicts]
+            ok = [v.get("outcome") == "genuine" for v in verdicts]
         nc = sum(ok)
-        if nc * 2 >= n:
-            majority, minority = "successful", "failing"
-            direction = "the TRAP the failing rollout(s) fell into, and how to avoid it."
-        else:
-            majority, minority = "failing", "successful"
-            direction = "the reliable procedure the successful rollout(s) used."
-        sys = _L2_SYS.format(minority=minority, majority=majority,
-                             direction=direction, max_items=max_items)
+        if nc == 0:
+            direction = ("ALL rollouts FAILED. Summarize the common cause of failure. Read the "
+                         "verdicts: if they ran out of the step budget or never produced a final "
+                         "answer, say the approach is too long to finish in budget and advise a "
+                         "cheaper route or giving a best-effort partial answer — do NOT advise being "
+                         "more exhaustive. If they took a wrong path, name it so it is avoided.")
+            learn_from_success = False
+        elif nc * 2 == n:
+            direction = ("Half succeeded, half failed. State BOTH: the reliable thing the successful "
+                         "rollouts did, AND the specific trap the failing ones fell into.")
+            learn_from_success = True
+        elif nc * 2 > n:
+            direction = ("Most rollouts SUCCEEDED; a few failed. NOTE the specific mistake the failing "
+                         "minority made — phrase it as a caution to avoid.")
+            learn_from_success = False
+        else:  # nc*2 < n (and nc>0): majority wrong, minority right
+            direction = ("Most rollouts FAILED; a few succeeded. REMEMBER the reliable procedure the "
+                         "successful minority used to get it right.")
+            learn_from_success = True
+        sys = _L2_SYS.format(direction=direction, max_items=max_items)
         l1_items = l1_items or [[] for _ in range(n)]
-        # Only attach a genuine success's full TRACE when success is the MINORITY (most rollouts
-        # failed) — that's the only direction where L2 needs to distill "how it succeeded". In the
-        # majority-succeeded direction L2 learns "avoid the trap" from the failing minority's L1s,
-        # so dumping every winner's trace would just bloat the prompt and distract it.
-        success_minority = nc * 2 < n
-        lines = [f"SITE: {site}", f"TASK: {intent}",
-                 f"\n{n} rollouts, {nc} succeeded. Per rollout: its L1 lesson (failure / 蒙对), or — "
-                 f"only for a minority genuine success — its full trace to inspect why it worked:"]
+        # WRITER kept answer-BLIND (no reference answer) so the L2 stays a general procedure.
+        lines = [f"SITE: {site}", f"TASK: {intent}", f"\n{n} rollouts, {nc} succeeded:"]
         for i, (r, v, is_ok, items) in enumerate(zip(rollouts, verdicts, ok, l1_items)):
             tag = "OK" if is_ok else "WRONG"
             if items:
                 body = "L1 lesson: " + " | ".join(f"{it.title}: {it.content}" for it in items)
-            elif is_ok and success_minority:
-                body = "no L1 (a MINORITY genuine success) — TRACE, study why it worked:\n  " + (r.get("trace", "") or "")
+            elif is_ok and learn_from_success:
+                body = "TRACE (genuine success — study why it worked):\n  " + (r.get("trace", "") or "")
             else:
-                body = "(genuine success — no lesson needed for this direction)" if is_ok else "(no usable trajectory)"
+                body = "(genuine success)" if is_ok else "(no usable trajectory)"
             lines.append(f"\n--- rollout {i+1} [{tag}] ({v['reason']})\n  {body}")
         out = self._json(self.llm.chat(
             [{"role": "system", "content": sys}, {"role": "user", "content": "\n".join(lines)}],
             temperature=0.0, **_JSON_KW))
-        outcome = "success" if nc * 2 < n else "failure"
-        return self._items(out, f"site:{site}", outcome, max_items)
+        outcome = "success" if learn_from_success else "failure"
+        return self._items(out, f"site:{site}", outcome, max_items, layer="L2")
+
+    def select_lesson(self, intent, items):
+        """LLM injection gate: from cosine-recalled candidates, pick the ONE genuinely-applicable
+        lesson (or None). Resolves generic-vs-specific ties raw cosine can't. Returns the chosen
+        ReasoningItem or None (inject nothing)."""
+        if not items:
+            return None
+        menu = "\n".join(f"[{i}] {it.title}: {it.content}" for i, it in enumerate(items))
+        out = self._json(self.llm.chat(
+            [{"role": "system", "content": _L2_SELECT_SYS},
+             {"role": "user", "content": f"CURRENT TASK: {intent}\n\nCANDIDATE LESSONS:\n{menu}"}],
+            temperature=0.0, **_JSON_KW))
+        idx = out.get("idx", -1)
+        return items[idx] if isinstance(idx, int) and 0 <= idx < len(items) else None

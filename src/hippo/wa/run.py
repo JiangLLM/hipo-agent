@@ -17,6 +17,7 @@ repeats. State-changing sites (reddit/gitlab) reset between arms via WA_FULL_RES
 from __future__ import annotations
 
 import json
+import multiprocessing
 import os
 import sys
 from concurrent.futures import ProcessPoolExecutor
@@ -88,6 +89,7 @@ def _worker_init(cfg_plain, llm_kwargs):
     cfg = DotDict(cfg_plain)
     set_site_env(cfg)
     _fix_webarena_grader()
+    _patch_browsergym_infra()
     _WORKER["cfg"] = cfg
     _WORKER["llm"] = LLMClient(**llm_kwargs)
 
@@ -121,7 +123,6 @@ def stream_arm(cfg, llm, brain, memory, tasks, logger, tag, retrieve, write):
     n_traj = max(1, cfg.agent.n_traj) if write else max(1, int(wa.get("eval_rollouts", 1)))
     layer1, layer2 = _on(wa.get("layer1", "on")), _on(wa.get("layer2", "on"))
     vote_margin = int(wa.get("vote_margin", 2))
-    fluke_on = _on(wa.get("l1_fluke", "on"))   # L1 records failures + 蒙对 flukes; off = failures only
     site = str(wa.get("site", "shopping"))
     seen = {(it.scope, _norm(it.title)) for it in memory.reasoning.items}
     rows, w1, w2 = [], 0, 0
@@ -136,9 +137,14 @@ def stream_arm(cfg, llm, brain, memory, tasks, logger, tag, retrieve, write):
                       "temperature": cfg.llm.temperature, "max_tokens": int(wa.get("max_tokens", 4000)),
                       "cache": cfg.llm.cache, "budget_usd": cfg.run.budget_usd}
 
-        def _new_executor():   # rebuild helper — reused to recover from a BrokenProcessPool
-            return ProcessPoolExecutor(max_workers=n_traj, initializer=_worker_init,
-                                       initargs=(cfg_plain, llm_kwargs))
+        _mp = multiprocessing.get_context("spawn")   # max_tasks_per_child requires a non-fork ctx
+        def _new_executor():   # rebuild helper — reused to recover from a BrokenProcessPool.
+            # max_tasks_per_child recycles a worker whose Playwright asyncio loop has wedged (the
+            # "no running event loop" setup crash) — a fresh process starts with a fresh loop,
+            # instead of every later task's rollouts routing to the dead worker and being dropped.
+            return ProcessPoolExecutor(max_workers=n_traj, mp_context=_mp,
+                                       initializer=_worker_init, initargs=(cfg_plain, llm_kwargs),
+                                       max_tasks_per_child=int(wa.get("worker_recycle", 10)))
         executor = _new_executor()
         logger.info(f"[{tag}] parallel rollouts ON: {n_traj} worker processes")
 
@@ -150,9 +156,21 @@ def stream_arm(cfg, llm, brain, memory, tasks, logger, tag, retrieve, write):
         scope = f"site:{site}"
         mem_text, ret_titles, ret_scores = "", [], []
         if retrieve:
-            pairs = memory.reasoning.topk_scored(t["intent"], int(cfg.memory.retrieve_k_reasoning),
-                                                 float(cfg.memory.get("relevance_threshold", 0.0)),
-                                                 scope=scope)
+            k = int(cfg.memory.retrieve_k_reasoning)
+            thr = float(cfg.memory.get("relevance_threshold", 0.0))
+            # inject ONLY L2 by default; L1 stays in the bank (written for debug) but not retrieved.
+            # Layer-filter happens INSIDE the store (before top-k) so L2 isn't starved by the L1 flood.
+            layer = "L2" if _on(wa.get("inject_only_l2", "on")) else None
+            if str(wa.get("inject_gate", "none")) == "llm":
+                # cosine recall a small pool, then let the LLM pick the ONE genuinely-applicable
+                # lesson (or none) — resolves the generic-vs-specific ties raw cosine can't (e.g. a
+                # "branch main" task needs the branch lesson, not the generic Contributors one).
+                fetch = int(wa.get("retrieve_fetch_k", 5))
+                cands = memory.reasoning.topk_scored(t["intent"], fetch, thr, scope=scope, layer=layer)
+                chosen = brain.select_lesson(t["intent"], [it for it, _ in cands])
+                pairs = [(it, s) for it, s in cands if it is chosen] if chosen is not None else []
+            else:
+                pairs = memory.reasoning.topk_scored(t["intent"], k, thr, scope=scope, layer=layer)
             items = [it for it, _ in pairs]
             ret_titles = [it.title for it in items]
             ret_scores = [round(s, 3) for _, s in pairs]
@@ -190,44 +208,31 @@ def stream_arm(cfg, llm, brain, memory, tasks, logger, tag, retrieve, write):
                         for r in range(n_traj)]
         for x in rollouts:
             x["trace"] = compact_trace(x["steps"])
-        verdicts = [brain.judge_trajectory(t["intent"], x["trace"], x["stop_answer"]) for x in rollouts]
+        verdicts = [brain.judge_trajectory(t["intent"], x["trace"], x["stop_answer"],
+                                           x["reward"], t.get("reference")) for x in rollouts]
         for r, (x, v) in enumerate(zip(rollouts, verdicts)):
             logger.event("wa_judge", tag=tag, task_id=t["task_id"], rollout=r,
-                         reward=x["reward"], success=v["success"], verified=v["verified"],
-                         reason=v.get("reason", ""), evidence=v.get("evidence", ""))
+                         reward=x["reward"], outcome=v["outcome"], reason=v.get("reason", ""))
         reward = rollouts[0]["reward"]                # official 0/1 of the scored rollout
-        # Learning signal: which rollouts count as "success" for L1/L2 gating.
-        #   judge  = label-free verdict (deployment-realistic, but noisy/over-strict here).
-        #   reward = the env's own task-completion signal (an oracle upper-bound on the
-        #            mechanism: shows what L1/L2 do when success/fail is judged accurately).
-        # WebArena's reward is a programmatic completion check, not a held-out gold answer,
-        # so using it stays honest about "did the task complete" without leaking test labels.
-        sig = str((cfg.get("wa", {}) or {}).get("divergence_signal", "reward"))
-        if sig == "reward":
-            ok = [bool(x["reward"]) for x in rollouts]
-        else:
-            ok = [bool(v["success"] and v["verified"]) for v in verdicts]
+        # Ground truth is the env grader (reward). The judge only labels HOW a CORRECT rollout got
+        # there: genuine (really derived) vs fluke (correct by luck / shallow match). ok/nc stay
+        # reward-based for the top-line metrics; the L1/L2 gates below use the genuine/fluke labels.
+        ok = [bool(x["reward"]) for x in rollouts]
         nc = sum(ok)
         n = len(rollouts)
 
         if write:
-            # L1 = record the two SURPRISING outcomes, one lesson each, no count cap:
-            #   - wrong (env reward=0)                       -> why it failed / how to avoid
-            #   - 蒙对 FLUKE (reward=1 but the judge found the reasoning did NOT establish it) -> a caution
-            # A genuine success (reward=1 AND judge success+verified = really knew it) is SKIPPED —
-            # nothing to learn. The genuine/fluke split comes from the judge (which now reads the full
-            # reasoning), not raw reward. wa.l1_fluke=off disables fluke capture (failures only).
-            # Every written L1 also feeds L2.
+            # L1 = reflect ONLY on genuine FAILURES (reward=0), one lesson each, no cap. Genuine
+            # successes have nothing to learn; FLUKES are NO-OP (skipped here AND dropped from L2).
+            # The reference answer is passed in so the lesson targets the procedure that would have
+            # reached the correct result. Every written L1 also feeds L2.
             l1_by_rollout: list = []
             if layer1:
                 for x, v in zip(rollouts, verdicts):
-                    genuine = bool(x["reward"]) and v["success"] and v["verified"]
-                    fluke = bool(x["reward"]) and not genuine
-                    if x["error"] or genuine or (fluke and not fluke_on):
+                    if x["error"] or v["outcome"] != "failure":
                         l1_by_rollout.append([])
                         continue
-                    items = brain.reflect_trajectory(site, t["intent"], x["trace"], v,
-                                                     outcome_hint=("fluke" if fluke else None))
+                    items = brain.reflect_trajectory(site, t["intent"], x["trace"], v)
                     l1_by_rollout.append(items)
                     for it in items:
                         k = (it.scope, _norm(it.title))
@@ -236,17 +241,27 @@ def stream_arm(cfg, llm, brain, memory, tasks, logger, tag, retrieve, write):
                             logger.event("wa_write_l1", task=t["task_id"], item={"title": it.title})
             else:
                 l1_by_rollout = [[] for _ in rollouts]
-            # L2: contrast the N per-rollout L1 lessons (majority vs minority), gated on divergence.
-            if layer2 and 0 < nc < n and abs(2 * nc - n) >= vote_margin:
-                for it in brain.contrast_rollouts(site, t["intent"], rollouts, verdicts,
-                                                  l1_by_rollout, ok=ok):
+            # L2: FLUKE rollouts are dropped entirely (no-op), then contrast the rest by the
+            # genuine-success ratio — 4 cases inside contrast_rollouts (all-wrong / half /
+            # majority-right / majority-wrong). Fires only with >1 non-fluke rollouts that are not
+            # a clean sweep of genuine successes.
+            keep = [i for i, v in enumerate(verdicts) if v["outcome"] != "fluke"]
+            ok_l2 = [verdicts[i]["outcome"] == "genuine" for i in keep]
+            ncg = sum(ok_l2); nkeep = len(keep)
+            if layer2 and nkeep > 1 and ncg < nkeep:
+                for it in brain.contrast_rollouts(site, t["intent"],
+                                                  [rollouts[i] for i in keep],
+                                                  [verdicts[i] for i in keep],
+                                                  [l1_by_rollout[i] for i in keep],
+                                                  ok=ok_l2):
                     k = (it.scope, _norm(it.title))
                     if k not in seen:
                         seen.add(k); memory.write_reasoning(it); w2 += 1
-                        logger.event("wa_write_l2", task=t["task_id"], nc=nc, n=n, item={"title": it.title})
+                        logger.event("wa_write_l2", task=t["task_id"], nc=ncg, n=nkeep,
+                                     n_fluke=n - nkeep, item={"title": it.title})
 
         rows.append({"idx": ti, "task_id": t["task_id"], "template_id": t["template_id"],
-                     "reward": reward, "judge": int(verdicts[0]["success"] and verdicts[0]["verified"]),
+                     "reward": reward, "judge": int(verdicts[0]["outcome"] == "genuine"),
                      "nc": nc, "n": n, "steps": rollouts[0]["n_steps"]})
         # self-evolution curve: cumulative SR and a trailing-10 window, in stream order —
         # if learning helps, the trailing window should rise as the bank matures.
@@ -338,6 +353,41 @@ def _fix_webarena_grader():
         pass
 
 
+def _patch_browsergym_infra():
+    """Two infra fixes for the flaky self-hosted browser env (must run in whatever process calls
+    env.step — i.e. every worker + the main process):
+    (B) browsergym hardcodes a 500ms Playwright timeout on every locator action (fill/click/…),
+        so a slightly-slow element throws TimeoutError and the agent wastes a step. Bump exactly
+        those 500ms locator calls to 3000ms at the Playwright Locator level.
+    (C) browsergym retries DOM/AXTree extraction EXTRACT_OBS_MAX_TRIES(=5) times per step; on an
+        iframe-marking-bug page (e.g. t307) it burns all 5 retries every step. Lower the cap to 2
+        — the final try is already lenient (skips the unmarkable frame)."""
+    try:
+        import browsergym.core.env as _bgenv
+        if getattr(_bgenv, "EXTRACT_OBS_MAX_TRIES", 5) > 2:
+            _bgenv.EXTRACT_OBS_MAX_TRIES = 2
+    except Exception:  # noqa: BLE001 - browsergym internals may shift; leave default
+        pass
+    try:
+        from playwright.sync_api import Locator
+        for _name in ("click", "dblclick", "fill", "clear", "check", "uncheck",
+                      "select_option", "hover", "press", "focus", "type"):
+            _orig = getattr(Locator, _name, None)
+            if _orig is None or getattr(_orig, "_wa_bumped", False):
+                continue
+
+            def _mk(o):
+                def _w(self, *a, **k):
+                    if k.get("timeout") == 500:      # only the hardcoded 500ms; leave timeout=0 etc.
+                        k["timeout"] = 3000
+                    return o(self, *a, **k)
+                _w._wa_bumped = True
+                return _w
+            setattr(Locator, _name, _mk(_orig))
+    except Exception:  # noqa: BLE001
+        pass
+
+
 def run(cfg) -> dict:
     load_dotenv()
     import litellm
@@ -345,6 +395,7 @@ def run(cfg) -> dict:
     wa = cfg.get("wa", {}) or {}
     set_site_env(cfg)
     _fix_webarena_grader()
+    _patch_browsergym_infra()
     logger = RunLogger(cfg.run.out_dir, cfg.run.name, level=cfg.logging.level, jsonl=cfg.logging.jsonl)
     if cfg.memory.mode != "off":
         cfg["memory"]["mode"] = "reasoning_only"

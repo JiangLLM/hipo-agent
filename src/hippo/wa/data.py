@@ -44,6 +44,9 @@ def load_tasks(cfg) -> list[dict]:
                      "template_id": int(r.get("intent_template_id", -1)),
                      "intent": r.get("intent", ""),
                      "eval_types": etypes,
+                     # reference answer(s) for the LEARNING signal only (judge/reflect see it
+                     # AFTER the rollout); the agent never gets it while solving.
+                     "reference": r.get("eval", {}).get("reference_answers", {}),
                      "requires_login": bool(r.get("require_login", False))})
     rows.sort(key=lambda r: r["task_id"])
     if flt := int(wa.get("limit", 0) or 0):

@@ -38,15 +38,19 @@ class ReasoningStore:
             self.items.append(item)
 
     def topk(self, query: str, k: int, threshold: float = 0.0,
-             scope: str | None = None) -> list[ReasoningItem]:
-        """`scope=None` searches everything (legacy); a scope string restricts the pool
-        to items written under that scope (e.g. one repo / one website)."""
+             scope: str | None = None, layer: str | None = None) -> list[ReasoningItem]:
+        """`scope=None` searches everything (legacy); a scope string restricts the pool to items
+        written under that scope. `layer` (e.g. "L2") further restricts to items with that layer
+        tag — applied BEFORE top-k, so a layer can't be starved out of a fixed candidate pool by
+        another (e.g. L2 lessons surviving even when L1 vastly outnumbers them)."""
         if k <= 0:
             return []
         with self._lock:
             items = list(self.items)                            # snapshot under lock
         if scope is not None:
             items = [it for it in items if getattr(it, "scope", "") == scope]
+        if layer is not None:
+            items = [it for it in items if getattr(it, "layer", "") == layer]
         if not items:
             return []                                           # skip embedding when empty
         q = np.asarray(self._embed([query])[0], dtype=float)   # embed outside lock
@@ -57,10 +61,10 @@ class ReasoningStore:
         return [items[i] for i in order if sims[i] >= threshold][:k]
 
     def topk_scored(self, query: str, k: int, threshold: float = 0.0,
-                    scope: str | None = None) -> list[tuple[ReasoningItem, float]]:
+                    scope: str | None = None, layer: str | None = None) -> list[tuple[ReasoningItem, float]]:
         """Like topk but returns (item, cosine) pairs — for retrieval-quality logging
         and downstream relevance gating."""
-        items = self.topk(query, k, threshold, scope)
+        items = self.topk(query, k, threshold, scope, layer)
         if not items:
             return []
         q = np.asarray(self._embed([query])[0], dtype=float)

@@ -57,6 +57,7 @@ class ReasoningItem:
     scope: str = ""                    # optional env id (e.g. "repo:django/django"); "" = global
     certainty: str = "medium"          # Honcho-style tag: low | medium | high
     outcome: str = "unknown"           # success | failure
+    layer: str = ""                    # "L1" (per-rollout reflection) | "L2" (cross-rollout contrast)
     source_traj_ids: list[str] = field(default_factory=list)
     surprise: float = 0.0
     id: str = field(default_factory=lambda: _uid("rsn"))

@@ -175,6 +175,8 @@ django 231 题、claude-haiku-4-5、真值（本地官方 harness + Epoch arm64 
 
 再往后是 WebArena。自主网页导航、同一个网站上任务反复出现，本来就是记忆最该发光的地方，我们的机制代码也早就和具体领域解耦了，迁过去只用换环境层。卡住的只有机器：官方镜像全是 x86 的，加起来三百多个 G，这台 Apple Silicon 跑不动。需要一台 x86 的 Linux 机器，4 核 16G 内存、1T 左右的盘、装好 Docker 就行——要么直接用官方的 AWS 镜像（us-east-2 区，t3a.xlarge 配 1T 盘，开箱即用），要么随便租台 x86 大盘机自己搭（有现成脚本，四十欧一个月的档位就够），公司沙箱里开台 EC2 也可以。
 
+WebArena 现已跑通（gpt-5.6-sol、gitlab/shopping_admin/shopping 三站）。配对口径下记忆净影响≈0，但根因不在检索或注入，而在"写"这一端——抽取出来的 L2 经验有四个系统性毛病（不去重、近半死条、矛盾条目同库共存、记流程而非记原则），逐题证据、"病在写端"的完整诊断和下一步 consolidation 修法都在 [WA_FINDINGS.md](WA_FINDINGS.md)。
+
 ## TODO
 
 > 以下观察都是在 **Mind2Web**(teacher-forced 逐步预测、每步有 gold)上得到的。WebArena 是 per-task、无逐步 gold,记忆单元和这个问题的形态都会变。

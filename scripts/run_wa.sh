@@ -18,5 +18,5 @@ caffeinate -i .venv-wa/bin/python -m hippo.wa.run \
   --wa.readonly_only "$READONLY" \
   --wa.arms nomem,withmem --agent.n_traj "$NTRAJ" \
   --wa.max_steps 30 --wa.step_timeout 90 \
-  --run.budget_usd 250 --run.name "$RUN"
+  --run.budget_usd "${BUDGET:-1000000}" --run.name "$RUN"
 echo "RUN_DONE: $RUN"

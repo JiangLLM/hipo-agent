@@ -14,6 +14,7 @@ from typing import Any
 
 from tenacity import (
     retry,
+    retry_if_exception,
     retry_if_not_exception_type,
     stop_after_attempt,
     wait_exponential,
@@ -118,7 +119,8 @@ class LLMClient:
             self._cache_put("chat", key, text)
         return text
 
-    @retry(retry=retry_if_not_exception_type(BudgetExceeded),
+    @retry(retry=retry_if_exception(lambda e: not isinstance(e, BudgetExceeded)
+                                    and type(e).__name__ != "ContextWindowExceededError"),
            stop=stop_after_attempt(8), wait=wait_exponential(multiplier=1, min=2, max=60))
     def _call_chat(self, payload: dict) -> str:
         import litellm

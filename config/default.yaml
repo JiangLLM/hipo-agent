@@ -70,6 +70,10 @@ wa:
   arms: nomem,withmem      # nomem | withmem | frozenmem
   memory_in: ""            # frozenmem/resume: path to a saved memory.json
   max_steps: 30            # agent turns per episode
+  worker_recycle: 10       # ProcessPoolExecutor max_tasks_per_child: recycle a worker after this
+                           # many rollouts so a wedged Playwright event loop ("no running event
+                           # loop") is replaced by a fresh process instead of silently dropping
+                           # 2 rollouts/task for the rest of the run.
   timeout: 10000           # per-action browser timeout (ms)
   step_timeout: 90         # hard wall-clock cap (s) on one env.step — kills wedged browser ops
   max_tokens: 8000         # shared budget: judge/extract need headroom (reasoning models
@@ -77,7 +81,10 @@ wa:
   layer1: on
   layer2: on
   l1_fluke: on             # L1 records failures + 蒙对 flukes (reward=1 but judge: reasoning unsound); off = failures only
-  vote_margin: 1           # L2 when |2*nc-n|>=margin (1 = any divergence triggers it)
+  inject_only_l2: on       # retrieval injects ONLY L2 lessons; L1 still written (for debug) but not retrieved
+  inject_gate: llm         # none | llm — llm: cosine recall retrieve_fetch_k, then LLM picks the ONE applicable (or none)
+  retrieve_fetch_k: 5      # candidate pool size for the llm inject gate
+  vote_margin: 1           # (unused for WA L2 now: L2 fires on any nc<n, ratio-cased inside contrast_rollouts)
   divergence_signal: reward  # reward | judge — what counts a rollout success for L1/L2 gating
   readonly_only: false     # keep only pure string_match tasks (no state mutation, robust eval)
   shard: ""                # "i/n" round-robin task partition for PARALLEL readonly runs (K
