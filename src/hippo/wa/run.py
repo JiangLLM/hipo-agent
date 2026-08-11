@@ -32,7 +32,7 @@ from ..llm import BudgetExceeded, LLMClient
 from ..logging_utils import RunLogger
 from ..memory import Memory
 from .brain import WaBrain
-from .data import load_tasks, set_site_env
+from .data import assert_site_env, load_tasks, set_site_env
 from .rollout import compact_trace, run_episode
 
 
@@ -44,30 +44,61 @@ def _norm(t: str) -> str:
     return " ".join(t.lower().split())
 
 
-def reset_site(cfg, logger, tag):
-    """Full-reset the state-changing sites, then poll until ready (200-500s). Called
-    ONCE per arm, not per task — all arms get the same clean starting state."""
+def reset_site(cfg, logger, tag, required: bool = False):
+    """Restore every box in the fleet to its pristine images before an arm starts.
+
+    Why a script and not an HTTP endpoint: the endpoint form (wa.reset_url, browsergym's
+    WA_FULL_RESET contract) assumes a reset service somebody deployed. We never deployed one, the
+    config default is empty, and no launcher ever passed it — so this function returned
+    immediately on every run we have ever done, while its own docstring claimed the sites were
+    being reset. It also only ever addressed ONE box, which cannot work now that a run spans eight.
+
+    scripts/wa_fleet.sh reset does the real thing on all eight in parallel: delete the four
+    containers, recreate them from the pristine images, and write each box's own IP back into
+    Magento and GitLab. That works because the containers keep no volumes, so the writable layer
+    IS the entire site state.
+
+    required=True makes an unavailable reset fatal. For mutating tasks that is the only safe
+    setting: without a reset the withmem arm starts on whatever the nomem arm left behind, and the
+    comparison is meaningless in a way no downstream metric can reveal."""
+    import subprocess
     import time
-    import urllib.request
 
     wa = cfg.get("wa", {}) or {}
-    base = str(wa.get("reset_url", "")).rstrip("/")
-    if not base:
+    if not _on(wa.get("fleet_reset", "off")):
+        if required:
+            raise RuntimeError(
+                "this task set writes to the server, so the arms must start from identical state, "
+                "but wa.fleet_reset is off. Turn it on (the fleet script resets all 8 boxes), or "
+                "select read-only tasks with --wa.task_filter readonly.")
         return
+    root = Path(__file__).resolve().parents[3]
+    script = root / "scripts" / "wa_fleet.sh"
+    if not script.exists():
+        if required:
+            raise RuntimeError(f"fleet reset requested but {script} is missing")
+        logger.event("reset_skipped", tag=tag, why="script missing")
+        return
+    logger.info(f"[{tag}] resetting the fleet from pristine images (a few minutes)")
+    t0 = time.time()
     try:
-        urllib.request.urlopen(f"{base}/reset", timeout=60)
-    except Exception:  # noqa: BLE001 - trigger may return before completion
-        pass
-    for _ in range(60):                              # poll up to ~10 min
-        try:
-            status = urllib.request.urlopen(f"{base}/status", timeout=30).read().decode()
-            if "Ready" in status:
-                logger.event("reset_done", tag=tag)
-                return
-        except Exception:  # noqa: BLE001
-            pass
-        time.sleep(10)
-    logger.event("reset_timeout", tag=tag)
+        proc = subprocess.run(["bash", str(script), "reset"], cwd=str(root),
+                              capture_output=True, text=True, timeout=45 * 60)
+    except subprocess.TimeoutExpired:
+        logger.event("reset_timeout", tag=tag)
+        if required:
+            raise
+        return
+    took = round(time.time() - t0, 1)
+    if proc.returncode == 0:
+        logger.event("reset_done", tag=tag, seconds=took)
+        logger.info(f"[{tag}] fleet reset done in {took}s")
+    else:
+        logger.event("reset_failed", tag=tag, seconds=took, err=proc.stdout[-800:])
+        if required:
+            raise RuntimeError(f"fleet reset failed, refusing to score mutating tasks on dirty "
+                               f"state:\n{proc.stdout[-800:]}")
+        logger.warn(f"[{tag}] fleet reset FAILED after {took}s, continuing (read-only task set)")
 
 
 # ---- parallel rollout workers (multi-rollout write arm) ---------------------------------
@@ -81,6 +112,25 @@ def reset_site(cfg, logger, tag):
 _WORKER: dict = {}
 
 
+def _kill_pool(pool) -> None:
+    """Tear a pool down for real. shutdown(cancel_futures=True) leaves RUNNING futures running and
+    their processes alive, so a rebuilt pool would race the corpse — on a per-deployment pool that
+    means two rollouts of one task on one box, i.e. the contamination we are paying 8 boxes to
+    avoid. Kill the processes, then let shutdown collect."""
+    try:
+        for proc in list(getattr(pool, "_processes", {}) or {}).values():
+            try:
+                proc.kill()
+            except Exception:  # noqa: BLE001 - already gone
+                pass
+    except Exception:  # noqa: BLE001 - private attr moved; shutdown below is still worth trying
+        pass
+    try:
+        pool.shutdown(wait=False, cancel_futures=True)
+    except Exception:  # noqa: BLE001
+        pass
+
+
 def _worker_init(cfg_plain, llm_kwargs):
     import litellm
     from ..config import DotDict
@@ -88,6 +138,8 @@ def _worker_init(cfg_plain, llm_kwargs):
     litellm.drop_params = True
     cfg = DotDict(cfg_plain)
     set_site_env(cfg)
+    # this worker owns exactly one deployment for its whole life; prove it before touching a browser
+    assert_site_env(cfg)
     _fix_webarena_grader()
     _patch_browsergym_infra()
     _WORKER["cfg"] = cfg
@@ -131,25 +183,90 @@ def stream_arm(cfg, llm, brain, memory, tasks, logger, tag, retrieve, write):
     # multi-rollout write arm needs it; WA_PARALLEL=0 forces the sequential path (isolated debug).
     executor = None
     _new_executor = None
-    if write and n_traj > 1 and os.environ.get("WA_PARALLEL", "1") != "0":
-        cfg_plain = json.loads(json.dumps(dict(cfg)))
+    # wa.base_urls pins rollout r to deployment r (one WebArena box per rollout). This is the only
+    # way a MUTATING task can yield N independent rewards: the N rollouts share one account per
+    # site, and the grader reads server state, so on a single deployment "did the bio change / did
+    # the order appear" is one shared answer for all N — first success scores everyone, and the L2
+    # contrast is then built on rollouts that were tripping over each other mid-episode.
+    #
+    # It has to be per-PROCESS, not per-rollout: webarena freezes the site URLs into module
+    # constants at first import (browser_env/env_config.py), so re-setting the env vars later has
+    # no effect. And it cannot be handed out by a shared counter, because max_tasks_per_child
+    # recycles workers — a replacement would draw an index still held by a live worker and two
+    # rollouts would quietly land on the same box. Hence one single-worker pool per deployment:
+    # the binding is structural, and recycling still works inside each pool.
+    raw_urls = wa.get("base_urls", "")
+    base_urls = ([] if raw_urls in (True, False, None)     # a bare --wa.base_urls parses as True
+                 else [u.strip() for u in str(raw_urls).split(",") if u.strip()])
+    # Refuse the combination that produces confidently-wrong numbers: mutating tasks fanned out
+    # over a SHARED deployment. One box cannot answer "did the order appear" N different ways, so
+    # the first success scores every rollout. Better to stop than to publish that.
+    n_mut = sum(1 for t in tasks if t.get("mutating"))
+    if n_traj > 1 and n_mut and len(base_urls) < n_traj:
+        raise ValueError(
+            f"{n_mut} of {len(tasks)} tasks write to the server, but wa.base_urls lists "
+            f"{len(base_urls)} deployments for n_traj={n_traj}. Give every rollout its own box "
+            f"(scripts/wa_fleet.sh urls), or select read-only tasks (--wa.task_filter readonly), "
+            f"or drop to --agent.n_traj 1.")
+    if base_urls and len(base_urls) < n_traj:
+        raise ValueError(f"wa.base_urls has {len(base_urls)} deployments but n_traj={n_traj}; "
+                         "every rollout needs its own box or the isolation is a fiction")
+    pools: list = []
+    # NOT gated on `write`: a scoring arm running eval_rollouts>1 needs the same isolation, or the
+    # baseline we compare against is itself contaminated (rollout 1's purchase is visible to 2..N)
+    # — and it would run N rollouts sequentially in the parent, N times slower for no reason.
+    if n_traj > 1 and os.environ.get("WA_PARALLEL", "1") != "0":
         llm_kwargs = {"model": cfg.llm.model, "embed_model": cfg.llm.embed_model,
                       "temperature": cfg.llm.temperature, "max_tokens": int(wa.get("max_tokens", 4000)),
                       "cache": cfg.llm.cache, "budget_usd": cfg.run.budget_usd}
-
         _mp = multiprocessing.get_context("spawn")   # max_tasks_per_child requires a non-fork ctx
-        def _new_executor():   # rebuild helper — reused to recover from a BrokenProcessPool.
-            # max_tasks_per_child recycles a worker whose Playwright asyncio loop has wedged (the
-            # "no running event loop" setup crash) — a fresh process starts with a fresh loop,
-            # instead of every later task's rollouts routing to the dead worker and being dropped.
-            return ProcessPoolExecutor(max_workers=n_traj, mp_context=_mp,
-                                       initializer=_worker_init, initargs=(cfg_plain, llm_kwargs),
-                                       max_tasks_per_child=int(wa.get("worker_recycle", 10)))
-        executor = _new_executor()
-        logger.info(f"[{tag}] parallel rollouts ON: {n_traj} worker processes")
+        recycle = int(wa.get("worker_recycle", 10))
 
-    if site in ("reddit", "gitlab", "shopping_admin"):   # clean, identical start per arm
-        reset_site(cfg, logger, tag)
+        def _cfg_for(url: str) -> dict:
+            plain = json.loads(json.dumps(dict(cfg)))
+            if url:
+                plain["wa"]["base_url"] = url
+            return plain
+
+        if base_urls:
+            # Recycle far more aggressively here than on the shared pool. There, `recycle` tasks
+            # are spread over n_traj workers, so a wedged one is replaced after roughly
+            # recycle/n_traj rollouts. Here each pool has exactly ONE worker, so the same number
+            # means it must serve `recycle` whole tasks before it is refreshed — and a Playwright
+            # loop that wedges early ("no running event loop") then poisons every remaining
+            # rollout on that box. That is what cost the shopping_admin nomem arm 32 rollouts.
+            per_pool_recycle = max(1, recycle // max(1, n_traj))
+
+            def _new_pool(i):
+                # max_workers=1 so this pool's single process keeps deployment i for its whole life
+                return ProcessPoolExecutor(max_workers=1, mp_context=_mp, initializer=_worker_init,
+                                           initargs=(_cfg_for(base_urls[i]), llm_kwargs),
+                                           max_tasks_per_child=per_pool_recycle)
+            _new_executor = _new_pool
+            pools = [_new_pool(i) for i in range(n_traj)]
+            logger.info(f"[{tag}] rollout isolation ON: {n_traj} deployments "
+                        f"{base_urls[:n_traj]}")
+        else:
+            # single shared deployment: correct for read-only tasks only (nothing is written, so
+            # the N rollouts cannot see each other), which is what wa.task_filter=readonly selects.
+            cfg_plain = _cfg_for("")
+            def _new_executor():   # rebuild helper — recovers from a BrokenProcessPool
+                # recycling replaces a worker whose Playwright asyncio loop has wedged (the "no
+                # running event loop" crash) instead of routing every later rollout to a dead one.
+                return ProcessPoolExecutor(max_workers=n_traj, mp_context=_mp,
+                                           initializer=_worker_init, initargs=(cfg_plain, llm_kwargs),
+                                           max_tasks_per_child=recycle)
+            executor = _new_executor()
+            logger.info(f"[{tag}] parallel rollouts ON: {n_traj} worker processes, ONE deployment "
+                        f"(sound for read-only tasks; mutating tasks need wa.base_urls)")
+
+    # Reset when this arm will WRITE to the sites, not by a hardcoded site list. The old list left
+    # shopping out even though its cart, orders and reviews are all mutable, and it would have
+    # reset gitlab for a run of pure lookups. Statefulness is a property of the task set, and the
+    # frozen manifest already tells us: if any task mutates, both arms must start from the same
+    # state, and an unavailable reset is then fatal rather than a warning.
+    if n_mut:
+        reset_site(cfg, logger, tag, required=True)
 
     def one_task(ti, t):
         nonlocal w1, w2, executor
@@ -177,26 +294,51 @@ def stream_arm(cfg, llm, brain, memory, tasks, logger, tag, retrieve, write):
             mem_text = memory.render({"reasoning": items})
             logger.event("wa_retrieve", tag=tag, task_id=t["task_id"], n_retrieved=len(items),
                          scores=ret_scores, titles=ret_titles, mem_chars=len(mem_text))
-        # N rollouts: in parallel across worker processes when the pool is up, else sequentially.
-        if executor is not None:
+        # N rollouts: in parallel across worker processes when a pool is up, else sequentially.
+        if pools or executor is not None:
             payloads = [(t["task_id"], mem_text,
                          {"tag": tag, "task_id": t["task_id"], "rollout": r}) for r in range(n_traj)]
             packed = None
             # a worker native crash (segfault/OOM in Playwright) breaks the pool PERMANENTLY;
             # rebuild + retry once so one crash can't silently zero every remaining task in the arm.
-            for attempt in (1, 2):
-                try:
-                    packed = list(executor.map(_rollout_worker, payloads))
-                    break
-                except BrokenProcessPool:
-                    logger.warn(f"[{tag}] worker pool broke on t{t['task_id']} (attempt {attempt}) — rebuilding")
+            if pools:
+                # one pool per deployment: rollout r ALWAYS runs on box r. Retry PER ROLLOUT, never
+                # as a batch: collecting with [f.result() for f in futs] raises on the first broken
+                # future while the other N-1 are still running, and shutdown(cancel_futures=True)
+                # cannot cancel a RUNNING future — so re-submitting the whole batch put a second
+                # rollout of the same task on a box that still had the first one live. That is the
+                # shared-cart contamination the fleet exists to remove, reintroduced by the retry.
+                results: list = [None] * n_traj
+                futs = {r: pools[r].submit(_rollout_worker, payloads[r]) for r in range(n_traj)}
+                for r, f in futs.items():
                     try:
-                        executor.shutdown(wait=False, cancel_futures=True)
-                    except Exception:  # noqa: BLE001
-                        pass
-                    executor = _new_executor()
-            if packed is None:   # broke twice — skip this task loudly (fresh pool ready for next), not silent
-                raise RuntimeError(f"worker pool repeatedly broke on t{t['task_id']}")
+                        results[r] = f.result()
+                    except BrokenProcessPool:
+                        logger.warn(f"[{tag}] pool {r} (box {base_urls[r]}) broke on "
+                                    f"t{t['task_id']} — killing it and retrying that rollout only")
+                        _kill_pool(pools[r])
+                        pools[r] = _new_executor(r)
+                        try:
+                            results[r] = pools[r].submit(_rollout_worker, payloads[r]).result()
+                        except Exception as exc:  # noqa: BLE001 - one box down != lose the task
+                            logger.warn(f"[{tag}] pool {r} failed twice on t{t['task_id']}: {exc}")
+                if all(x is None for x in results):
+                    raise RuntimeError(f"every deployment failed on t{t['task_id']}")
+                # a rollout that never produced a result is dropped, not faked: nc/n below counts
+                # only what actually ran, so a dead box shrinks N instead of scoring a false 0.
+                packed = [x for x in results if x is not None]
+            else:
+                for attempt in (1, 2):
+                    try:
+                        packed = list(executor.map(_rollout_worker, payloads))
+                        break
+                    except BrokenProcessPool:
+                        logger.warn(f"[{tag}] worker pool broke on t{t['task_id']} "
+                                    f"(attempt {attempt}) — rebuilding")
+                        _kill_pool(executor)
+                        executor = _new_executor()
+                if packed is None:   # broke twice — skip this task loudly, not silently
+                    raise RuntimeError(f"worker pool repeatedly broke on t{t['task_id']}")
             rollouts = [p["x"] for p in packed]
             for p in packed:                       # replay per-step events; accumulate cost
                 for kind, f in p["events"]:
@@ -219,7 +361,20 @@ def stream_arm(cfg, llm, brain, memory, tasks, logger, tag, retrieve, write):
         # reward-based for the top-line metrics; the L1/L2 gates below use the genuine/fluke labels.
         ok = [bool(x["reward"]) for x in rollouts]
         nc = sum(ok)
-        n = len(rollouts)
+        # Denominator counts rollouts that actually RAN. A rollout that died in the browser
+        # (Target crashed, goto timeout, a wedged Playwright loop) carries reward=0 and would
+        # otherwise be scored as a wrong answer. That is not a measurement, it is a missing
+        # sample, and it is not symmetric across arms: on shopping_admin the nomem arm lost 32
+        # rollouts to browser crashes against the withmem arm's 4, which alone moved the paired
+        # delta by 3.2 points — in the direction that flattered memory.
+        n_err = sum(1 for x in rollouts if x.get("error"))
+        n = len(rollouts) - n_err
+        if n <= 0:                     # every rollout died: no evidence either way
+            logger.event("wa_task_all_failed", tag=tag, task_id=t["task_id"], n_err=n_err)
+            return
+        if n_err:
+            logger.event("wa_rollouts_dropped", tag=tag, task_id=t["task_id"],
+                         n_err=n_err, n_scored=n)
 
         if write:
             # L1 = reflect ONLY on genuine FAILURES (reward=0), one lesson each, no cap. Genuine
@@ -291,6 +446,11 @@ def stream_arm(cfg, llm, brain, memory, tasks, logger, tag, retrieve, write):
     finally:
         if executor is not None:
             executor.shutdown(wait=True, cancel_futures=True)
+        for p in pools:
+            try:
+                p.shutdown(wait=True, cancel_futures=True)
+            except Exception:  # noqa: BLE001 - teardown must not mask the real error
+                pass
         with open(Path(logger.dir) / f"rewards_{tag}.json", "w") as fh:
             json.dump({str(r["task_id"]): r["reward"] for r in rows}, fh, indent=2)
         write_csv(os.path.join(logger.dir, f"metrics_{tag}.csv"), rows)

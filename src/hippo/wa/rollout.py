@@ -17,30 +17,69 @@ BrowserGym is imported lazily so importing this module never pulls it into the m
 """
 from __future__ import annotations
 
+import os
 import re
 import urllib.parse
 
 
-def _guard_host(action: str, origin: str) -> str:
-    """Agents sometimes hallucinate an external host (gitlab.com, gitlab.local, github.com) inside
-    a goto() when a project/branch isn't found on the dashboard/search — landing off the
-    self-hosted env (login page or ERR_NAME_NOT_RESOLVED) and losing the episode. Rewrite any
-    goto() whose host differs from the CURRENT page origin back onto that origin, so the agent's
-    direct-navigation fallback lands on the real site instead of the public one."""
-    if not origin or "goto(" not in action:
+def _site_origins() -> dict[str, str]:
+    """netloc -> full origin, for every site THIS worker is configured to talk to.
+
+    Read from the environment because that is where the per-worker deployment lives: each worker
+    process is pinned to one box and set_site_env wrote that box's URLs here before browsergym
+    was imported."""
+    out = {}
+    for var in ("SHOPPING", "SHOPPING_ADMIN", "REDDIT", "GITLAB", "MAP", "WIKIPEDIA", "HOMEPAGE"):
+        url = os.environ.get(var, "")
+        if url.startswith("http"):
+            p = urllib.parse.urlparse(url)
+            if p.netloc:
+                origin = f"{p.scheme}://{p.netloc}"
+                out[p.netloc] = origin      # "is this host one of ours?"
+                out[var] = origin           # "where does site X live?"
+    return out
+
+
+def _guard_host(action: str, origin: str, site: str = "") -> str:
+    """Agents sometimes hallucinate an external host (gitlab.com, magento.local, github.com) inside
+    a goto() when a project or product isn't found through the UI — landing off the self-hosted env
+    and losing the episode. Rewrite such a goto back onto our own deployment.
+
+    Two rules, both learned the hard way.
+
+    Target the CONFIGURED deployment, not the current page's origin. Pinning to the current origin
+    means that if a rollout ever does drift onto a foreign box, the guard nails it there for the
+    rest of the episode while the grader keeps reading the box the rollout was assigned — scoring
+    a trajectory against a server it never touched. The configured origins are the fixed point.
+
+    Leave OUR OWN hosts alone. Our six sites differ only by port, so a same-box cross-site goto
+    (gitlab:8023 -> reddit:9999) has a different netloc and the old rule rewrote it, silently
+    breaking any task that spans two sites."""
+    if "goto(" not in action:
         return action
     m = re.search(r"""goto\(\s*(['"])(.*?)\1""", action)
     if not m:
         return action
     try:
         u = urllib.parse.urlparse(m.group(2))
-        b = urllib.parse.urlparse(origin)
     except Exception:  # noqa: BLE001
         return action
-    if u.scheme in ("http", "https") and u.netloc and u.netloc != b.netloc:
-        fixed = urllib.parse.urlunparse(u._replace(scheme=b.scheme, netloc=b.netloc))
-        return action[:m.start(2)] + fixed + action[m.end(2):]
-    return action
+    if u.scheme not in ("http", "https") or not u.netloc:
+        return action                      # relative paths are already on the right host
+    known = _site_origins()
+    if u.netloc in known:
+        return action                      # one of ours, including a legitimate other port
+    # Unknown host. Send it to THIS EPISODE'S configured site, never to wherever the page happens
+    # to be: if the browser has already drifted onto a foreign box, falling back to the current
+    # origin would pin the rest of the episode there while the grader reads the assigned box.
+    target = known.get(site.upper()) if site else None
+    if not target:
+        target = known.get(urllib.parse.urlparse(origin).netloc)
+    if not target:
+        return action                      # nothing trustworthy to aim at, leave it alone
+    b = urllib.parse.urlparse(target)
+    fixed = urllib.parse.urlunparse(u._replace(scheme=b.scheme, netloc=b.netloc))
+    return action[:m.start(2)] + fixed + action[m.end(2):]
 
 
 def _action_set():
@@ -233,7 +272,7 @@ def run_episode(task_id: int, memory_text: str, cfg, llm, logger=None, log_ctx: 
             _cur = obs.get("url") if isinstance(obs, dict) else None
             if _cur:
                 _p = urllib.parse.urlparse(_cur)
-                _g = _guard_host(action, f"{_p.scheme}://{_p.netloc}")
+                _g = _guard_host(action, f"{_p.scheme}://{_p.netloc}", str(wa.get("site", "")))
                 if _g != action:
                     ev("wa_host_guard", step=si, was=action, now=_g)
                     action = _g

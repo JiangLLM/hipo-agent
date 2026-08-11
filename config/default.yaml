@@ -64,7 +64,20 @@ swe:
 # --- WebArena knobs (task-level two-layer memory on autonomous web nav; hippo/wa/run.py) ---
 wa:
   base_url: ""             # e.g. http://10.44.12.29 (self-hosted sites; required)
-  reset_url: ""            # WA_FULL_RESET endpoint (e.g. http://10.44.12.29:7565/reset)
+  base_urls: ""            # comma list of N WebArena deployments, one PER ROLLOUT. Required for
+                           # MUTATING tasks: the N rollouts of a task share one account per site
+                           # and the grader reads server state, so on a single deployment they
+                           # cannot produce N independent rewards (the first success scores all of
+                           # them). Leave empty for read-only tasks — nothing is written, so one
+                           # deployment is correct and cheaper. Must list >= agent.n_traj boxes.
+  reset_url: ""            # legacy WA_FULL_RESET endpoint. Never deployed, so reset_site used to
+                           # be a no-op on every run while claiming otherwise. Superseded by
+                           # fleet_reset below; kept only so old configs still parse.
+  fleet_reset: off         # on = before each arm, restore all 8 boxes from their pristine images
+                           # via scripts/wa_fleet.sh reset (a few minutes, runs in parallel).
+                           # REQUIRED for any task set containing mutating tasks: without it the
+                           # second arm starts on whatever the first arm wrote, and nothing
+                           # downstream can detect that. The runner raises rather than run dirty.
   site: shopping           # shopping | shopping_admin | reddit | gitlab | map | wikipedia
   limit: 0                 # 0 = all single-site tasks for this site
   arms: nomem,withmem      # nomem | withmem | frozenmem
@@ -86,7 +99,17 @@ wa:
   retrieve_fetch_k: 5      # candidate pool size for the llm inject gate
   vote_margin: 1           # (unused for WA L2 now: L2 fires on any nc<n, ratio-cased inside contrast_rollouts)
   divergence_signal: reward  # reward | judge — what counts a rollout success for L1/L2 gating
-  readonly_only: false     # keep only pure string_match tasks (no state mutation, robust eval)
+  readonly_only: false     # DEPRECATED alias for task_filter (true -> string_match). Kept so the
+                           # commands that produced the 230-task runs still mean the same thing.
+  task_filter: ""          # "" = defer to readonly_only, so every pre-existing command keeps its
+                           # exact task set. New runs must name a filter explicitly — the
+                           # denominator is never allowed to move silently.
+                           # string_match (legacy 230: eval_types==["string_match"]) | readonly
+                           # (434: frozen manifest says the task writes nothing) | all (812,
+                           # mutating included — only sound with one deployment PER ROLLOUT)
+  task_manifest: config/wa_task_class.json   # frozen statefulness classification; see
+                           # scripts/classify_wa_tasks.py. Statefulness is not derivable from the
+                           # eval field, so it is a checked-in artefact, not a run-time heuristic.
   shard: ""                # "i/n" round-robin task partition for PARALLEL readonly runs (K
                            # processes, each own browser, merge event logs after). Leave "" for
                            # streaming/withmem (memory accumulates in order — must not shard).
