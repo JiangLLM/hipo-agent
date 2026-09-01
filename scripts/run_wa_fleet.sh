@@ -30,34 +30,62 @@ ARMS="${ARMS:-nomem,withmem}"
 # One experiment at a time. The 8 boxes serve whichever run asks, so a second run started while
 # one is in flight silently shares them: both slow down and both sets of numbers pick up the
 # contention. That happened once already and it is invisible in the output.
-if pgrep -f "hippo\.wa\.run" >/dev/null 2>&1; then
+if [ "${FORCE:-0}" != "1" ] && pgrep -f "hippo\.wa\.run" >/dev/null 2>&1; then
   echo "!! a WebArena run is already using the fleet:"
   pgrep -fl "hippo\.wa\.run" | head -2 | cut -c1-150
   echo "   Wait for it, or stop it deliberately. Two runs on 8 boxes contaminate each other."
+  echo "   (FORCE=1 overrides — sound ONLY when the runs share no boxes, e.g. map on its own box.)"
   exit 1
 fi
 MODEL="${MODEL:-gpt-5.6-sol}"
 RUN="${RUN_NAME:-wa_fleet_${SITE}_${FILTER}_$(date +%Y%m%d_%H%M%S)}"
 export LLM_TIMEOUT="${LLM_TIMEOUT:-180}"
 
-URLS=$(bash scripts/wa_fleet.sh urls)
-N_BOX=$(echo "$URLS" | tr ',' '\n' | wc -l | tr -d ' ')
-if [ "$N_BOX" -lt "$NTRAJ" ]; then
-  echo "!! fleet has $N_BOX boxes but NTRAJ=$NTRAJ — every rollout needs its own box"; exit 1
-fi
-
 # A site nobody deployed does not fail loudly: set_site_env points WA_MAP/WA_WIKIPEDIA at ports
 # 3000/8888 regardless, ui_login() then dies per episode with ERR_CONNECTION_REFUSED, and the run
 # completes as a tidy 0% arm. Refuse instead of producing that number.
+#
+# map is the exception: its 109 tasks are ALL read-only, so rollouts cannot contaminate each
+# other and ONE frontend box (scripts/wa_map_deploy.sh) serves all 8 — no fleet involved.
 case "$SITE" in
-  map|wikipedia)
-    echo "!! site '$SITE' is not deployed on this fleet (ports 3000/8888 are dead)."
+  map)
+    if [ -z "${WA_MAP_HOST:-}" ]; then
+      echo "!! map needs its frontend box. Deploy it once with scripts/wa_map_deploy.sh, then:"
+      echo "   WA_MAP_HOST=http://<box-ip> bash scripts/run_wa_fleet.sh map"
+      exit 1
+    fi ;;
+  wikipedia)
+    echo "!! site 'wikipedia' is not deployed (port 8888 is dead)."
     echo "   Running it would score 0 on every task and look like a legitimate result."
     exit 1 ;;
 esac
 
-echo "== preflight: all $N_BOX boxes must serve their own urls"
-bash scripts/wa_fleet.sh check || { echo "!! fleet not ready — fix the boxes before running"; exit 1; }
+# Postmill rate-limits posting per account, server-side; ~10 posting tasks in, every submission
+# fails with "You cannot post more" and the grader scores the rate limiter instead of the agent.
+# The counter lives in the container, so reddit gets a per-mutating-task forum reset (~30s each).
+EXTRA_ARGS=""
+[ "$SITE" = "reddit" ] && EXTRA_ARGS="--wa.reset_per_task on"
+# map runs 8 rollouts against ONE rails dev server; a synchronized 8-way page load at every task
+# boundary wedges it past the 10s goto timeout and whole template families die with zero episodes
+# (22 of 109 tasks in the first map run). Stagger the rollout starts and give goto 60s.
+[ "$SITE" = "map" ] && EXTRA_ARGS="--wa.timeout 60000 --wa.rollout_stagger 4"
+
+if [ "$SITE" = "map" ]; then
+  URLS="$WA_MAP_HOST"
+  echo "== preflight: map frontend must answer"
+  code=$(curl -s -o /dev/null -m 20 -w '%{http_code}' "${WA_MAP_HOST}:3000/" || echo 000)
+  [ "$code" = "200" ] || { echo "!! map frontend ${WA_MAP_HOST}:3000 -> $code — not ready"; exit 1; }
+else
+  URLS=$(bash scripts/wa_fleet.sh urls)
+  N_BOX=$(echo "$URLS" | tr ',' '\n' | wc -l | tr -d ' ')
+  if [ "$N_BOX" -lt "$NTRAJ" ]; then
+    echo "!! fleet has $N_BOX boxes but NTRAJ=$NTRAJ — every rollout needs its own box"; exit 1
+  fi
+  # rollout r binds to box r only when base_urls is passed; map (single box) skips it
+  EXTRA_ARGS="$EXTRA_ARGS --wa.base_urls $URLS"
+  echo "== preflight: all $N_BOX boxes must serve their own urls"
+  bash scripts/wa_fleet.sh check || { echo "!! fleet not ready — fix the boxes before running"; exit 1; }
+fi
 
 LOG="runs/${RUN}.log"
 mkdir -p runs
@@ -66,13 +94,13 @@ echo "== [$SITE] filter=$FILTER n_traj=$NTRAJ arms=$ARMS -> runs/$RUN  (log: $LO
 caffeinate -i .venv-wa/bin/python -m hippo.wa.run \
   --llm.model "$MODEL" --llm.embed_model local/BAAI/bge-small-en-v1.5 \
   --wa.base_url "$(echo "$URLS" | cut -d, -f1)" \
-  --wa.base_urls "$URLS" \
   --wa.site "$SITE" --wa.limit 0 \
   --wa.task_filter "$FILTER" \
   --wa.fleet_reset "${FLEET_RESET:-$([ "$FILTER" = all ] && echo on || echo off)}" \
   --wa.arms "$ARMS" --agent.n_traj "$NTRAJ" --wa.eval_rollouts "$NTRAJ" \
   --memory.retrieve_k_reasoning 1 \
   --wa.max_steps 30 --wa.step_timeout 90 --wa.reset_timeout 120 \
+  $EXTRA_ARGS \
   --run.budget_usd "${BUDGET:-1000000}" --run.name "$RUN" 2>&1 | tee "$LOG"
 
 D=$(ls -dt runs/${RUN}_*/ 2>/dev/null | head -1)

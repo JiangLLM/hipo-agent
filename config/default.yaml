@@ -79,6 +79,12 @@ wa:
                            # second arm starts on whatever the first arm wrote, and nothing
                            # downstream can detect that. The runner raises rather than run dirty.
   site: shopping           # shopping | shopping_admin | reddit | gitlab | map | wikipedia
+  rollout_timeout: 1800    # parent-side wall-clock cap per task batch (s); a hung rollout is
+                           # killed + dropped instead of freezing the run forever
+  episode_timeout: 900     # in-worker deadline (s): dump python stacks to the run log and
+                           # self-destruct; parent retries the rollout once on a fresh worker
+  reset_per_task: off      # reset the site container before each mutating task (reddit needs it:
+                           # postmill's per-account posting rate limit lives in the container)
   limit: 0                 # 0 = all single-site tasks for this site
   arms: nomem,withmem      # nomem | withmem | frozenmem
   memory_in: ""            # frozenmem/resume: path to a saved memory.json

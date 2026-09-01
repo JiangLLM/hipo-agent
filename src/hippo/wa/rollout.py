@@ -246,6 +246,14 @@ def run_episode(task_id: int, memory_text: str, cfg, llm, logger=None, log_ctx: 
     env = None
     steps, reward = [], 0
     reset_to = int(wa.get("reset_timeout", 120))
+    # De-synchronize episode starts. On single-deployment sites (map: one rails dev server for
+    # all 8 rollouts) the synchronized 8-way homepage load at every task boundary wedges the
+    # server past the goto timeout and the whole task dies with zero episodes — 22 of 109 map
+    # tasks in the first run. rollout r waiting r*stagger seconds spreads the stampede.
+    stagger = float(wa.get("rollout_stagger", 0) or 0)
+    if stagger > 0:
+        import time as _time
+        _time.sleep(stagger * int(ctx.get("rollout", 0) or 0))
     try:
         # make/reset are the browser setup path; wrap them in the same hard timeout as step
         # (a wedged Playwright teardown/setup otherwise busy-spins a greenlet at 100% CPU with

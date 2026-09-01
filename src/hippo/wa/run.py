@@ -20,7 +20,8 @@ import json
 import multiprocessing
 import os
 import sys
-from concurrent.futures import ProcessPoolExecutor
+import time
+from concurrent.futures import ProcessPoolExecutor, TimeoutError as FutureTimeout
 from concurrent.futures.process import BrokenProcessPool
 from pathlib import Path
 
@@ -44,7 +45,7 @@ def _norm(t: str) -> str:
     return " ".join(t.lower().split())
 
 
-def reset_site(cfg, logger, tag, required: bool = False):
+def reset_site(cfg, logger, tag, required: bool = False, site: str | None = None):
     """Restore every box in the fleet to its pristine images before an arm starts.
 
     Why a script and not an HTTP endpoint: the endpoint form (wa.reset_url, browsergym's
@@ -79,10 +80,15 @@ def reset_site(cfg, logger, tag, required: bool = False):
             raise RuntimeError(f"fleet reset requested but {script} is missing")
         logger.event("reset_skipped", tag=tag, why="script missing")
         return
-    logger.info(f"[{tag}] resetting the fleet from pristine images (a few minutes)")
+    # site=None resets all four sites; a site name resets just that one (much cheaper — forum
+    # recreates in ~30s, the full reset takes minutes). The container for reddit is named "forum".
+    container = {"reddit": "forum"}.get(site, site)
+    what = container or "all sites"
+    logger.info(f"[{tag}] resetting {what} from pristine images")
     t0 = time.time()
     try:
-        proc = subprocess.run(["bash", str(script), "reset"], cwd=str(root),
+        proc = subprocess.run(["bash", str(script), "reset"] + ([container] if container else []),
+                              cwd=str(root),
                               capture_output=True, text=True, timeout=45 * 60)
     except subprocess.TimeoutExpired:
         logger.event("reset_timeout", tag=tag)
@@ -91,8 +97,8 @@ def reset_site(cfg, logger, tag, required: bool = False):
         return
     took = round(time.time() - t0, 1)
     if proc.returncode == 0:
-        logger.event("reset_done", tag=tag, seconds=took)
-        logger.info(f"[{tag}] fleet reset done in {took}s")
+        logger.event("reset_done", tag=tag, seconds=took, site=what)
+        logger.info(f"[{tag}] reset of {what} done in {took}s")
     else:
         logger.event("reset_failed", tag=tag, seconds=took, err=proc.stdout[-800:])
         if required:
@@ -116,15 +122,51 @@ def _kill_pool(pool) -> None:
     """Tear a pool down for real. shutdown(cancel_futures=True) leaves RUNNING futures running and
     their processes alive, so a rebuilt pool would race the corpse — on a per-deployment pool that
     means two rollouts of one task on one box, i.e. the contamination we are paying 8 boxes to
-    avoid. Kill the processes, then let shutdown collect."""
+    avoid. Kill the processes, then let shutdown collect.
+
+    The forged results below are load-bearing. A RUNNING work item whose worker was SIGKILLed
+    never produces a result, so it sits in pending_work_items forever; the manager thread then
+    never satisfies its exit condition and parks in connection.wait — and because our shutdown's
+    wakeup fires in the same select() as the dead-worker sentinel, the elif in
+    wait_result_broken_or_wakeup reads the wakeup FIRST and never notices the corpse. A parked
+    non-daemon manager thread deadlocks interpreter exit (threading._shutdown joins it), which
+    turned 'watchdog killed a hung rollout at 21:36' into 'the whole run is a zombie at 08:00'.
+    Feeding a fabricated result per pending item lets the thread drain, see pending empty, and
+    walk its normal shutdown path."""
     try:
-        for proc in list(getattr(pool, "_processes", {}) or {}).values():
+        from concurrent.futures.process import _ResultItem
+        rq = getattr(pool, "_result_queue", None)
+        pending = dict(getattr(pool, "_pending_work_items", {}) or {})
+        if rq is not None:
+            for wid in pending:
+                try:
+                    rq.put(_ResultItem(wid, exception=BrokenProcessPool(
+                        "rollout watchdog killed this worker")))
+                except Exception:  # noqa: BLE001 - queue already closed
+                    break
+    except Exception:  # noqa: BLE001 - stdlib internals moved; kills below still matter most
+        pass
+    try:
+        # NOT list(d).values() — list(dict) yields KEYS, and the resulting AttributeError was
+        # silently swallowed here for weeks: this loop never killed anything. It only looked
+        # fine because on the BrokenProcessPool path the workers were already corpses.
+        for proc in list((getattr(pool, "_processes", None) or {}).values()):
             try:
                 proc.kill()
             except Exception:  # noqa: BLE001 - already gone
                 pass
     except Exception:  # noqa: BLE001 - private attr moved; shutdown below is still worth trying
         pass
+    # Order matters: join the manager thread BEFORE calling shutdown(). The forged results and
+    # the dead-worker sentinels drive it through its own broken-pool teardown, which was verified
+    # to terminate it; racing shutdown(cancel_futures=True) against that teardown was verified to
+    # park it forever (its wakeup masks the sentinel in the same select()).
+    mgr = getattr(pool, "_executor_manager_thread", None)
+    if mgr is not None:
+        mgr.join(timeout=30)
+        if mgr.is_alive():   # would deadlock interpreter exit later — say so NOW, mid-run
+            print(f"[warn] pool manager thread refused to die; "
+                  f"process exit may hang (thread={mgr.name})", file=sys.stderr, flush=True)
     try:
         pool.shutdown(wait=False, cancel_futures=True)
     except Exception:  # noqa: BLE001
@@ -161,8 +203,33 @@ def _rollout_worker(payload):
         def warn(self, *a, **k):
             pass
 
-    before = llm.spent_usd
-    x = run_episode(task_id, mem_text, cfg, llm, _Collect(), log_ctx=log_ctx)
+    # In-worker deadline. Twice now a worker wedged itself in a 100%-CPU greenlet spin inside
+    # the playwright sync bridge (browser and node driver alive and idle, python spinning),
+    # which no step timeout can interrupt because no step ever returns. The parent's 1800s
+    # watchdog contains the damage; this deadline turns it into a cheap, SELF-DIAGNOSING kill:
+    # dump every thread's python stack to stderr (which the launcher redirects into the run
+    # log — the autopsy we could never capture from outside without root), then hard-exit.
+    # The parent sees BrokenProcessPool and retries the rollout once on a fresh worker.
+    import faulthandler
+    import threading
+    deadline = int((cfg.get("wa", {}) or {}).get("episode_timeout", 900))
+
+    def _boom():
+        print(f"[worker] episode deadline {deadline}s exceeded on t{task_id} "
+              f"(rollout {log_ctx.get('rollout')}) — python stacks follow, then self-destruct",
+              file=sys.stderr, flush=True)
+        faulthandler.dump_traceback(file=sys.stderr)
+        os._exit(70)
+
+    timer = threading.Timer(deadline, _boom)
+    timer.daemon = True
+    if deadline > 0:
+        timer.start()
+    try:
+        before = llm.spent_usd
+        x = run_episode(task_id, mem_text, cfg, llm, _Collect(), log_ctx=log_ctx)
+    finally:
+        timer.cancel()
     return {"x": x, "events": events, "spent": llm.spent_usd - before}
 
 
@@ -299,6 +366,13 @@ def stream_arm(cfg, llm, brain, memory, tasks, logger, tag, retrieve, write):
             payloads = [(t["task_id"], mem_text,
                          {"tag": tag, "task_id": t["task_id"], "rollout": r}) for r in range(n_traj)]
             packed = None
+            # Wall-clock cap per task batch. Without one, f.result() waits forever: a reddit run
+            # froze at task 35/106 for 11 hours because all 8 workers hung in browser SETUP
+            # (playwright greenlet-spinning on a browser that died mid-launch) — a phase that
+            # step_timeout does not cover, and no step means no timeout ever fires. All N futures
+            # start together, so one shared deadline bounds a fully-hung task to ~one `wall`.
+            wall = int(wa.get("rollout_timeout", 1800))
+            deadline = time.time() + wall
             # a worker native crash (segfault/OOM in Playwright) breaks the pool PERMANENTLY;
             # rebuild + retry once so one crash can't silently zero every remaining task in the arm.
             if pools:
@@ -312,16 +386,29 @@ def stream_arm(cfg, llm, brain, memory, tasks, logger, tag, retrieve, write):
                 futs = {r: pools[r].submit(_rollout_worker, payloads[r]) for r in range(n_traj)}
                 for r, f in futs.items():
                     try:
-                        results[r] = f.result()
+                        results[r] = f.result(timeout=max(1.0, deadline - time.time()))
+                    except FutureTimeout:
+                        # A hang is not a crash: no retry. A worker that sat on one rollout for
+                        # `wall` seconds is spinning, and retrying a deterministic hang would cost
+                        # another `wall` per rollout (8x the damage on a task that hangs all 8).
+                        # Kill the pool so box r gets a fresh worker for the NEXT task, and drop
+                        # this rollout — the denominator accounting below already handles absences.
+                        logger.warn(f"[{tag}] pool {r} (box {base_urls[r]}) HUNG on "
+                                    f"t{t['task_id']} ({wall}s) — killing it, dropping the rollout")
+                        _kill_pool(pools[r])
+                        pools[r] = _new_executor(r)
                     except BrokenProcessPool:
                         logger.warn(f"[{tag}] pool {r} (box {base_urls[r]}) broke on "
                                     f"t{t['task_id']} — killing it and retrying that rollout only")
                         _kill_pool(pools[r])
                         pools[r] = _new_executor(r)
                         try:
-                            results[r] = pools[r].submit(_rollout_worker, payloads[r]).result()
+                            results[r] = pools[r].submit(
+                                _rollout_worker, payloads[r]).result(timeout=wall)
                         except Exception as exc:  # noqa: BLE001 - one box down != lose the task
                             logger.warn(f"[{tag}] pool {r} failed twice on t{t['task_id']}: {exc}")
+                            _kill_pool(pools[r])
+                            pools[r] = _new_executor(r)
                 if all(x is None for x in results):
                     raise RuntimeError(f"every deployment failed on t{t['task_id']}")
                 # a rollout that never produced a result is dropped, not faked: nc/n below counts
@@ -330,10 +417,14 @@ def stream_arm(cfg, llm, brain, memory, tasks, logger, tag, retrieve, write):
             else:
                 for attempt in (1, 2):
                     try:
-                        packed = list(executor.map(_rollout_worker, payloads))
+                        # submit+result instead of map: map() has no per-future timeout, and one
+                        # worker hung in browser setup would freeze the whole arm forever.
+                        futs2 = [executor.submit(_rollout_worker, p) for p in payloads]
+                        end = time.time() + wall
+                        packed = [f.result(timeout=max(1.0, end - time.time())) for f in futs2]
                         break
-                    except BrokenProcessPool:
-                        logger.warn(f"[{tag}] worker pool broke on t{t['task_id']} "
+                    except (BrokenProcessPool, FutureTimeout):
+                        logger.warn(f"[{tag}] worker pool broke or hung on t{t['task_id']} "
                                     f"(attempt {attempt}) — rebuilding")
                         _kill_pool(executor)
                         executor = _new_executor()
@@ -432,12 +523,27 @@ def stream_arm(cfg, llm, brain, memory, tasks, logger, tag, retrieve, write):
                     f"nc={nc}/{n} cumSR={cum_sr:.2f} win10={win_sr:.2f} "
                     f"mem={memory.stats()['n_reasoning']} spent=${llm.spent_usd:.2f}")
 
+    # Per-mutating-task reset (wa.reset_per_task). Postmill rate-limits POSTING per account,
+    # server-side: after ~10 posting tasks every submission returns "You cannot post more. Wait a
+    # while before trying again", and from there on the grader hands out zeros that measure the
+    # rate limiter, not the agent (observed live: reddit-all froze/zeroed from t603 on, twice).
+    # The counter lives in the container, so recreating the site between mutating tasks is the
+    # only reliable flush. `dirty` skips redundant resets: read-only tasks change nothing, and
+    # the arm-start reset already covers the first mutating task.
+    reset_per_task = _on(wa.get("reset_per_task", "off"))
+    dirty = False
     try:
         for ti, t in enumerate(tasks):
             if llm.spent_usd > cfg.run.budget_usd:
                 raise BudgetExceeded(f"spend ${llm.spent_usd:.2f}")
+            if reset_per_task and t.get("mutating") and dirty:
+                reset_site(cfg, logger, tag, required=True, site=site)
+                dirty = False
+            if t.get("mutating"):
+                dirty = True   # pessimistic: even a failed attempt may have posted something
             try:
                 one_task(ti, t)
+                _LAST_PROGRESS[0] = time.time()
             except BudgetExceeded:
                 raise
             except Exception as exc:  # noqa: BLE001 - one bad task must not kill the arm
@@ -488,6 +594,36 @@ def _fix_webarena_grader():
             return r["choices"][0]["message"]["content"] or ""
 
         hf.generate_from_openai_chat_completion = _grader_complete
+
+        # N/A equivalence (deterministic, symmetric to both arms). Official flow for
+        # fuzzy_match=="N/A": exact_match on the literal "N/A", else llm_ua_match asks an LLM
+        # whether pred declares the task unachievable — and browsergym calls validate() every
+        # step with the placeholder answer "whatever", so a per-step LLM lottery hands out
+        # rewards to agents that never answered (12 shopping tasks: 82-89% of scoring rollouts
+        # had NO answer), while an agent that concluded "None" gets rejected (t24: semantically
+        # correct, 0/8). Two deterministic rails before the LLM:
+        #   empty/"whatever"  -> 0.0  (no answer is not a claim of unachievability)
+        #   explicit none-y   -> 1.0  ("none", "no results", "not found", "does not exist", ...)
+        # Anything else still goes to the LLM as before.
+        import re as _re
+
+        from webarena.evaluation_harness import evaluators as _ev
+        _orig_ua = hf.llm_ua_match
+        _NONE_RX = _re.compile(
+            r"^(n/?a|none|no|nothing|not found|no result(s)?|no such .{0,60}|"
+            r"(there (is|are) )?no .{0,60}|does not exist|not (available|achievable|possible)"
+            r"[.!]?)$", _re.I)
+
+        def _ua(pred, ref, intent):
+            p = (pred or "").strip()
+            if not p or p.lower() == "whatever":
+                return 0.0
+            if _NONE_RX.match(p):
+                return 1.0
+            return _orig_ua(pred, ref, intent)
+
+        hf.llm_ua_match = _ua
+        _ev.llm_ua_match = _ua      # evaluators imported the name by value; patch both
     except Exception:  # noqa: BLE001 - if webarena internals shift, grader stays default
         pass
     # string_match host normalization: our self-hosted sites serve on a different host than
@@ -502,11 +638,23 @@ def _fix_webarena_grader():
 
         from webarena.evaluation_harness.evaluators import StringEvaluator
         our_host = _up.urlparse(os.environ.get("GITLAB") or os.environ.get("SHOPPING") or "").hostname
+        # reddit references embed a second placeholder host, with a PORT-ful deployment on our
+        # side: ref "http://www.reddit.com/f/books/59396" must match pred
+        # "http://10.44.12.x:9999/f/books/59396", so the replacement needs the full netloc.
+        # Full-benchmark audit (2026-08-14): www.reddit.com x2 and metis are the ONLY placeholder
+        # hosts in reference_answers; web.cmoa.org (map t256) is a real museum website that IS the
+        # answer — do not normalize it. Cost of the gap: reddit t66, 13/16 rollouts named exactly
+        # the right posts and scored 0.
+        reddit_netloc = _up.urlparse(os.environ.get("REDDIT") or "").netloc
         _orig_clean = StringEvaluator.clean_answer   # staticmethod descriptor -> plain callable
 
         def _clean(ans):
             s = _orig_clean(ans)
-            return s.replace("metis.lti.cs.cmu.edu", our_host) if our_host else s
+            if our_host:
+                s = s.replace("metis.lti.cs.cmu.edu", our_host)
+            if reddit_netloc:
+                s = s.replace("www.reddit.com", reddit_netloc)
+            return s
 
         StringEvaluator.clean_answer = staticmethod(_clean)
     except Exception:  # noqa: BLE001
@@ -548,10 +696,44 @@ def _patch_browsergym_infra():
         pass
 
 
+def _arm_stall_reporter():
+    """Diagnosis that survives us. A power blip overnight changed the machine's network identity;
+    every LLM socket went CLOSE_WAIT, the workers (predating the in-worker deadline) slept on dead
+    reads for 7 hours, and the parent froze somewhere we could never see because py-spy needs root
+    on macOS. Two remedies, both about VISIBILITY rather than prevention:
+      * SIGUSR1 dumps every thread's python stack on demand: `kill -USR1 <pid>` from any shell.
+      * A daemon thread watches _LAST_PROGRESS and dumps all stacks to stderr (=> the run log)
+        whenever no task has completed for 30 minutes, once per stall-interval.
+    Neither kills anything — the parent watchdog and the in-worker deadline do the healing; this
+    makes sure the NEXT freeze arrives with its own autopsy attached."""
+    import faulthandler
+    import signal
+    import threading
+    faulthandler.register(signal.SIGUSR1, all_threads=True, chain=False)
+
+    def _watch():
+        while True:
+            time.sleep(300)
+            quiet = time.time() - _LAST_PROGRESS[0]
+            if quiet > 1800:
+                print(f"[stall] no task finished for {quiet/60:.0f} min — python stacks of all "
+                      f"threads follow (kill -USR1 {os.getpid()} re-dumps on demand)",
+                      file=sys.stderr, flush=True)
+                faulthandler.dump_traceback(file=sys.stderr)
+                _LAST_PROGRESS[0] = time.time()   # rate-limit: one autopsy per stall interval
+
+    threading.Thread(target=_watch, daemon=True, name="stall-reporter").start()
+
+
+_LAST_PROGRESS = [0.0]
+
+
 def run(cfg) -> dict:
     load_dotenv()
     import litellm
     litellm.drop_params = True
+    _LAST_PROGRESS[0] = time.time()
+    _arm_stall_reporter()
     wa = cfg.get("wa", {}) or {}
     set_site_env(cfg)
     _fix_webarena_grader()

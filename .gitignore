@@ -7,10 +7,13 @@ __pycache__/
 .idea/
 .DS_Store
 
-# run artifacts
-runs/
+# run artifacts: runs/ 入库(实验数据),但 SWE 原始轨迹 28GB 单文件超 GitHub 限制,排除
+runs/**/*.traj.json
+runs/**/trajs/
 data/
 .cache/
 *.log
+!runs/*.log
 logs/
 sb-cli-reports/
+.env.aws

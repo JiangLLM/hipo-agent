@@ -20,6 +20,11 @@ import re
 from ..schema import ReasoningItem
 
 _JSON_KW = {"drop_params": True}
+# Writer calls get their own output cap, decoupled from the client default the judge uses.
+# gpt-5.6-sol is a reasoning model: thinking tokens count against max_tokens, and on long
+# contrast inputs the 8000 shared cap ran dry mid-sentence — a truncated lesson entered the
+# bank at "seemed relevant with" and poisoned three sibling tasks (gitlab t483-485).
+_WRITE_KW = {"drop_params": True, "max_tokens": 16000}
 
 _ITEM_FORMAT = (  # doubled braces: goes through str.format()
     'Respond JSON {{"items": [{{"title": str, "description": str, "content": str}}]}}.\n'
@@ -58,7 +63,14 @@ _JUDGE_SYS = (
 _L1_SYS = (
     "You are an expert web-navigation analyst distilling a lesson from ONE failed rollout. It "
     "{outcome_clause}\nExtract lessons that would prevent this failure on future tasks on this "
-    "site.\n" + _ITEM_FORMAT
+    "site.\n"
+    # Blanket-prohibition guard (replay-validated): one trajectory cannot distinguish a bad
+    # route from a good route walked badly. Without this line, 4/4 sampled L1s wrote blanket
+    # prohibitions ("do not use the Yours tab") from a single failure — the class that zeroed
+    # gitlab t169-172; with it, 1/4.
+    "A single attempt cannot tell a bad route from a good route walked badly: do NOT write "
+    "blanket prohibitions (\"never use X\", \"page Y is unreliable\") from one trajectory — state "
+    "what to VERIFY on that route instead.\n" + _ITEM_FORMAT
 )
 
 _L2_SYS = (
@@ -137,7 +149,7 @@ class WaBrain:
         usr = f"SITE: {site}\nTASK: {intent}\n\nTRACE:\n{trace}"
         out = self._json(self.llm.chat(
             [{"role": "system", "content": sys}, {"role": "user", "content": usr}],
-            temperature=0.0, **_JSON_KW))
+            temperature=0.0, **_WRITE_KW))
         return self._items(out, f"site:{site}", "failure", max_items, layer="L1")
 
     def contrast_rollouts(self, site, intent, rollouts, verdicts, l1_items, max_items=1, ok=None):
@@ -156,23 +168,74 @@ class WaBrain:
             ok = [v.get("outcome") == "genuine" for v in verdicts]
         nc = sum(ok)
         if nc == 0:
+            # Two guard sentences, both replay-validated on real recorded inputs and red-teamed
+            # (workflow wf_e9a9a91e, 2026-08-14):
+            #  * no-distrust: t71 all-wrong used to yield "verify the mailing ZIP beyond map
+            #    results", teaching t72 to override the map's CORRECT answer (3/4 -> 0/7). With
+            #    the sentence, the same input yields "open the exact institution record" — the
+            #    t141->t143 shipping-allocation save (same branch) survives verbatim.
+            #  * no-invented-procedures: t615 all-wrong invented "upload via the file chooser"
+            #    (no rollout ever completed it) and zeroed t616/618/619. Scope controls stay
+            #    exempt (red team: t102's "select All" is load-bearing for three gitlab saves),
+            #    and untried ideas go to a marked final clause, never the substance.
             direction = ("ALL rollouts FAILED. Summarize the common cause of failure. Read the "
                          "verdicts: if they ran out of the step budget or never produced a final "
                          "answer, say the approach is too long to finish in budget and advise a "
                          "cheaper route or giving a best-effort partial answer — do NOT advise being "
-                         "more exhaustive. If they took a wrong path, name it so it is avoided.")
+                         "more exhaustive. If they took a wrong path, name it so it is avoided. "
+                         "If every rollout read the same on-page value and it was judged wrong, do "
+                         "NOT conclude the site or its results are untrustworthy, and never advise "
+                         "overriding a displayed value with outside knowledge — describe where the "
+                         "correct value lives ON the site and how to read it. Recommend only "
+                         "actions some rollout actually performed: a reading convention diagnosed "
+                         "by the verdicts may be stated directly, and scope controls that only "
+                         "change what is displayed (tabs, filters, sorting, page size) are safe to "
+                         "include; but a UI mechanism no rollout ever completed must NOT become the "
+                         "substance of the lesson — start the content with an executable "
+                         "instruction, and mention an untried idea only in a final clause "
+                         "explicitly marked as untried.")
             learn_from_success = False
         elif nc * 2 == n:
             direction = ("Half succeeded, half failed. State BOTH: the reliable thing the successful "
                          "rollouts did, AND the specific trap the failing ones fell into.")
             learn_from_success = True
         elif nc * 2 > n:
+            # Answer-narrowing guard (replay-validated): t16 (7/8 right, 1 failed on format)
+            # used to yield "preserve the requested output form", which stripped the
+            # Walking/Driving labels from ALL 8 of t19's answers (8/8 -> 4/8). Same input with
+            # the sentence yields "preserve answer labels". The look-alike-exclusion save
+            # (t126 -> t226/228, same branch) survives.
             direction = ("Most rollouts SUCCEEDED; a few failed. NOTE the specific mistake the failing "
-                         "minority made — phrase it as a caution to avoid.")
+                         "minority made — phrase it as a caution to avoid. The caution may steer "
+                         "navigation or verification, but must NEVER narrow the final answer: keep "
+                         "every element, label and unit the task asks for — most rollouts answered "
+                         "correctly, do not overcorrect their answer format.")
             learn_from_success = False
         else:  # nc*2 < n (and nc>0): majority wrong, minority right
-            direction = ("Most rollouts FAILED; a few succeeded. REMEMBER the reliable procedure the "
-                         "successful minority used to get it right.")
+            # Three guards, replay-validated + red-teamed:
+            #  * decision-not-transcript: "REMEMBER the reliable procedure" transcribed the
+            #    minority's clicks incl. incidental circumstances (t168's "view empty -> answer
+            #    N/A" poison; t585's step-burn that zeroed t586). Asking WHY keeps it decision-level.
+            #  * cheap-default + conditional-verification: t35 (3/8) used to write "bind and verify
+            #    exact route endpoints" as an UNCONDITIONAL ritual — one lesson zeroed five easy
+            #    routing tasks. CRITICAL red-team finding: the symptom condition goes in the
+            #    CONTENT, never the description — retrieval embeds only title+description
+            #    (store.py:36), and symptom clauses there pushed the t153 save from rank 1 to 13
+            #    and t757 out of the fetch_k=5 pool. The description stays in the task family's
+            #    own vocabulary.
+            #  * enumeration exemption: without it the cost rule downgraded the broad-search
+            #    saves (t158 -> t160/161, "open every plausible product") into conditional acts.
+            direction = ("Most rollouts FAILED; a few succeeded. Explain WHY the successful "
+                         "minority was right where the majority went wrong — the decision or check "
+                         "that separated them — NOT a transcript of the minority's steps, and NOT "
+                         "incidental page states they happened to see. The remedy must fit a tight "
+                         "step budget: state the CHEAP default way first, and make any expensive "
+                         "verification CONDITIONAL on the specific symptom that requires it — put "
+                         "that symptom condition in the content, and keep the description written "
+                         "in the task family's own vocabulary (the description is the retrieval "
+                         "key; do not dilute it with symptom clauses). When the task itself asks "
+                         "to enumerate or list everything, complete enumeration is NOT expensive "
+                         "verification and must not be made conditional.")
             learn_from_success = True
         sys = _L2_SYS.format(direction=direction, max_items=max_items)
         l1_items = l1_items or [[] for _ in range(n)]
@@ -189,7 +252,7 @@ class WaBrain:
             lines.append(f"\n--- rollout {i+1} [{tag}] ({v['reason']})\n  {body}")
         out = self._json(self.llm.chat(
             [{"role": "system", "content": sys}, {"role": "user", "content": "\n".join(lines)}],
-            temperature=0.0, **_JSON_KW))
+            temperature=0.0, **_WRITE_KW))
         outcome = "success" if learn_from_success else "failure"
         return self._items(out, f"site:{site}", outcome, max_items, layer="L2")
 

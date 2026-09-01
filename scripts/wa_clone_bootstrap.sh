@@ -44,9 +44,18 @@ start_one() {
 # above the steady state they happily share, and on a 15 GB box gitlab is the one the kernel
 # kills (Exited 137). That is how a reset intended to clean the fleet took gitlab down on all
 # eight machines at once.
+# forum polls instead of sleeping: postmill is up in seconds, and the per-mutating-task reddit
+# reset calls this once per task — a flat 30s sleep there would double the reset cadence cost.
 for s in $SITES; do
   start_one "$s"
-  sleep 30
+  if [ "$s" = "forum" ]; then
+    for _ in $(seq 1 30); do
+      curl -sf -o /dev/null -m 2 "http://localhost:9999/" && break
+      sleep 1
+    done
+  else
+    sleep 30
+  fi
 done
 
 # Wait for Magento to actually answer its own CLI, do not guess with sleep. The first attempt at
@@ -106,7 +115,7 @@ for spec in "shopping 7770" "shopping_admin 7780" "forum 9999" "gitlab 8023"; do
   # private addresses and therefore missed metis.lti.cs.cmu.edu entirely.
   leak=$(curl -s -L --max-time 40 "http://${IP}:$2/" 2>/dev/null \
          | grep -oE 'https?://[A-Za-z0-9.-]+(:[0-9]+)?' | sort -u \
-         | grep -vE "://($IP|www\.magentocommerce\.com|postmill\.xyz|ogp\.me|schema\.org|www\.w3\.org|gitlab\.com|about\.gitlab\.com|docs\.gitlab\.com)" \
+         | grep -vE "://($IP|www\.magentocommerce\.com|postmill\.xyz|ogp\.me|schema\.org|www\.w3\.org|gitlab\.com|about\.gitlab\.com|docs\.gitlab\.com|forum\.gitlab\.com)" \
          | head -3 | tr '\n' ' ')
   case "$final" in *"$IP"*) ;; *) leak="${leak}redirected-to:$final " ;; esac
   if [ -n "$leak" ] || [ "$code" = "000" ]; then
