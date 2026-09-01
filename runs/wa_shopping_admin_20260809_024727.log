@@ -1,0 +1,17 @@
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+[info] run_id=wa_shopping_admin_20260809_024727_20260809_024729 site=shopping_admin tasks=88 arms=['withmem']
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/yutongs/Projects/hipo-agent/src/hippo/wa/run.py", line 610, in <module>
+    main()
+  File "/Users/yutongs/Projects/hipo-agent/src/hippo/wa/run.py", line 606, in main
+    run(load_config(sys.argv[1:]))
+  File "/Users/yutongs/Projects/hipo-agent/src/hippo/wa/run.py", line 589, in run
+    summary["withmem"] = stream_arm(cfg, llm, brain, memory, tasks, logger, "withmem",
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/yutongs/Projects/hipo-agent/src/hippo/wa/run.py", line 206, in stream_arm
+    raise ValueError(
+ValueError: 2 of 88 tasks write to the server, but wa.base_urls lists 0 deployments for n_traj=8. Give every rollout its own box (scripts/wa_fleet.sh urls), or select read-only tasks (--wa.task_filter readonly), or drop to --agent.n_traj 1.

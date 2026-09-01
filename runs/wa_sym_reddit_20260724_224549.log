@@ -1,0 +1,303 @@
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+[info] run_id=wa_sym_reddit_20260724_224549_20260724_224551 site=reddit tasks=11 arms=['nomem', 'withmem']
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 1/11 t27 reward=1 nc=8/8 cumSR=1.00 win10=1.00 mem=0 spent=$2.44
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 2/11 t28 reward=0 nc=0/8 cumSR=0.50 win10=0.50 mem=0 spent=$8.69
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 3/11 t29 reward=1 nc=8/8 cumSR=0.67 win10=0.67 mem=0 spent=$12.55
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 4/11 t30 reward=1 nc=8/8 cumSR=0.75 win10=0.75 mem=0 spent=$15.21
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 5/11 t31 reward=0 nc=0/8 cumSR=0.60 win10=0.60 mem=0 spent=$19.31
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 6/11 t66 reward=0 nc=0/8 cumSR=0.50 win10=0.50 mem=0 spent=$28.68
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 7/11 t67 reward=0 nc=4/8 cumSR=0.43 win10=0.43 mem=0 spent=$37.68
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 8/11 t68 reward=0 nc=0/8 cumSR=0.38 win10=0.38 mem=0 spent=$46.70
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 9/11 t69 reward=1 nc=8/8 cumSR=0.44 win10=0.44 mem=0 spent=$52.56
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 10/11 t723 reward=1 nc=6/8 cumSR=0.50 win10=0.50 mem=0 spent=$56.50
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 11/11 t726 reward=1 nc=8/8 cumSR=0.55 win10=0.50 mem=0 spent=$56.62
+[info] [withmem] parallel rollouts ON: 8 worker processes
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 1/11 t27 reward=1 nc=8/8 cumSR=1.00 win10=1.00 mem=0 spent=$59.46
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 2/11 t28 reward=0 nc=0/8 cumSR=0.50 win10=0.50 mem=9 spent=$68.12
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 3/11 t29 reward=0 nc=0/8 cumSR=0.33 win10=0.33 mem=17 spent=$78.15
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 4/11 t30 reward=1 nc=8/8 cumSR=0.50 win10=0.50 mem=17 spent=$80.85
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 5/11 t31 reward=1 nc=8/8 cumSR=0.60 win10=0.60 mem=17 spent=$87.53
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 6/11 t66 reward=0 nc=0/8 cumSR=0.50 win10=0.50 mem=26 spent=$100.02
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 7/11 t67 reward=1 nc=7/8 cumSR=0.57 win10=0.57 mem=28 spent=$108.88
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 8/11 t68 reward=0 nc=0/8 cumSR=0.50 win10=0.50 mem=37 spent=$120.69
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 9/11 t69 reward=1 nc=8/8 cumSR=0.56 win10=0.56 mem=37 spent=$127.10
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+[info] [withmem] 10/11 t723 reward=1 nc=8/8 cumSR=0.60 win10=0.60 mem=37 spent=$128.08
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 11/11 t726 reward=1 nc=8/8 cumSR=0.64 win10=0.60 mem=37 spent=$128.21
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+[info] DONE {'n_tasks': 11, 'site': 'reddit', 'arms': ['nomem', 'withmem'], 'nomem': {'n': 11, 'reward_sr': 0.5455, 'layer1_writes': 0, 'layer2_writes': 0}, 'withmem': {'n': 11, 'reward_sr': 0.6364, 'layer1_writes': 32, 'layer2_writes': 5}, 'learned_memory': {'n_reasoning': 37, 'n_fact': 0}, 'spent_usd': 128.2092}
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback

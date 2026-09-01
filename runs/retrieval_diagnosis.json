@@ -1,0 +1,1242 @@
+[
+ {
+  "task_id": 0,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "The lesson correctly describes navigating from the newest forum post to the author's full comment history (sort New, first submission's author, Comments tab not Overview, follow every More link) — valid advice for the source Worcester-forum task, and directly applicable to the CURRENT_TASK which is the same task shape with only the forum name changed (DIY vs Worcester). But it is not sufficient: the task requires counting comments where downvotes exceed upvotes (gold = 1), and the lesson stops at gathering the full comment list. It omits the key move — comparing downvotes vs upvotes per comment and counting the matches. It captures the navigation symptom-step but not the analytical fix, so following it fully would not by itself produce the correct count."
+ },
+ {
+  "task_id": 1,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The current task (\"count of comments with more downvotes than upvotes for the user who made the latest post on the space forum\") is structurally identical to the source task (same question, Worcester forum). The lesson correctly prescribes the exact navigation needed: switch the forum sort from Hot to New, take the author of the first submission, open their Comments tab (not Overview), and follow every More link to the end. This advice is correct (valid), matches the current task's required approach and data source (applicable), and covers the full path to enumerate the user's comments so the downvote>upvote count can be computed (sufficient). Both nomem and withmem rewards are 1."
+ },
+ {
+  "task_id": 2,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson was distilled from the near-identical source task (same \"count comments with more downvotes than upvotes for the user who made the latest post on <forum>\" shape, just Worcester vs photoshopbattles). valid: the advice is correct and captures the genuinely tricky navigation moves — switch sort from Hot to New, take the first submission's author, open the Comments tab (not Overview, which mixes submissions), and follow every \"More\" link until pagination ends. applicable: current task has the identical required approach and data source, differing only in forum name. sufficient: following the lesson lands the agent on the complete comment history for the correct user; the remaining step (comparing each comment's downvotes vs upvotes and counting) is the task's explicit literal instruction, not a hidden move the lesson should have to encode. Both nomem_reward and withmem_reward are 0, so the failure lies in model execution, not in the extracted experience or its retrieval (cosine 0.665)."
+ },
+ {
+  "task_id": 3,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson describes navigating from the newest forum post to a specific user's full comment history: sort \"Hot\"->\"New\", take the first submission's author, open the profile \"Comments\" tab, and follow every \"More\" link. That advice is correct and useful for its source task (counting a user's net-downvoted comments), so it is valid. But CURRENT_TASK is entirely different: identify, among the top 10 posts in the books forum, which post URLs recommend a single book. It involves no sort-by-new, no author lookup, and no comment-history pagination; it requires reading the top posts' content/titles and judging book-recommendation semantics. The lesson's approach and data source do not fit this need, so it is inapplicable and could not make the task correct — a mis-retrieval (cosine 0.591 driven by shared \"forum/post\" surface terms)."
+ },
+ {
+  "task_id": 4,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson teaches how to navigate from the newest forum post to a user's full comment history (sort Hot->New, go to the author's profile, pick the Comments tab, follow every \"More\" link). That advice is correct and useful for its source task (counting a user's down>up-voted comments). But CURRENT_TASK is entirely different: read the top 10 posts in the \"books\" forum and extract book names from posts that recommend exactly one book (gold: A Christmas Carol, The Hobbit). It needs no profile navigation, no comment-history pagination, and no down/upvote reasoning. The required data source (post bodies in a forum listing) and approach share nothing with the lesson, so it fits a genuinely different need and should not have been injected here."
+ },
+ {
+  "task_id": 5,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is a correct, useful navigation recipe for its source task (finding a specific user's full comment history: sort forum by New, open the author's profile, choose \"Comments\" over \"Overview,\" and follow every \"More\" link) — so it is valid. But the current task is different in kind: it asks to look at the top 10 posts in the \"books\" forum and extract the author name and book name from posts that recommend a single book (gold expects things like \"A Christmas Carol\"/\"Levar Burton\", \"The Hobbit\"/\"J. R. R. Tolkien\"). That requires browsing top posts and reading their content for book recommendations — not navigating a user profile's comment history or paginating comments. Same \"forum\" surface but a genuinely different need and data source, so the lesson is mis-retrieved (cosine only 0.573) and should not have been injected. Since it does not apply, it cannot be sufficient. This is a retrieval/scope failure, not a content or execution one."
+ },
+ {
+  "task_id": 6,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson teaches how to locate the newest poster in a forum: open Forums via Alphabetical view, select the exact forum, sort by \"New,\" verify the first submission's timestamp, and follow the author link to their profile. That advice is correct and useful for its source task (counting a user's net-downvoted comments after finding the latest poster on photoshopbattles), so valid=true. But the current task has a genuinely different need: scan the top 10 posts in the \"books\" forum, determine whether any discusses supporting local bookstores, and extract the organizations involved (gold: bookshop.org). This requires reading post content and extracting an entity, not sorting by \"New\" or navigating to a profile page. The \"New\" sort even conflicts with the required \"Hot/top\" ordering. So applicable=false (wrong scope / mis-retrieved), and consequently insufficient. Cosine is only 0.556, and both nomem and withmem rewards are 1, confirming the lesson was irrelevant rather than harmful."
+ },
+ {
+  "task_id": 7,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "Both tasks are the same shape: count how many commits a given author made to an a11y GitLab repo on a specific date. The lesson correctly prescribes navigating Repository > Commits, choosing the branch, using date navigation/filters, and paginating through the entire requested date range before aggregating — which is exactly the procedure needed here to correctly count Steven Woodson's commits on 2/6/2023. Valid for its source, directly applicable to the current task (same required data source and approach), and sufficient (following it fully yields the count). Withmem reward went 0 to 1, consistent with the lesson helping."
+ },
+ {
+  "task_id": 8,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson correctly describes how to navigate a single repository's commit history and paginate through a date range to count qualifying commits — sound advice for its source task (\"How many commits did Eric and Kilian make to a11yproject on 1/3/2023\"), so valid=true. But CURRENT_TASK asks to enumerate the repositories the user contributed to and rank them by star count (gold: a11yproject.com, design). That needs the user's contributions/repository list and their star counts, not a single repo's commit log filtered by date. The commit-history/date-pagination guidance addresses a genuinely different need, so applicable=false and it should not have been injected here. Cosine only 0.58 (surface overlap on \"commits\"/\"repository\"). Category H3 (wrong scope / mis-retrieved)."
+ },
+ {
+  "task_id": 9,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson was distilled from a commit-counting task (\"how many commits did Eric and Kilian make to a11yproject on 1/3/2023\"), and its advice — enumerate every commit row in a date group, match the displayed author exactly, open commit detail views to disambiguate identities/dates, count qualifying commits before answering — is correct and useful for that kind of task (valid=true). But CURRENT_TASK asks for the full names of repositories the user contributed to that received the least stars, which requires enumerating repositories, filtering to those with the user's contributions, and comparing star counts to find the minimum. That is a different data source (repository/star listings, not commit rows) and a different approach (min-comparison over repos, not author-matched commit counting). The lesson's guidance about matching authors and inspecting commit detail views does not fit this need (applicable=false), and fully following it would not produce the repo/star answer (sufficient=false). Cosine 0.582 reflects surface GitHub/commit vocabulary overlap, but this is a mis-retrieval onto an unrelated task."
+ },
+ {
+  "task_id": 10,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is about counting commits made by named authors on a specific date (enumerate commit rows, match displayed author exactly, open commit detail views, count qualifying commits). It is valid, useful advice for that commit-counting source task. But CURRENT_TASK asks for repository full names filtered by contribution AND star count (<5 stars) — a completely different need requiring listing repos, verifying contributions, and reading each repo's star count, none of which the commit-row/author-matching guidance addresses. Mis-retrieved (cosine 0.593, likely on 'contributions/commits/GitHub' surface overlap). Since it does not fit the task's required approach, it also cannot be sufficient to get the star-filter answer correct."
+ },
+ {
+  "task_id": 11,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson teaches how to open a single repository's commit history and page through a date range to enumerate qualifying commits — correct and useful for its source task (\"how many commits did Eric and Kilian make to a11yproject on 1/3/2023\"), so valid=TRUE. But the current task needs to list repositories the user contributed to that have zero stars, which requires enumerating/filtering the user's contributed repos by star count, not navigating one repo's commit log by date. The required approach and data source are entirely different, so applicable=FALSE; following the commit-history steps would not surface no-star repos, so sufficient=FALSE. This is a mis-retrieval (cosine 0.593), classified H3_wrong_scope_misretrieved."
+ },
+ {
+  "task_id": 12,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "Source task (\"how many commits did Eric and Kilian make on 1/3/2023\") and CURRENT_TASK (\"how many commits did kilian make on 3/5/2023\") are the same shape: count qualifying commit rows for a named author on a specific date in the commit-history view. The lesson's advice — inspect every row in the date group, match each displayed author exactly, open a commit's detail view if author/date is abbreviated, and count all qualifying rows before answering — is correct and directly on-point. Fully following it (filter to the date, match Kilian exactly, count and verify) is enough to get the count right, matching GOLD must_include '1'. Both nomem and withmem rewards are 1, consistent with a valid, applicable, sufficient lesson."
+ },
+ {
+  "task_id": 13,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "CURRENT_TASK \"How many commits did Eric make on 3/2?\" (gold=2) is the same class of task the lesson was distilled from (\"How many commits did Eric and Kilian make ... on 1/3/2023?\"): count commits by a named author on a given date in the GitLab commits list. The lesson's advice — enumerate every row in the date group, match the displayed author exactly, open a commit detail view when the list abbreviates author/date, distinguish near-identical identities, and answer only after the qualifying commits and final count are visibly verified — is correct and useful for that task class (valid). It directly fits this task's need: same required approach and data source (applicable). Fully following it (find the 3/2 group, match \"Eric\" exactly, count all qualifying rows) yields the correct count of 2 with no missing key move (sufficient). Consistent with both nomem_reward=1 and withmem_reward=1."
+ },
+ {
+  "task_id": 14,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson teaches enumerating every commit in the requested date group, matching each displayed author exactly, opening detail views when author/date is abbreviated, distinguishing near-identical identities, and counting qualifying rows across all named people before answering. It was distilled from a nearly identical source task (\"How many commits did Eric and Kilian make to a11yproject on 1/3/2023?\") where this advice is clearly correct and useful (valid). The current task (\"How many commits did Eric and Kilian make on 1/3/2023 in total?\") requires the exact same approach and data source (commit list filtered by date, authors Eric and Kilian), so it is applicable. Fully following the lesson — enumerate the 1/3/2023 group, exactly match Eric and Kilian, count qualifying commits — would yield the correct count (gold=1), so it is sufficient. Both nomem and withmem rewards are 0, so the failure lies in model execution, not the experience or retrieval."
+ },
+ {
+  "task_id": 15,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "CURRENT_TASK (\"Get me my RSS feed token\") requires navigating to a user account/profile settings page to read the RSS feed token — no commit history involved. The retrieved lesson is about expanding \"Repository\" > \"Commits\" and paginating through a date range to count commits (from source task counting Eric/Kilian's commits on 1/3/2023). That advice is correct and useful for its own commit-counting task (valid=true), but it targets a completely different data source and navigation path than the RSS token lookup. It was mis-retrieved (cosine only 0.489, likely on generic Gitea-navigation phrasing) and does not fit this task's need, so applicable=false and, by extension, insufficient. This is a scope/retrieval mismatch, not a content or coarseness defect."
+ },
+ {
+  "task_id": 16,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson teaches how to enumerate and count commits by matching authors and dates exactly — sound advice for its source task (counting commits by Eric and Kilian on a date), so valid is TRUE. But CURRENT_TASK asks for the SSH clone command for Super_Awesome_Robot, which requires reading the repository's clone URL from the repo page (an entirely different data source and approach). Commit enumeration/counting guidance is irrelevant here, so applicable is FALSE. Low cosine (0.485) confirms a mis-retrieval; this is H3."
+ },
+ {
+  "task_id": 17,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson was distilled from \"clone Super_Awesome_Robot with SSH\" and injected for \"clone ChatGPT with SSH\" — the same task type on the same Gitea-style repo UI. The advice (open the Clone control, wait for the menu, read the SSH not HTTPS entry, copy the complete value including scheme/user, host, port, namespace, repo path, and suffix, and prepend `git clone` only if a URL rather than a full command is shown) is correct and useful for that source task (valid). It fits the current task's need exactly, same UI-read approach (applicable). Fully following it would produce the gold answer git clone ssh://git@metis.lti.cs.cmu.edu:2222/convexegg/chatgpt.git, including the non-obvious port 2222 and ssh:// scheme (sufficient). Both nomem and withmem rewards are 0, so the failure is model execution, not the experience or retrieval."
+ },
+ {
+  "task_id": 18,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson \"Ground the SSH clone command\" was distilled from \"clone ChatGPT with SSH\" and injected for \"clone metaseq with SSH\" — the identical task type (GitLab-style project, capture the full \"Clone with SSH\" value, prepend `git clone `). valid: the advice is correct and useful — open the Clone control, capture a fresh full observation, verify the SSH entry over the HTTPS look-alike, prepend `git clone ` only when a command is requested. applicable: exactly the same required approach and data source (the project page's Clone control). sufficient: fully following it (grounding the complete displayed SSH value) would produce the gold answer git clone ssh://git@metis.lti.cs.cmu.edu:2222/root/metaseq.git. Both nomem and withmem rewards are 0, so the failure is model execution, not the experience or retrieval."
+ },
+ {
+  "task_id": 19,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "Source task (\"clone metaseq with SSH\") and current task (\"clone the best GAN python implementation with SSH\") are the same kind: retrieve the SSH clone command from a repo's Clone control on the same GitLab-like host. The lesson's advice—open the Clone menu, copy the full \"Clone with SSH\" value verbatim (scheme/host/port/namespace/path/suffix), prepend `git clone `, never infer from the browser URL—is correct and useful (valid). It fits the current need exactly, and the gold format (ssh://git@metis.lti.cs.cmu.edu:2222/eriklindernoren/PyTorch-GAN.git, including port 2222 and full path) is precisely what the lesson tells you to capture (applicable). Following the lesson yields the correct SSH string; the only extra work is navigating to the best GAN repo first, which is ordinary task setup rather than a key move the lesson omits (sufficient). Both rewards being 0 indicates a model execution failure, not an experience/retrieval defect."
+ },
+ {
+  "task_id": 20,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson describes exactly how to capture an SSH clone command: open the visible \"Clone\" control, wait for the expanded menu in a fresh observation, copy the complete \"Clone with SSH\" value (scheme, host, port, namespace, path, suffix) verbatim and prepend `git clone `, never inferring from the browser URL. This advice is correct/useful for its source task (clone metaseq with SSH) — VALID. The current task (\"clone the most stared Covid location tracker with SSH\") is the identical task type requiring the identical approach and data source (the GitLab Clone-with-SSH field); the only extra wrinkle is first identifying the most-starred Covid tracker repo, but once on the repo page the clone-capture steps are the same — APPLICABLE. Following the lesson fully (navigate to the correct repo, open Clone control, copy the full SSH value like ssh://git@metis...:2222/yjlou/2019-nCov.git, prepend git clone) yields the gold answer — SUFFICIENT. Both nomem and withmem rewards are 0, so the failure lies in model execution (likely repo identification or clone-value capture), not the experience or retrieval."
+ },
+ {
+  "task_id": 21,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson advises enumerating every commit whose displayed date and author match the requested criteria, continuing through all pages/load-more controls, opening commit details to disambiguate abbreviated/near-identical author identities, and summing only visibly-verified per-author counts on GitLab. This is correct and useful for its source task (\"how many commits did Eric and Kilian make on 1/3/2023\"), so valid=true. The current task (\"how many commits did Kilian make during 2023\") is the same class of GitLab commit-counting problem with the identical required approach: filter to the matching author, enumerate all matching commits across pagination, and verify author identity — so applicable=true. Fully following the lesson (carefully enumerating all of Kilian's 2023 commits, paging through, disambiguating author identity) would yield the correct count (gold must_include '1'), so sufficient=true. Consistent with both nomem_reward=1 and withmem_reward=1: the task succeeds and the lesson is aligned, so any residual difficulty is execution, not experience/retrieval."
+ },
+ {
+  "task_id": 22,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson (\"Count every visibly matching commit\": enumerate every commit whose date+author match, continue through all rows and any next-page/load-more control, open detail for abbreviated names, sum only visibly verified GitLab entries) is CORRECT and useful for its source task (\"how many commits did Eric and Kilian make on 1/3/2023\") — valid=TRUE. It is APPLICABLE to the current task, which is the same shape: count commits by a specific author (Eric) within a date criterion on GitLab, requiring the same enumerate-and-paginate approach. It is SUFFICIENT: the current task's Feb–May 2023 range means matches span multiple pages, and the lesson explicitly directs exhaustive enumeration through pagination/load-more with author+date matching and summing verified entries, which yields the gold answer 14. Although the lesson phrases the date as singular (\"for that date\"), its core move — exhaustive paginated enumeration of author-matching commits — transfers directly to a range. Since withmem_reward went 1->0, the failure lies in model execution, not the experience or retrieval."
+ },
+ {
+  "task_id": 23,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson teaches enumerating every commit whose displayed author and date match the requested criteria on GitLab, paginating through all rows/next-page controls, and disambiguating author identities before counting. This is correct and useful for its source task (counting Eric+Kilian commits on a date). CURRENT_TASK has the identical need: count commits by a named author (Philip) in a given period (2023/1) on GitLab. Following the lesson exactly — enumerate all visibly matching commits and verify author identity — yields the correct answer (0, since none match). Both nomem and withmem rewards are 1, consistent with the lesson being valid, applicable, and sufficient; any behavior here is correct execution."
+ },
+ {
+  "task_id": 24,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "Both the source task (\"How many commits did Eric and Kilian make on 1/3/2023\") and CURRENT_TASK (\"How many commits did Anthony make between 08/2022-09/2022?\") are GitLab commit-counting-by-author-and-date tasks, so the retrieval is on-scope. valid: the advice to enumerate every commit whose displayed date+author match, page through all rows/next-page/load-more, open details when a name is abbreviated, and sum per-author counts is correct and genuinely useful for commit-counting tasks. applicable: identical required approach and data source (count an author's commits over a date window on the GitLab commits view). sufficient: the gold answer is 0 (Anthony made no commits in that window); following the lesson — scanning the commit list for Anthony over 08-09/2022 through all pages and finding no matching entries — yields exactly 0. The lesson captures the key move (verify visibly matching entries for that author/date and count), so full adherence would produce the correct answer. Both nomem and withmem rewards are 0, so the failure lies in model execution (not scrolling/verifying properly), not in the experience content or retrieval."
+ },
+ {
+  "task_id": 25,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson \"Count every visibly matching commit\" advises enumerating every commit whose displayed author and date match the requested criteria, continuing through all rows and any next-page/load-more controls, opening commit details for abbreviated authors, distinguishing near-identical identities, and summing only visibly verified GitLab entries. This is correct, useful methodology for its source task (counting commits by Eric and Kilian on 1/3/2023) — valid TRUE. The current task (\"How many commits did Nic make in April 2021?\") is the same kind of need: count commits by a specific author over a time window on GitLab — applicable TRUE. Fully following the lesson (enumerate all Nic-authored commits across the April 2021 window, paging through, verifying the author identity) would produce the correct count of 16 — sufficient TRUE. Both nomem and withmem rewards are 0, which indicates the failure is in model execution (e.g. miscounting or not paging through the full month), not in the experience content or its retrieval."
+ },
+ {
+  "task_id": 26,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "CURRENT_TASK asks who made the MOST commit contributions — a ranking/aggregation across all authors, best served by GitLab's Contributors graph. The retrieved lesson was distilled from \"how many commits did Anthony make in a date range\" and is entirely about filtering commit history to a SINGLE named author (Author autocomplete control, date-bounded commits API with URL-encoded project path, pagination). That advice is correct and useful for its source task (valid=true), but it targets a different need: counting one author's commits, not aggregating/ranking every contributor. Following it verbatim would not surface the top contributor unless you manually enumerate all authors, so it does not fit and would not be sufficient for this task. Same instance/domain (commits) drove the 0.672 cosine match, but it is mis-scoped onto a top-contributor task. (Both nomem and withmem rewards are 1, so the failure/impact lies elsewhere, not with this being a helpful injection.)"
+ },
+ {
+  "task_id": 27,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is valid for its source task (\"How many commits did Anthony make between 08/2022-09/2022?\"): opening Commits, selecting a branch, using the Author autocomplete, and falling back to the GitLab repository commits API with URL-encoded project path, branch, and date bounds is correct guidance for counting one author's commits in a date range on a GitLab instance. But it does not fit the current task. CURRENT_TASK asks who made the MOST commits to thoughtbot/administrate — a GitHub project, needing a ranking of all contributors (GitHub Insights/Contributors view or the contributors API), not an author+date-range filter. The lesson is GitLab-specific (GitLab commits API, \"don't switch to the public GitLab host\") and its whole thrust is single-author-in-a-date-window counting, which is the wrong approach and wrong data source for a \"top contributor overall on GitHub\" query. It was mis-retrieved on topical \"commit history\" similarity (cosine 0.66); the withmem success is incidental, not because this advice supplied the key move."
+ },
+ {
+  "task_id": 28,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is valid for its source task (\"How many commits did Nic make in April 2021?\"): opening Repository -> Commits and using the Author filter to select a named person is the correct way to count a specific author's commits. But the current task asks who made the MOST contributions across the whole project (gold: tokudu), which requires ranking all contributors by commit count via the project's Contributors/Graphs page. The lesson presupposes you already know which person to search for in the author filter and offers no way to discover the top committer, so it fits a genuinely different need. Right topic (commits) but wrong scope/approach — a mis-retrieval, not a partial fix. Reward was unaffected (nomem=withmem=1)."
+ },
+ {
+  "task_id": 29,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "The lesson is valid GitLab-commit-history guidance for its source task (counting a specific author's commits in a date range): navigate Repository -> Commits, use the Author autocomplete filter, and fall back to the instance's repository commits API with URL-encoded project path, branch, date bounds, and pagination, without switching to the public GitLab host. It is applicable in scope — CURRENT_TASK is on the same GitLab instance and also concerns commit history for a project. But it is not sufficient: CURRENT_TASK needs the single top contributor by total commit count, which requires aggregating commits per author (or reading the project's contributor/graph stats) to find the maximum. The lesson only covers filtering to one known author or paging the commit list and omits the key aggregate-and-rank move, so following it literally would not directly produce \"who made the most contributions.\""
+ },
+ {
+  "task_id": 30,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson (distilled from \"How many commits did Anthony make between 08/2022-09/2022?\") teaches a correct, useful technique for counting a KNOWN author's commits: use Repository -> Commits, apply the Author autocomplete filter, and fall back to the GitLab commits API with URL-encoded project path, branch, date bounds, and pagination. That advice is valid for its source task. But the current task needs the OPPOSITE operation: rank contributors to find who made the MOST commits to csvkit — an aggregation/leaderboard, not a filter-by-named-author. GitLab exposes this directly via Repository -> Contributors (contributor graph), which the lesson never mentions; its Author-filter guidance would require enumerating every author and does not fit the current need. Right general area (GitLab commit history) but mis-retrieved onto a different required approach, so applicable is false and sufficiency is moot."
+ },
+ {
+  "task_id": 31,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "CURRENT_TASK needs a ranking of the top 3 contributors by commit count for prime/design — best obtained from GitLab's Contributors graph (Project → Analytics/Repository → Contributors), which lists all authors ordered by commits. The retrieved lesson was distilled from a \"how many commits did Anthony make in a date range\" task, and it is genuinely valid there: go to Repository → Commits, pick the branch, use the Author autocomplete filter (typed text/Enter won't apply), and fall back to the commits API with date bounds and pagination if truncated. But that guidance targets counting commits for one already-known author in a date window; it says nothing about producing a ranked list of contributors, which is a different required approach/data source. Cosine 0.651 pulled it in on the shared \"commits\" surface, but it does not fit this task's need — hence wrong-scope misretrieval. (Both nomem and withmem reward = 1, so the model still succeeded; the failure, if any, is not attributable to this experience.)"
+ },
+ {
+  "task_id": 32,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is sound for its source task (counting one named author's commits in a date range): use Repository -> Commits, pick the branch, use the Author autocomplete filter, and fall back to the repository commits API with URL-encoded project path, branch, date bounds and pagination when the UI truncates. That advice is correct and useful there, so valid=true. But the current task needs the EMAIL addresses of the top-3 contributors ranked by commit count. The lesson addresses neither ranking contributors by commit volume nor extracting author emails — it is about filtering commits to a single known author over a date window. That is a genuinely different need (contributor-ranking + email extraction vs. per-author commit counting), so applicable=false and it should not have been injected here. Following it would not yield the three emails or the top-3 ranking, so sufficient=false. Hence H3_wrong_scope_misretrieved."
+ },
+ {
+  "task_id": 33,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The current task asks for the top 3 contributors to facebook's create-react-app repo ranked by commit count — a contributor-ranking need served by the repo's Contributors/Insights view. The retrieved lesson is about counting a single author's commits within a date range on a GitLab instance (source task: \"How many commits did Anthony make between 08/2022-09/2022?\"), advising the Commits page with an Author autocomplete filter and a date-bounded GitLab commits API fallback. That advice is correct and useful for its own single-author date-window counting task (valid=true), but it targets a genuinely different need: filtering to one author over date bounds rather than ranking all contributors by total commits, and it references GitLab rather than GitHub. So it does not fit CURRENT_TASK (applicable=false) and following it would not produce the ranked top-3 list (sufficient=false). This is a mis-retrieval, not a content flaw."
+ },
+ {
+  "task_id": 34,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "Source task (\"How many commits did Anthony make in a date range?\") makes the lesson valid: navigate Repository -> Commits, pick the branch, use the Author filter only if autocomplete yields a selectable account, and fall back to the commits API with URL-encoded project path + branch + date bounds + pagination if the UI truncates — all correct GitLab guidance. It is applicable to the current task too: same GitLab instance, same commit-history/commits-API data source. But it is not sufficient. The current task needs the top-3 contributors ranked by total commit count, which requires enumerating ALL contributors and aggregating per-author counts then sorting (naturally the Contributors graph, or aggregating the commits API over every author). The lesson only covers filtering to a single named author / date range and reading commits; it omits the key group-by-author aggregation-and-ranking move, so following it faithfully would not produce the ranked top-3 answer."
+ },
+ {
+  "task_id": 35,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson tells the agent to navigate to Repository > Contributors (the dedicated ranked-by-commits report) and to avoid the Analytics/Repository Analytics pages that only show aggregate author stats without the contributor ranking. The source task (\"top 3 contributors to metaseq ranked by commits\") and CURRENT_TASK (\"last names of top 3 contributors to 2019-nCov ranked by commits\") share the exact same required data source and approach: both need the ranked contributor list. Valid: the navigation advice is correct and useful. Applicable: same need (contributor ranking by commit count), just a different repo. Sufficient: reaching the Contributors report yields the top 3 ranked contributors with their names, from which the last names (Lo, Chen, Chu) are directly readable; the only trivial residual step is picking the surname from each full name. Both nomem_reward and withmem_reward are 1, consistent with the lesson being on-target."
+ },
+ {
+  "task_id": 36,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "CURRENT_TASK needs the repo's member/access list (Project > Members), which returns the username 'yjlou'. The retrieved lesson is about navigating the commit history and paginating through a date range to count commits — a valid technique for its source task (counting Eric/Kilian's commits on a date), but a completely different navigation path and data source. Commit history does not establish who has access to a repository, so the guidance does not fit this task's need and following it would not produce the answer. Valid for its origin, mis-retrieved here (cosine only 0.64)."
+ },
+ {
+  "task_id": 37,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson (enumerate the complete member/collaborator list, exhaust pagination, copy usernames exactly, and exclude the signed-in requester when \"else\" is required) was distilled from an essentially identical task (\"Who else have access to my repo gimmiethat.space, show me their usernames\"). The current task (\"Who else have access to my repo prism-theme, show me their usernames\") needs the exact same approach and data source: read the repo's collaborator/access list and report the other users' usernames verbatim. The gold answer is a single username (abisubramanya27), and following the lesson (open the access list, exclude yourself, copy the username exactly, use profile view if truncated) would produce it. Advice is correct, fits the current need, and is complete. Both nomem and withmem rewards are 1, consistent with the lesson being genuinely applicable and sufficient."
+ },
+ {
+  "task_id": 38,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "CURRENT_TASK needs the email of the top-committer to branch main; the retrieved lesson directs to the dedicated GitLab Repository > Contributors report (and warns off the Analytics variant that lacks the contributor ranking). That report ranks contributors by commit count AND lists each contributor as \"Name <email>\", so it exposes both the ranking needed to pick the top contributor and the email address that is the gold answer (secupwn@users.noreply.github.com). Valid: the navigation advice is correct for the source task (top-3 contributors by commits). Applicable: same data source and page serve both the source ranking task and this email-lookup task. Sufficient: following the lesson lands the agent on the exact page containing both the ranking and the email — the key move (reach Contributors, read the top-ranked entry) is captured. The withmem failure (reward 0 vs nomem 1) therefore lies in model execution, not the experience/retrieval."
+ },
+ {
+  "task_id": 39,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson correctly advises using the dedicated \"Contributors\" report (not Analytics) to get a contributor commit ranking, which is valid and useful for its source task (top 3 contributors by commit count). But CURRENT_TASK needs the EMAIL ADDRESS of the top contributor to a SPECIFIC branch (gh-page). The Contributors report only surfaces contributor names and commit counts, not email addresses, and offers no per-branch filtering. The required data source/approach is genuinely different (locate the user's email via commit/profile, scoped to the branch). This is the textbook \"count contributors\" lesson mis-retrieved onto an \"email of a contributor\" task, so applicable is false; consequently it is not sufficient to solve CURRENT_TASK."
+ },
+ {
+  "task_id": 40,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "CURRENT_TASK needs the total commit count of the top contributor to branch main (gold 412), which requires the GitLab Contributors/commit-statistics view that ranks contributors by commit count. The retrieved lesson is about navigating a branch's commit history via date/pagination controls (plus a generic API host/namespace gotcha), distilled from a task counting one named person's commits within a date range. That advice is correct and useful for its source task (valid=true), but it fits a genuinely different need: it never addresses identifying which contributor has the most commits, so it does not match the current task's required approach (applicable=false) and following it would not yield 412 (sufficient=false). Related surface topic (GitLab commits) but mis-retrieved onto this task."
+ },
+ {
+  "task_id": 41,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "The lesson correctly explains how to find contributor commit rankings via the dedicated Contributors report (valid, and useful for its source task about top-3 contributors by commits). It is applicable here because CURRENT_TASK's first move is identifying the contributor with the most commits to main, which is exactly what the Contributors report provides. However it is not sufficient: the task's actual answer is the number of FOLLOWERS of that contributor (gold=0), which requires the extra move of navigating to that user's profile to read their follower count. The lesson captures only the contributor-identification step and omits the follower-lookup, so following it alone would not yield the correct answer."
+ },
+ {
+  "task_id": 42,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "Current task needs the top contributor to branch php52 AND that person's profile details (full name, gitlab username, location, email). The lesson correctly (valid, per its source date-range counting task) tells you to open Repository > Commits and pick the branch, which is genuinely on-topic for finding who commits to php52. But it is too coarse for this task: it fixates on date-range pagination (irrelevant here) and omits the dominant required move — navigating to the contributor's user profile to read name/gitlab account/location/email. Following it fully would at best surface the top committer's identity but not the four profile fields the answer must include, so it is insufficient. Right topic, incomplete fix -> H2."
+ },
+ {
+  "task_id": 43,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson was distilled from a near-identical task (\"list reviewers who mention ear cups being small\") and injected onto \"list reviewers who mention good fingerprint resistant\". Both are the same WebArena pattern: scan all review pages, read full reviewer names and comments, and report only those whose visible comment mentions the target attribute. The advice — visibly read complete names and full comments, open expanded views, cover all pages, deduplicate exact rows, and answer only from captured observations — is correct and useful for this task class (valid). It fits the current task's exact need: finding qualifying reviewers by their comment text (applicable). Fully following it (reading every review across pages and recording names of those mentioning fingerprint resistance) would yield the gold answer of Rachel and T. Gannon (sufficient). Both nomem_reward and withmem_reward are 1, consistent with a well-scoped, sufficient lesson; any variance lies in execution, not the experience/retrieval."
+ },
+ {
+  "task_id": 44,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "Source task (\"list reviewers who mention ear cups being small\") and CURRENT_TASK (\"list reviewers who mention average print quality\") are the identical task shape on the same data source (product reviews), so the lesson is both valid and applicable — its review-reading discipline (read full name/comment, cover all pages, dedupe, ground in captured text) is correct guidance for this family. But it is too coarse to be sufficient: it captures only the careful-reading symptom and omits the load-bearing moves — locating the correct product, navigating/filtering to its review set, and scanning comment text for the target phrase. Following only \"read every review carefully and ground it\" does not tell the agent how to find the right reviews, which is why both nomem and withmem rewards are 0."
+ },
+ {
+  "task_id": 45,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson was distilled from a near-identical task (list reviewers who mention price being unfair) and is correct there: read full review text, pair each qualifying comment with the complete reviewer name, match on semantic variants not keywords, enumerate all matches, and only answer none after all reviews and the stated total are accounted for. The current task (list reviewers who complain about customer service) requires exactly the same approach and data source — scan the full review set, semantically match a complaint category, and pair with the displayed reviewer name. The guidance is fully applicable and, if followed, sufficient to produce the gold answer (Bob in Vegas, RemyR). Both nomem and withmem rewards are 1, consistent with a valid/applicable/sufficient lesson; any variance would be execution, not the experience."
+ },
+ {
+  "task_id": 46,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is sound advice for its source task (listing reviewers who mention a topic requires selecting the Reviews tab and paging through all review pages). But the current task asks for the price range of wireless earphones in the One Stop Market — a category/search-result task requiring navigating to the wireless earphone product listing, sorting by price, and reading the min/max prices (gold: 0.14 to 745.00). Reviews and their pager are irrelevant to a price-range lookup, so the guidance does not fit this task's data source or approach (applicable false, hence sufficient false too). Low cosine (0.425) confirms a mis-retrieval. The lesson itself is not wrong, so valid stays true."
+ },
+ {
+  "task_id": 47,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson advises searching the One Stop Market, exposing the product grid, reading the complete displayed prices, verifying genuine product matches (not near-identical accessories/variants), and inspecting every row tied at the endpoint to report the low/high price range grounded in the page. The source task (\"price range of wireless earphone in the One Stop Market\") is the same shape as the current task (\"price range of teeth grinding mouth guard in the One Stop Market\"): both require finding the min and max price of a product category from the search-result grid. The advice is correct and useful for that source task (valid), it fits the current task's identical need and data source (applicable), and fully following it — search, load the grid, match the right product, read all tied endpoints, report min/max (gold 1.46 and 85) — would suffice to get the answer (sufficient). Both runs still scored 0, so the failure lies in model execution, not the retrieved experience."
+ },
+ {
+  "task_id": 48,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "Source task (\"price range of teeth grinding mouth guard in One Stop Market\") and current task (\"price range of Canon photo printer in One Stop Market\") are the identical WebArena task family, so the lesson's advice — sort by price, read both endpoints, verify each price attaches to the intended product variant, include tied rows — is correct and useful (valid) and squarely on-topic (applicable). But the lesson is too coarse: it dwells entirely on sort/endpoint-verification mechanics and never states the key upstream move these tasks require — first search/filter to the specific product term (Canon photo printer) so the min/max endpoints are computed over the correct qualifying set. Following the lesson as written would have the agent sorting and reading endpoints over the wrong/broader result set, which matches the observed regression (nomem_reward 1 -> withmem_reward 0). Captures the symptom step, omits the fix, so sufficient is false -> H2."
+ },
+ {
+  "task_id": 49,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson correctly describes how to open the full order-history table (My Account -> My Orders, set items-per-page/paginate, confirm Date/Order Total/Status columns) — this is genuinely useful for its source task, which is a whole-account aggregation (\"how many fulfilled orders over the past year and total money spent\"). So valid=TRUE. But CURRENT_TASK asks for spending on \"food-related shopping during March 2023\", which requires filtering by product category. The Orders summary table only exposes Date/Order Total/Status and has no category/line-item information, so this lesson points at the wrong data granularity: to answer the current task you must open individual orders and inspect line items to identify which are food-related, then sum only those. The lesson's core guidance (read Order Total from the summary table) fits a different need than the current task, so applicable=FALSE (and consequently insufficient). This is a topically-near lesson mis-retrieved onto a category-filtered task."
+ },
+ {
+  "task_id": 50,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "Source task (\"how much spent on food-related shopping in March 2023\") and current task (\"hair care/hair style spending in Jan 2023\") share the same data source and a core subgoal: navigate My Account > My Orders and page through the Orders table to cover the full date interval with visible pagination/boundary checks. That advice is correct and useful (valid) and fits this task's date-range requirement (applicable). But it is too coarse for the current need: the lesson only tells you how to bound the set of orders by date; it omits the load-bearing move of opening each in-window order, filtering line items to the hair care/hair style product category, and summing only those amounts. Following the lesson alone would yield total Jan 2023 spending, not the 95.23 hair-care subset. Right topic, symptom-level step, missing the category-filtering fix."
+ },
+ {
+  "task_id": 51,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "CURRENT_TASK (\"how much I spent on home decoration shopping during 1/29/2023\") and the source task (\"food-related shopping during March 2023\") are the same shape: sum spending on a category over a period from order history. The lesson's advice — inspect every page of the Orders table and verify pagination/date boundaries — is correct and useful for that kind of task (valid) and on-topic for CURRENT_TASK (applicable: same order-history data source). But it is too coarse: it captures only the pagination/date-boundary navigation and omits the key move of identifying which orders count as the target category (\"home decoration\") and summing their totals. Following the lesson fully would correctly bound the 1/29/2023 date window but would not tell the agent how to select the relevant items and compute 265.69, so it is not sufficient. Failure (both nomem and withmem reward 0) is consistent with the missing category/aggregation step."
+ },
+ {
+  "task_id": 52,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "CURRENT_TASK (\"how much spent on food shopping mid-Jan to end-Jan 2023\", gold answer = 0) is the same shape as the lesson's source task (\"food spending during March 2023\") — both are food-spend-over-a-date-range questions against the same My Account > My Orders history. valid: the advice (page through every page of the Orders table, use displayed dates to cover the interval, check adjacent boundary rows, verify pagination before claiming results) is correct and useful for that source task. applicable: it fits the current need exactly — same data source, same required navigation. sufficient: since the gold answer is 0 (no orders fall in the mid-to-end-Jan window), the decisive move is exactly what the lesson prescribes — thoroughly inspecting every page and verifying date boundaries so the agent correctly concludes nothing matches and returns 0. Both nomem and withmem rewards are 0, so the failure lies in model execution, not the experience or its retrieval."
+ },
+ {
+  "task_id": 53,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "CURRENT_TASK asks how much was spent on cooking/food-shopping during March 2022 (gold 52.35); the lesson was distilled from a structurally identical task (hair-care spending during Jan 2023). The lesson's advice — go to My Account -> My Orders, use the items-per-page selector to show the whole history / traverse all pages, check rows inside the period plus boundary dates, and restore full-history after View Order — is correct and useful for that kind of order-history task (valid), and it targets the same data source/approach this task needs (applicable). But it captures only the navigation/pagination symptom: it explains how to see all orders in the date window yet omits the key move of drilling into each order, filtering to just the relevant product category (cooking/food-shopping items), and summing those line totals to reach the exact figure. Following the lesson alone would expose the orders but not compute the category-specific spend, so it is not sufficient to get 52.35."
+ },
+ {
+  "task_id": 54,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson (distilled from a \"how much I spent on food shopping in March 2023\" task) is sound advice for spend-aggregation questions: enumerate qualifying orders, open View Order, read Items Ordered, distinguish merchandise subtotal from shipping/total, and compute only from visible values. That advice is correct and useful for its source task, so valid=true. But CURRENT_TASK (\"size configuration of the picture frame I bought Sep 2022\", gold 16x24) is a single-order attribute lookup — find one order and read a product size spec, no enumeration, no subtotal-vs-total arithmetic, no summing. The lesson's substance (money aggregation and total/shipping disambiguation) targets a genuinely different need; only a trivial \"open the order and read items\" fragment overlaps. It was mis-retrieved onto this task (cosine 0.553) and should not have been injected, so applicable=false and category H3. Both nomem and withmem rewards are 0, consistent with the lesson not helping here."
+ },
+ {
+  "task_id": 55,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is valid for its source task (computing food-related spend in March 2023): open each qualifying order via View Order, read the Items Ordered section, distinguish merchandise subtotal from shipping and total, and only use visibly shown values — correct, useful guidance for a spend-calculation task. But CURRENT_TASK asks for the size configuration (16x24) of a picture frame bought in 2022, which is a product-attribute lookup, not a monetary calculation. The lesson's substance — enumerating qualifying items, separating subtotal vs shipping vs order total, never inferring amounts — is about spend math and does not fit the need to read a product's size/configuration option. Only the generic \"open the order and read items\" step overlaps, and it never mentions reading the frame's size attribute, so it's a mis-retrieved spend lesson injected onto an attribute task rather than the right approach for this need."
+ },
+ {
+  "task_id": 56,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson teaches reading the full configuration labels and values from an order's \"Items Ordered\" detail view and copying the complete value for the requested option. It was distilled from a near-identical task (size configuration of the picture frame bought 2022); the current task asks for the color configuration of the picture frame bought Sep 2022 (gold: \"Mist\"). Same site, same required data source (order detail configuration options), same move — only the requested option field differs (color vs size). Valid: the advice about verifying product name, reading all config labels/values, and copying the exact shown value is correct and useful. Applicable: identical need, just a different option key on the same order/product. Sufficient: fully following it (open the Sep 2022 order, read the configuration options, copy the color value) yields \"Mist\". Consistent with both nomem and withmem rewards being 1."
+ },
+ {
+  "task_id": 57,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson teaches reading the full product name and all configuration labels/values in \"Items Ordered,\" opening a fuller detail view if abbreviated, copying the complete value for the requested option, and checking every matching order without inferring among variants. The source task (size configuration of a picture frame bought 2022) is the same shape as CURRENT_TASK (color configuration of artificial plants bought Feb 2023): both require locating a specific past order and reading its configuration/option value. The advice is correct and useful for that task type (valid), the required approach and data source match exactly (applicable), and fully following it — find the Feb 2023 artificial-plants order, read the color configuration, copy the exact value (Green-vines) — is enough to answer correctly (sufficient). Both nomem and withmem rewards are 1, consistent with a well-matched lesson."
+ },
+ {
+  "task_id": 58,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is valid for its source task (finding a product's price range by sorting the catalog and verifying both min/max endpoints on the product grid). But CURRENT_TASK asks for the price configuration of a specific fake tree the user bought in Jan 2023 (gold 260.69) — this is an order-history lookup, not a catalog price-range search. The lesson's guidance about sorting by price and inspecting min/max endpoints does not fit: the required data source is the user's past order detail, not a sorted product grid. Right topic keyword (\"price\") drove a 0.607 cosine match, but the approach is genuinely different, so it was mis-retrieved onto this task."
+ },
+ {
+  "task_id": 59,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "CURRENT_TASK (\"main criticisms of this product, extract the relevant sentences\") and the gold answer are all sentences drawn from the product's customer reviews. The lesson tells the agent to open the \"Reviews (count)\" tab, inspect every displayed review, and follow next-page controls until no pages remain, verifying that the observation actually contains review entries. VALID: for its source task (list reviewers mentioning print quality) this is correct, useful advice — you must open and fully paginate reviews to enumerate the right ones. APPLICABLE: the criticisms live in the same data source (customer reviews), and the required approach is identical — open + paginate all reviews so the full text is visible. SUFFICIENT: the load-bearing move for this task is getting the complete review text into the observation, which the lesson fully covers; selecting the negative/critical sentences from that visible text is the task's own trivial extraction step. Both nomem and withmem rewards are 0, so the failure lies in model execution (extracting/formatting the sentences), not in the experience or retrieval."
+ },
+ {
+  "task_id": 60,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "CURRENT_TASK asks to extract the main criticisms of the product from its reviews (gold: \"Dry\", \"Uneven color\"). The retrieved lesson tells the agent to open the \"Reviews (count)\" tab, inspect every review, and paginate through all review pages while verifying the review entries are actually visible in the observation. VALID: this is correct, useful advice for the source task (\"list reviewers who mention average print quality\"), which is fundamentally a review-mining task. APPLICABLE: criticisms of a product live in the same place — the reviews — so the required approach and data source (open + fully paginate reviews) match exactly. SUFFICIENT: full coverage of all review pages plus reading the entries is enough to surface the negative sentences containing \"Dry\" and \"Uneven color\"; the lesson captures the key move (get all reviews visible) rather than only a symptom. Both nomem and withmem rewards are 1, consistent with the lesson helping rather than being the failure point."
+ },
+ {
+  "task_id": 61,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson tells the agent to open the \"Reviews (count)\" tab and paginate through every review page, verifying the observation actually contains review entries. It was distilled from a \"list reviewers who mention X\" task, where this navigation/coverage discipline is correct and useful (valid). The CURRENT_TASK asks for the main criticisms of the product, extracting relevant sentences — and those criticisms come precisely from the customer reviews (e.g. \"The 39 was too small...\", \"the strap is made of some really stiff leather and is painful to my heel\"). So the same data source and required approach apply: get to the reviews tab and read all review content (applicable). Fully following the lesson gets the agent to the complete set of review text, which is exactly what's needed to extract the critical sentences; the extraction itself is model-side reasoning, not a missing retrieval/navigation move (sufficient). Both nomem and withmem rewards are 0, so the failure lies in execution/extraction rather than the experience being wrong, mis-scoped, or too coarse."
+ },
+ {
+  "task_id": 62,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "Self-retrieval: the lesson was distilled from the identical task intent (\"main criticisms of this product? extract the relevant sentences\"), cosine 0.694. VALID: the advice — read every displayed review fully, expand truncated text, copy each criticism as a complete visible sentence verbatim without inventing words, include all qualifying reviews, keep near-identical complaints distinct, and only answer when every quote is grounded on the page — is exactly the correct approach for criticism-extraction tasks. APPLICABLE: current task is precisely a criticism-extraction task whose gold is a must_include list of verbatim criticism sentences, matching the lesson's data source and required approach. SUFFICIENT: fully following the lesson (extract all visible criticism sentences verbatim, expand truncation) would yield the gold verbatim quotes; nothing key is omitted. Both nomem and withmem reward are 0, so the failure lies in model execution (likely paraphrasing, missing a review, or not expanding truncated text), not in the experience content or retrieval."
+ },
+ {
+  "task_id": 63,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson teaches how to fully expose order history (expand items-per-page, traverse every page, verify all rows within a date period and boundary dates, restore pagination after 'View Order'). That advice is correct and genuinely useful for its source task, which is a period-aggregation query ('how much I spent on hair care during Jan 2023') that requires surveying every order row in a date window — so valid=TRUE. But CURRENT_TASK asks for the total cost of the single 'latest cancelled order.' The required approach is to filter/scan orders by status=Cancelled, identify the most recent one, and read its order total — not to paginate the entire history to catch every row within a date range. The lesson never mentions status filtering or selecting the latest matching order, which is the key move here. Right general area (My Orders page) but wrong need, so it should not have been injected here — applicable=FALSE, hence H3. (Both nomem and withmem reward=1, so the mis-retrieval did not hurt outcome, but the retrieval itself is off-scope.)"
+ },
+ {
+  "task_id": 64,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson advises exhaustively traversing the full My Orders history with rows-per-page/pagination controls to read every qualifying row — correct and useful for its source task (\"how much I spent on food shopping mid-to-end Jan 2023\"), which requires aggregating over a date range (valid=true). But CURRENT_TASK asks only for the total cost of the single latest pending order: the required move is to filter/identify one specific order by status=pending and recency, then read its total (754.99). Exhaustive full-history pagination coverage is a different need — you just need to locate the one most-recent pending order, not sum across all rows. So applicable=false; the lesson was mis-retrieved onto this task (cosine 0.661, both merely touch \"My Orders\"). Since it doesn't fit the need, it also can't be sufficient. Note both nomem and withmem rewards are 1, so the model succeeded regardless."
+ },
+ {
+  "task_id": 65,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "Current task needs the single latest \"Complete\" order's Grand Total (65.32). The lesson correctly points to My Account > My Orders (same data source, so applicable), and its date-boundary/pagination advice is valid for its source task (summing food orders across March 2023). But for this task the key move is filtering by order status = Complete and picking the most recent row, then reading its total cost — the lesson instead emphasizes paginating across date intervals and verifying date boundaries before counting matching orders, which is the wrong emphasis and omits the identify-latest-complete-and-read-total step. Right topic/source but too coarse to be sufficient."
+ },
+ {
+  "task_id": 66,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "Current task needs the single latest NON-CANCELLED order's total (754.99): the key moves are filtering by order status (excluding cancelled) and picking the most-recent row. The retrieved lesson is about aggregating spend across a date interval — it teaches paginating through all orders and verifying date boundaries to cover a \"full requested interval,\" which is the right advice for its source task (food spending in March 2023) so valid=true. But that interval-coverage/date-boundary guidance does not fit the current need: there is no interval to cover, and nothing about identifying the latest order or excluding cancelled ones. Only the shared \"My Account -> My Orders\" navigation overlaps; the substantive advice is for a genuinely different need, so it was mis-retrieved (applicable=false, hence sufficient=false)."
+ },
+ {
+  "task_id": 67,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "CURRENT_TASK: price range for \"Amazon basic\" brand products (gold 5.49 / 375.19). The lesson (from a \"teeth grinding mouth guard price range\" task) correctly advises verifying both the lowest and highest displayed price endpoints after sorting, opening detail pages when truncated, and including tied rows — sound and useful advice for price-range tasks, so valid=true. It is the same required approach (sort by price, read both endpoints), so applicable=true. But it is insufficient: it starts at \"after sorting by price, inspect every qualifying product\" and never captures the load-bearing first move for this task — scoping/filtering results to the specific brand \"Amazon basic\" (via search or brand filter) before sorting. Without that, the sort/endpoint reads happen over the wrong (unfiltered) set and return wrong values. It captures the symptom step (read both endpoints) and omits the key move (filter to the brand first), matching the H2 example."
+ },
+ {
+  "task_id": 68,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "CURRENT_TASK asks for the price range of products from brand EYZUTAK; GOLD requires 9.99 (one endpoint). The lesson, distilled from the \"teeth grinding mouth guard price range\" task, gives correct and useful advice for establishing a price range: after sorting by price, inspect the qualifying products to capture both the lowest and highest displayed current prices, use the sort-direction control for the opposite endpoint, open detail pages when the grid truncates, and include tied rows rather than guessing. That advice is valid and shares the same approach/data source, so it is applicable to a brand price-range query. However it is only sufficient at the symptom level: it covers how to read the two endpoints but omits the load-bearing first move for this task — restricting the result set to the specific brand EYZUTAK (search/filter to that brand) before sorting. Following the lesson literally, an agent could sort and read endpoints over the wrong (unfiltered) set. Right topic, too coarse/incomplete → H2."
+ },
+ {
+  "task_id": 69,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "The lesson is valid: after sorting by price, inspecting both endpoints and confirming they attach to the intended product (opening detail pages when the grid truncates) is correct, useful advice for a price-range question like its source task (mouth guard price range in One Stop Market). It is applicable: CURRENT_TASK is also a price-range question (gold min 18.18 / max 94.99) needing the same sort-and-read-endpoints approach. But it is not sufficient: the current task requires first scoping the result set to \"products from sephora\" (searching/filtering by the sephora brand), and only then reading the min/max displayed prices. The lesson focuses entirely on endpoint verification after sorting and merely says \"inspect every qualifying product\" without capturing the load-bearing move of filtering to the specific brand/vendor first. This mirrors the H2 archetype in the instructions (says \"sort and read the price endpoints\" but omits \"first filter to the specific product/brand\"), so endpoints could be read over the wrong set. Both nomem and withmem rewards are 0, consistent with the fix being incompletely captured."
+ },
+ {
+  "task_id": 70,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "CURRENT_TASK asks for the price range of ugreen products (gold 6.99–38.99); the lesson was distilled from an analogous price-range task (mouth guard in One Stop Market), so its core advice is sound: after sorting by price, verify both the lowest and highest displayed current-price endpoints, open detail pages when the grid truncates, and include tied rows rather than guessing. That advice is correct and useful for its source task (valid=true) and squarely on the same topic/data source as CURRENT_TASK — a store price-range lookup via sorting (applicable=true). However it is too coarse: it presumes the set of 'qualifying products' is already correctly established and only addresses the endpoint-verification symptom. It omits the key prerequisite move for this task — first filtering/searching to the specific brand 'ugreen' so the min/max are computed over the right subset. Following the lesson alone (sort the grid and read both ends) would establish endpoints over the wrong set if the brand filter isn't applied, so it is not sufficient to guarantee correctness (sufficient=false). This matches the instructions' price-range example where the fix ('first filter to the specific brand') is missing. Both nomem and withmem rewards are 1, so this run passed via model execution, not because the lesson supplied the missing filter step."
+ },
+ {
+  "task_id": 71,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "Source task (\"price range of teeth grinding mouth guard\") and current task (\"price range for products from Perricone MD\") are the same WebArena task type: establish the low/high price endpoints over a filtered product set (gold must_include ['35','149']). The lesson's advice — after sorting by price, inspect the qualifying products to capture both the lowest and highest current displayed prices, use sort-direction/last page for the opposite endpoint, open detail pages if the grid truncates, and include tied rows — is a correct and useful procedure for price-range questions (valid). It targets the same need as the current task, and even flags scoping to the \"intended product variant\" (applicable). Following it fully — filter to the target set, sort by price, read both endpoints — would yield 35 and 149 (sufficient). Consistent with both nomem and withmem reward = 1."
+ },
+ {
+  "task_id": 72,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson gives generic My Orders navigation guidance: open My Account > My Orders, expand rows-per-page to show the entire history (or traverse every page), and read every row that qualifies by date and status, restoring page size after viewing an order detail. It is valid for its source task (summing food spending over a date range required full-history coverage). It is also applicable to the current task, which asks for the most recent cancelled order — this likewise requires scanning the complete order history and filtering rows by status (\"cancelled\") and date. Following the lesson fully (show all rows, read status/date, pick the most recent cancelled) would surface order 170, so it is sufficient. Both nomem and withmem rewards are 1, consistent with the lesson not hurting and the task being solvable."
+ },
+ {
+  "task_id": 73,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson (\"Use the complete My Orders history\": open My Account -> My Orders, expand rows-per-page to show the full history/traverse all pages, read every row whose date and status qualify, and restore page size after viewing an order detail) is correct and useful for its source task (summing food-shopping spend over a mid-to-end-Jan 2023 window, which requires full pagination coverage and date/status filtering) -> valid TRUE. The current task (\"get the order number of my most recent pending order\") uses the same data source and navigation: it needs to locate rows in My Orders qualifying by status (pending) and pick the most recent by date -> applicable TRUE. Following the lesson's guidance (full coverage, read rows by date and status) is enough to identify the most recent pending order and report its number (189) -> sufficient TRUE. Both nomem_reward and withmem_reward are 1, consistent with the lesson being genuinely on-topic and complete."
+ },
+ {
+  "task_id": 74,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "CURRENT_TASK asks for the order number of the most recent complete order (gold: 180). The lesson tells the agent to open My Account -> My Orders, expand the full history via the rows-per-page control / traverse every page, and read every row whose date and status qualify. This is valid advice for its source task (summing food-shopping spend over a date range, which needs complete pagination coverage). It is also applicable here: same data source (My Orders), and it explicitly directs the agent to consider each row's status (\"complete\") and date recency, which is exactly what identifying the most recent complete order requires. Fully following it — expand history, look at complete-status rows, pick the most recent — is sufficient to land on order 180. Both nomem and withmem rewards are 1, consistent with this being a solvable case where the lesson genuinely aligns."
+ },
+ {
+  "task_id": 75,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "The lesson (verify both visible price endpoints after sorting) is correct and useful for its source task, a pure price-range query on One Stop Market. It is also on-topic here since this task does ask for the Sony Bluetooth headphones price range (gold: 18.99 to 406), so the price-endpoint guidance genuinely applies. But the current task's dominant requirement is enumerating the complete names of all 12 qualifying Sony Bluetooth headphones — which needs filtering to the Sony/Bluetooth set and paginating to collect every product name. The lesson only covers establishing the lowest/highest price and says nothing about exhaustively listing all matching product names. Followed fully, it would still miss the enumeration half, so it is too coarse/incomplete to get the task correct (both nomem and withmem reward = 0)."
+ },
+ {
+  "task_id": 76,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "Source task (\"complete names of Sony Bluetooth headphones + price range\") and current task (\"full names of Anker chargers + price range\") are the same task shape: enumerate every qualifying product's full displayed name and compute a price range. The lesson's advice — visibly verify each row matches the requested product, record full name and price, open the detail page when the grid truncates, keep variants/accessories distinct, enumerate every qualifying row across all pages, and compute the range (with ties) from the recorded visible prices — is correct and useful for that task type (valid). It matches the current task's required approach and data source exactly (applicable). It also captures the load-bearing moves needed here: the gold set is heterogeneous (wall chargers, wireless pads, power banks, even a replacement cable) and the range spans 8.99-59.99, and \"enumerate every qualifying row across every page, record full names and prices, compute range from all\" would produce the correct answer (sufficient). Both nomem and withmem reward are 0, but the gap is model execution (failing to enumerate all 13 items / traverse all pages), not the lesson content or its retrieval."
+ },
+ {
+  "task_id": 77,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "CURRENT_TASK asks for the product names of Oral-B kids brush heads and their price range per brush — a product-search/price-comparison need. The retrieved lesson (\"Open and paginate the product reviews\") teaches how to select the Reviews tab and page through review entries, which was correct and useful for its source task (listing reviewers who mention average print quality), so valid=true. But it is about a genuinely different data source (reviews, not product listings/prices) and offers no guidance on searching for the brush heads or reading their prices, so applicable=false. Following it would not help get the price range or product names, so sufficient=false. This is a mis-retrieval driven by shared \"product\" surface similarity (cosine 0.613); both runs scored 0 reward."
+ },
+ {
+  "task_id": 78,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "The lesson (grounding both price endpoints in visible product cards, capturing full displayed prices, handling ties, opening detail pages for truncated names) is correct and useful for the price-range source task (valid). It is also on-topic for CURRENT_TASK, which likewise asks for a Nike-slide price range from the same product-card data source and even benefits from the truncated-name/detail-page advice (applicable). But it is not sufficient: CURRENT_TASK's primary requirement is to exhaustively enumerate ALL nine qualifying Nike slide products by their full names (the gold must_include lists 9 distinct product names plus min 27.6 and max 90.65). The lesson only addresses the two price endpoints and tie handling; it never captures the key move of filtering to the specific Nike-slide result set and listing every matching product's complete name. Following it fully would likely recover the price range but miss the full name enumeration, so it captures the symptom (endpoint prices) not the whole fix."
+ },
+ {
+  "task_id": 79,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson advises navigating My Account -> My Orders and inspecting every page of the Orders table, using displayed dates to cover the requested interval and verifying pagination/date boundaries before claiming which orders match. This is correct and useful for its source task (spend during March 2023), so valid. The current task (\"refund from an order cancelled in April 2022\") uses the exact same data source and navigation: the agent must go to My Orders and check whether any order matches the April 2022 date/cancelled criterion. Applicable. The gold answer is 0, meaning no matching order exists; if the agent fully followed the lesson (systematically inspecting all pages and verifying date boundaries), it would find no qualifying order and correctly conclude the refund is 0. The lesson captures the core move (date-bounded, paginated verification of the Orders table) rather than a mere symptom, so it is sufficient. Both nomem and withmem rewards are 0, indicating the failure lies in model execution, not in the quality or applicability of the retrieved experience."
+ },
+ {
+  "task_id": 80,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson was distilled from a near-identical task (\"refund for my order cancelled in April 2022, including shipping fee\") and applies to CURRENT_TASK (\"refund for order cancelled in Feb 2023, including shipping fee\") — same required approach and data source: open the cancelled order via its action link, read the full totals section, and use the visible labeled shipping + final refundable total. The advice is correct and useful (compute only from labeled amounts, include shipping as the page shows), and following it fully would yield the labeled grand total (gold 406.53). All three checks hold; both nomem and withmem rewards are 1, so nothing fails here."
+ },
+ {
+  "task_id": 81,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson (open the qualifying cancelled order via its action link, confirm heading/date/status, read the full totals section, and compute the refund from visible labeled shipping and final total) was distilled from a near-identical task (\"refund from order cancelled in April 2022, including shipping fee\") — so its advice is correct and genuinely useful there (valid). The current task (\"refund from order cancelled in 2022, including shipping fee\") shares the exact same required approach and data source: locate the cancelled 2022 order and read its labeled refund/shipping totals, so the guidance fits (applicable). Fully following the lesson — identify the cancelled 2022 order, read the totals section, include shipping, and report the visible final total (3053.97) — would be enough to get the answer right (sufficient). Both nomem and withmem rewards are 0, so the failure lies in model execution (e.g. picking the wrong order among 2022 orders or misreading the total), not in the extracted experience or its retrieval."
+ },
+ {
+  "task_id": 82,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "CURRENT_TASK asks for the refund on an order cancelled in May 2023 when the shipping fee is NOT refunded — i.e. grand total minus shipping. The lesson (distilled from a near-identical \"refund from cancelled order, including shipping fee\" task) is valid: recording the exact displayed Shipping and Grand Total per order, filtering to qualifying orders by date/number, and only summing evidence-backed values is correct, useful guidance for refund-from-order-detail tasks. It is applicable: same data source (order detail totals section) and same required approach; it explicitly names the Shipping and Grand Total fields, which are precisely the two numbers this task needs to answer \"grand total minus shipping.\" It is sufficient: capturing both the exact Shipping and Grand Total gives all inputs to compute the refund excluding shipping (grand total - shipping = 350.42); the arithmetic direction is dictated by the question itself. Both nomem and withmem rewards are 1, consistent with the lesson not hurting and the topic being right. Any residual concern is model execution, not experience/retrieval."
+ },
+ {
+  "task_id": 83,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "The lesson is valid: reading the full totals section and calculating only from visible labeled amounts is sound advice for the order-refund family it was distilled from (a \"how much refund including shipping\" task). It is applicable: the current task is the same kind of order-refund lookup on the same page, and the source and current intents are near-identical (both about a cancelled 2022 order's refund). But it is not sufficient. The current task has a decisive twist the lesson does not capture: the customer kept only the AC-DC Adapter and cannot get the shipping fee back, so the correct answer (264.49) requires (a) restricting to the single kept item's price and (b) explicitly EXCLUDING shipping. The lesson only says to read/copy the displayed shipping and final refundable total and not to claim shipping inclusion that is absent — it frames shipping as something to read off the page, not as an amount to subtract, and it says nothing about isolating one kept line item from a multi-item order. Following it literally would push the agent toward the page's full refundable total (which includes other items/shipping) rather than computing the item-only, shipping-excluded figure. It captures the \"read the totals carefully\" symptom but omits the key move (filter to the kept item and subtract shipping), and indeed withmem_reward stayed 0."
+ },
+ {
+  "task_id": 84,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "CURRENT_TASK asks total spending on 4/19/2023 at One Stop Market; GOLD is 0 (no qualifying orders that date). The lesson (open My Account > My Orders, expand rows-per-page to show the entire history or page through all rows, and read every row whose date/status qualifies, re-restoring page size after visiting an order detail) is the exact procedure for a date-filtered spend sum from order history. It is valid for its source task (summing food spending over a Jan-2023 date range) and applicable here since the required data source and approach are identical. It is also sufficient: fully following it — traversing the complete order history and matching by date — would reveal no order on 4/19/2023 and yield 0. Both nomem and withmem rewards are 0, so the failure is in model execution (not correctly reaching/reading the full order history or not concluding 0), not in the extracted experience or its retrieval."
+ },
+ {
+  "task_id": 85,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "Both tasks are the same kind: aggregate spending over a date range from the WebArena shopping account. The lesson (open My Account > My Orders, use rows-per-page to show the full history, traverse every page, read every row whose date/status qualifies, and re-restore page size after returning from an order detail) is a correct and useful technique for the source task (\"food shopping mid-Jan to end-Jan 2023\") -> valid. The current task (\"spend in March 2023 at One Stop Market\") needs the identical approach and data source (My Orders history filtered by date), so it fits -> applicable. Fully following the lesson yields complete date-filtered coverage of the order rows and their totals, which is exactly the key move needed to compute the sum -> sufficient. Both nomem and withmem rewards are 0, so the failure lies in model execution (e.g. arithmetic/date-filtering/store attribution), not in the extracted experience or its retrieval."
+ },
+ {
+  "task_id": 86,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "CURRENT_TASK asks total spending in July 2022 at One Stop Market; source task asks total food spending mid-to-end Jan 2023. Both are the same shape: sum order totals across a date window, which requires opening My Account > My Orders and reading every qualifying row across the full paginated history. The lesson's advice (expand rows-per-page or traverse all pages, read every row whose date/status qualifies, restore page size after viewing an order detail) is correct and directly captures the key move for this task type, not just a symptom. Both nomem and withmem rewards are 1, consistent with the lesson being valid, applicable, and sufficient."
+ },
+ {
+  "task_id": 87,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "The lesson (open My Account -> My Orders, inspect every page, verify pagination and date boundaries) is correct and useful for its source task (summing food-related spend during a month), so valid=true. It is also on-topic for CURRENT_TASK, which likewise needs enumerating orders within a date window (November 2022) from the same order-history source, so applicable=true. But it is insufficient: it only covers enumerating orders across the date range and omits the task's key moves — filtering to the \"One Stop Market\" store, summing the order totals, and applying the conditional 20% discount for orders exceeding $200 in cash that yields the gold answer 359.546. Following the lesson alone would not produce the correct number (both nomem and withmem reward = 0)."
+ },
+ {
+  "task_id": 88,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is about capturing numeric order totals (exact \"Shipping\" and \"Grand Total\" amounts) and summing them across qualifying orders for a refund calculation — valid advice for its source task (\"how much refund including shipping fee\"). But CURRENT_TASK just asks for the shipping *method* label of a single order (gold: \"Flat Rate - Fixed\"), not any dollar amount and no summing. This is a genuinely different need — reading a categorical shipping-method field vs. reading/summing monetary totals — so it was mis-retrieved (cosine 0.66 on shared \"shipping\"/\"order\" keywords). Following the lesson would not guide the agent to the method field, so it is not applicable and not sufficient."
+ },
+ {
+  "task_id": 89,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson teaches how to systematically scan the full order history by maximizing page size and inspecting every target-period row rather than guessing from price/status/total. That is sound advice for its source task (finding a picture frame bought in 2022, where you must scan the history for that period). But the current task gives a concrete order number (148): the agent simply navigates directly to order 148 and reads its line items — no history scanning, page-size maximizing, or period-row inspection is involved. The lesson addresses a genuinely different need (locating an unknown order by time period vs. opening a known order), so it should not have been injected here. Both nomem and withmem rewards are 0, consistent with the lesson being irrelevant rather than helpful."
+ },
+ {
+  "task_id": 90,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson's advice — maximize the order-history page size, restore it after each View Order, and systematically scan every row over a target period rather than guessing — is correct and genuinely useful for its source task (\"what is the size configuration of the picture frame I bought 2022\"), where the specific order is unknown and must be located by scanning a time period. So valid=TRUE. But the current task gives an explicit order number (00178); there is no period-scan or candidate-guessing problem to solve — you just locate order 00178 (search/navigate directly) and read its billing address. The lesson is about a different need (finding the right order among many via exhaustive scanning) and never mentions where/how to read a billing address, so it does not fit this task: applicable=FALSE. This is a fine lesson mis-retrieved (cosine 0.647, both no-mem and with-mem reward=1, so it changed nothing), which is H3."
+ },
+ {
+  "task_id": 91,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "Current task (\"list customers who complain about quality of EYZUTAK phone cases\") and source task (\"main criticisms of this product, extract sentences\") are both about reading a product's reviews to extract negative feedback — same data source (Reviews tab) and same approach. The lesson's advice — verify the exact product/variant from the heading, activate the Reviews tab, confirm bodies render, and paginate/expand until every review is inspected — is correct and directly enables identifying every complaining customer. It captures the key move (inspect all reviews of the specific product) rather than a symptom step. Both nomem and withmem rewards are 1, consistent with a valid, applicable, and sufficient lesson."
+ },
+ {
+  "task_id": 92,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson advises verifying the exact product/variant from the heading, opening the Reviews tab, confirming review bodies render, and paginating/expanding until every review is inspected. This is correct and useful for its source task (extracting product criticisms from reviews), so valid=TRUE. The current task (\"list customers who think EYZUTAK phone cases are good looking\") uses the identical data source and approach: read all reviews of one specific product on its Reviews tab. So applicable=TRUE. Following the lesson fully — confirm the EYZUTAK product, open Reviews, page through all of them — surfaces every review including the eight gold names praising the looks; the remaining step (filter by the good-looking sentiment and list names) is ordinary task interpretation, not a gap in the experience/retrieval. So sufficient=TRUE. The withmem failure (reward 0 vs nomem 1) lies in model execution, not the injected lesson."
+ },
+ {
+  "task_id": 93,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is sound advice for its source task (a price-range question): inspect qualifying product cards, copy displayed prices, handle ties at sort endpoints. So valid=TRUE. But CURRENT_TASK asks for the rating of one specific product (Ugreen lightning to 3.5mm cable, rounded to nearest whole number). That requires locating the product and reading its numeric rating value, not comparing prices across sorted cards or enumerating endpoint ties. The lesson's guidance (prices, sort state, endpoint ties, price ranges) is about a genuinely different need with a different data source, so applicable=FALSE and it should not have been injected here (cosine only 0.545). This is a misretrieval — the failure is in scope/retrieval, not in the lesson's correctness."
+ },
+ {
+  "task_id": 94,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson advises verifying the exact product/variant, opening the Reviews tab, confirming review bodies are visible, and paginating/expanding until every review is inspected. This advice is correct and useful for its source task (\"main criticisms of this product\"), so valid=TRUE. The current task (\"Who gave 4 or 5 stars for phone cases from EYZUTAK\") requires the same data source and approach: locate the EYZUTAK phone case product, open its Reviews, and inspect all reviews — so applicable=TRUE. The lesson's core move (find the right product, activate Reviews, page through every review) is exactly what surfaces the full set of reviews needed to identify the 4-5 star reviewers; extracting names filtered by rating is trivial task-specific reading once all reviews are visible, so sufficient=TRUE. Both nomem and withmem rewards are 1 (success), consistent with the lesson being appropriate and any success/failure lying in execution, not experience/retrieval."
+ },
+ {
+  "task_id": 95,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is sound advice for its source task (reading a canceled order's full totals to report a refund including shipping) — it correctly tells the agent to open the order via its action link and copy only visible labeled shipping/refundable amounts. So valid=true. But CURRENT_TASK is entirely different: it asks which reviewers gave 1 or 2 stars to EYZUTAK phone cases, which requires locating the product/brand, filtering reviews by rating, and collecting reviewer names (gold: Evelyn Kurver, N Randall). The refund-totals guidance shares no data source or approach with a review-filtering task, so applicable=false and it should not have been injected here. Because it is inapplicable, following it would not help produce the correct reviewer names, so sufficient=false. This is a mis-retrieval (cosine 0.578); both nomem and withmem still scored 1, so any effect on outcome was neutral."
+ },
+ {
+  "task_id": 96,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson (open REPORTS > Products Bestsellers, set Period/From/To, click Show Report, confirm dates and rows loaded before extracting) correctly describes how to solve its source task (top-1 best-selling product type in Q1 2022) — valid. The current task (top-2 best-selling products in 2022) is answered by the exact same Bestsellers report, just with a year-level Period and reading the top two rows, so the guidance fits the required approach and data source — applicable. Fully following it (set the 2022 date range, load rows) is enough to extract the top-2 rows and get the correct answer; both nomem and withmem reward are 1. All three true — OK."
+ },
+ {
+  "task_id": 97,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson describes the correct Bestsellers-report workflow (Reports > Products > Bestsellers, set Period/From/To, Show Report, confirm normalized dates and loaded rows before extracting) — valid for the source task (top-1 product type in Q1 2022). CURRENT_TASK (top-3 best-selling products in Jan 2023) uses the exact same report and data source, differing only in period, so the guidance is applicable. Fully following it (set Jan 2023 range, load report, read the top rows) is enough to extract the top-3 products, so it is sufficient. Both nomem and withmem rewards are 1, consistent with the task being achievable via this workflow."
+ },
+ {
+  "task_id": 98,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson describes using the Products Bestsellers report and setting the Period/From/To date controls before activating Show Report and reading rows. The source task (\"top-1 best-selling product type in Quarter 1 2022\") and the current task (\"top-1 best-selling product type in Jan 2023\") are essentially the same task type: find the top best-selling product type over a given time window, which the Bestsellers report with date filtering answers directly. The advice is correct for its source (valid), targets the same required data source and approach for the current task (applicable), and fully following it — set the correct Jan 2023 range, confirm dates persist, wait for rows, then extract the top row — would yield the answer 'Duffle' (sufficient). The shared 0 reward for both nomem and withmem indicates the failure lies in model execution (e.g., wrong date entry or misreading the top row), not the retrieved experience."
+ },
+ {
+  "task_id": 99,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson advises opening REPORTS > Products > Bestsellers, setting the Period/From/To date controls, activating Show Report, and confirming dates persisted and rows loaded before extracting. This is correct and useful for its source task (top-1 best-selling product type in Q1 2022) and directly fits CURRENT_TASK (top-5 best-selling products in 2023): same report, same date-filter mechanics, just a different date range (full-year 2023) and taking the top 5 rows instead of top 1. The Bestsellers report lists products with quantities sold, which is exactly the data source needed. Following the lesson (correct date range + waiting for rows) is enough to read off the top-5 products. WithMem reward improved 0->1, consistent with the lesson being the operative fix."
+ },
+ {
+  "task_id": 100,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson correctly describes how to run the Products \"Bestsellers\" sales report with Period/From/To date filters, which is valid guidance for its source task (\"top-1 best-selling product type in Q1 2022\"). But the current task asks for the number of reviews mentioning the term \"disappointed\" — this requires searching/filtering the store's Reviews grid (e.g., All Reviews under Marketing/Products with a keyword search), not a Bestsellers sales report with date controls. The lesson is about a genuinely different need and data source, so it was mis-retrieved (cosine only 0.55). Following it would lead the agent to the wrong report entirely."
+ },
+ {
+  "task_id": 101,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson advises using the Products Bestsellers report with Period/From/To filters, which is correct and useful for its source task (finding top-selling product type in Q1 2022). But CURRENT_TASK asks for the count of store reviews mentioning \"satisfied\" — a customer reviews query answered via Reports > Reviews or the Reviews grid with a keyword filter, an entirely different data source. The Bestsellers sales report contains no review data, so this lesson is a mis-retrieval (cosine only 0.562) and should not have been injected here."
+ },
+ {
+  "task_id": 102,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson correctly describes driving the Products \"Bestsellers\" report with Period/From/To date filters and Show Report — useful for its source task (top-1 best-selling product type in Q1 2022), so it is valid. But CURRENT_TASK asks for the number of reviews mentioning the term \"decent,\" which requires the reviews management grid filtered by review text, not a sales report with date range controls. Entirely different data source and approach, so it is not applicable and cannot be sufficient. Low cosine (0.565) indicates a mis-retrieval."
+ },
+ {
+  "task_id": 103,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson correctly describes how to use the filterable Bestsellers report (set Period/From/To, click Show Report, confirm rows loaded) — valid and useful for its source task about the top-selling product type in Q1 2022. But the current task is entirely different: counting store reviews that mention the term \"not useful\" (gold answer 0), which requires the Reviews grid/search, not a sales Bestsellers report with date filters. The date-filtered Bestsellers guidance has no bearing on filtering reviews by a keyword, so it is mis-retrieved (cosine only 0.581) and should not have been injected here."
+ },
+ {
+  "task_id": 104,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson correctly describes how to run the Products \"Bestsellers\" report with Period/From/To filters — valid advice for its source task (top-1 best-selling product type in Q1 2022). But CURRENT_TASK needs a count of product reviews whose text mentions the term \"best\", which lives in the reviews data (Marketing/Reports > Reviews or the review search), not in the Bestsellers sales report. The retrieval was triggered by lexical overlap on \"best\"/\"Bestsellers\", not by matching the required approach or data source. Following this lesson would send the agent to the wrong report entirely, so it is neither applicable nor sufficient. This is a mis-retrieval (H3)."
+ },
+ {
+  "task_id": 105,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson (valid for its source task \"top-1 best-selling product type\") is about reading a bestsellers quantity grid: comparing quantities across rows for ties and opening the product detail view to disambiguate truncated/near-identical product TYPES. The current task, \"List the top 1 search terms in my store\" (gold: \"hollister\"), requires the Search Terms report — returning a top search-term string ranked by hits, not a product type. There is no product detail view to open and no product-variant disambiguation involved. The tie/quantity-and-product-type guidance does not fit this different data source and approach, so it was mis-retrieved (cosine only 0.626). Applicable is false, hence sufficient is moot."
+ },
+ {
+  "task_id": 106,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson teaches how to extract the single top-ranked best-selling product TYPE from a bestsellers grid: read the full first-ranked row, compare quantities across rows for ties, and open the product detail view to disambiguate truncated/near-identical type names. That is sound advice for its source task (\"top-1 best-selling product type in Jan 2023\"), so valid=true. But CURRENT_TASK asks to list the top 2 SEARCH TERMS, which comes from the Admin's search-terms report (a different data source and report), and asks for the top two ranked terms rather than a single product type with tie handling. The lesson's guidance about product types, truncated names, and single-winner tie logic does not fit the search-terms need, so it should not have been injected here. Cosine 0.63 reflects only superficial 'top-ranked' phrasing overlap. Both nomem and withmem reward = 1, consistent with the lesson being irrelevant rather than harmful."
+ },
+ {
+  "task_id": 107,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson correctly describes using the Products \"Bestsellers\" report with Period/From/To filters, which is fine advice for its source task (top-1 best-selling product type in Q1 2022). But CURRENT_TASK asks for the top 3 search terms, which lives in a different Magento admin report (Reports > Marketing > Search Terms), not the Bestsellers report. The gold answer (search phrases: hollister, Joust Bag, Antonia Racer Tank) confirms the required data source is Search Terms, not Bestsellers. Following the lesson would navigate the agent to the wrong report entirely, so it is mis-retrieved onto this task despite being a valid lesson elsewhere."
+ },
+ {
+  "task_id": 108,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is valid for its source task (top-1 best-selling product type): read the full first-ranked row, handle ties, open the detail view to resolve truncated/near-identical product names. That is correct, useful advice for that kind of ranked-product report. But it does not fit the current task, which asks which customer completed the most orders. That requires a different data source (customer/order data, filtered to completed orders) rather than a product best-seller grid, and the lesson's specific guidance about product names/types and product detail views is irrelevant to identifying a top customer. The topic overlap is only the generic \"pick the top ranked item\" pattern, so this is a mis-retrieval (cosine 0.526). Both nomem and withmem rewards are 1, so the memory did not change the outcome; the injection was simply out of scope."
+ },
+ {
+  "task_id": 109,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson (verify/extract the single top-ranked product TYPE from a best-selling-products report, handling truncated names and variants) is valid advice for its source task \"top-1 best-selling product type in Jan 2023\". But CURRENT_TASK needs the SECOND-most orders per CUSTOMER (a customer-orders report), with all ties at the second position (Adam Garcia, Michael Nguyen, Sarah Miller). Different data source (customers/orders vs product types) and different rank position — the lesson explicitly focuses on the single top row and even says \"return only the single top type.\" It gives no guidance on identifying the runner-up rank or a customer report. Mis-retrieved (cosine only 0.505); should not have been injected here."
+ },
+ {
+  "task_id": 110,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is about ranking customers by COMPLETED order count, and its central move is to set a Status filter (to \"Complete\"/the requested state) on the SALES > Orders page while avoiding the status-agnostic Order Count report. That advice is correct and useful for its source task (\"second most completed orders\"), so valid=TRUE. But CURRENT_TASK asks which customer PLACED exactly 2 orders in the entire history, with no status requirement at all. Applying a status filter (the lesson's key instruction) would wrongly exclude non-matching-status orders and corrupt the count; moreover the current task needs an exact-count-of-2 identification rather than a most/second-most ranking, and the very report the lesson brands a \"trap\" may be the more appropriate status-agnostic source here. Right general domain (orders), but a genuinely different need — mis-retrieved. Following it would not yield the correct answer, so sufficient=FALSE, and the failure is scope/retrieval, i.e. H3."
+ },
+ {
+  "task_id": 111,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson tells the agent to open Reports → Customers → Order Count, set the full-history From/To range, and use that report for order-count-by-customer questions without a status constraint. This is correct and useful for its source task (\"which customer placed 2 orders\"), so valid=TRUE. The current task (\"fifth most orders in entire history\") is the same kind of question — customer order counts, no status filter, full history — so the same report and settings apply, giving applicable=TRUE. Following the lesson lands the agent on exactly the report that contains per-customer order counts over full history; reading the fifth-highest count is the intended use of that report and not a separate hidden key move, so sufficient=TRUE. The withmem failure (reward 0 vs nomem 1) therefore lies in model execution (e.g., mis-ranking/mis-reading the row), not in the experience or retrieval."
+ },
+ {
+  "task_id": 112,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is about counting customer ORDERS (source task: \"which customer placed 2 orders\"), guiding the agent to Reports → Customers → Order Count and to Sales → Orders for status-specific order questions. Its advice is correct for that order-counting domain (valid). But CURRENT_TASK asks for the count of Pending REVIEWS — a different entity in a different admin section (Marketing/All Reviews grid filtered by status = Pending), unrelated to the orders report/grid the lesson names (applicable=false). Following the lesson would send the agent to order reports and never surface the review count, so it cannot yield the answer '5' (sufficient=false). Retrieved only on surface 'count' similarity (cosine 0.557); should not have been injected here."
+ },
+ {
+  "task_id": 113,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The retrieved lesson is about counting ORDERS (Reports -> Customers -> Order Count, and Sales -> Orders for order-status-specific questions), distilled from \"which customer placed 2 orders.\" That advice is sound for order-counting tasks (valid=true). But CURRENT_TASK asks for the count of Approved REVIEWS among all reviews — a different data domain entirely. Reviews live under Marketing/Catalog -> Reviews, not the Sales -> Orders or Order Count reports the lesson points to. The status filtering hint (\"clear filter chips, apply required filters\") is superficially topical (both mention a status), but it navigates to the wrong section and would not lead to the reviews grid where Approved status can be counted. Wrong-scope mis-retrieval (cosine only 0.571); it should not have been injected here. Both nomem and withmem rewards are 1, so the model succeeded regardless."
+ },
+ {
+  "task_id": 114,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is a valid, useful guide for order/customer count questions: it correctly explains when to use Reports → Customers → Order Count vs Sales → Orders and to clear leftover filter chips for status-specific order queries. But the current task asks for the count of \"Not Approved reviews\" among all reviews, which lives in the review moderation area (Catalog/Marketing Reviews), an entirely different data source with no connection to order-count reports or Sales → Orders. Following the lesson would point the agent at order reports rather than the reviews grid, so it neither fits the task's need nor would produce the answer. Retrieved only on surface \"count\" similarity (cosine 0.552); should not have been injected here."
+ },
+ {
+  "task_id": 115,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "CURRENT_TASK is a single-record lookup: find the grand total (36.39) of invoice 000000001. The retrieved lesson is about paginating through a customer grid, reconciling a customer's order counts across page boundaries, and ranking to find the Nth-most-orders customer with tie enumeration. That advice is sound and useful for its source task (fifth-most-orders customer), so valid=true. But it addresses a genuinely different need — multi-page ranking/aggregation over customers, not opening a specific invoice to read one displayed total — so it does not fit this task (applicable=false), and following it would not help retrieve invoice 000000001's grand total (sufficient=false). Low cosine (0.549) confirms a mis-retrieval; the reward being 1 in both arms is unrelated to this lesson."
+ },
+ {
+  "task_id": 116,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is sound advice for a ranking task (paginate all pages, reconcile a customer's order counts across page boundaries, enumerate ties, read exact names) and matches its source task \"which customer has completed the fifth most number of orders\" — so it is valid. But CURRENT_TASK is a direct single-record lookup: read the grand total (39.64) of invoice 000000002 from the invoice detail view. There is no ranking, no pagination-and-reconcile, no tie enumeration, and no name-abbreviation issue involved. The lesson's guidance addresses a genuinely different need, so it is not applicable and would not by itself yield the invoice total. Mis-retrieved on modest cosine 0.555 (both mention \"customer/orders\" superficially). Reward is unaffected (nomem=withmem=1)."
+ },
+ {
+  "task_id": 117,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is valid for its source task (\"fifth most orders\"): auditing every page, carrying a customer's count across page boundaries, ranking only after reconciling all groups, enumerating ties, and reporting names exactly are all correct, useful moves for a ranking-by-order-count task. But CURRENT_TASK asks for customers dissatisfied with the \"Circe fleece\" product — a product-reviews task requiring navigation to the product's reviews (or the reviews grid filtered to that product) and identifying negative/low-rating reviewers, not counting orders or ranking customers. The lesson's guidance about reconciling per-customer order counts across pages and ranking is about a genuinely different need and data source, so it does not fit; it was mis-retrieved (cosine 0.522, superficial \"customer\" overlap). Since valid is TRUE but applicable is FALSE, this is H3."
+ },
+ {
+  "task_id": 118,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "Source task (\"dissatisfaction with Circe fleece\") and current task (\"dissatisfaction with Olivia zip jacket\") are the same review-based pattern: find customers who left negative reviews for a specific product. The lesson's advice — enumerate every qualifying review, open each to verify the exact product and rating/text establishing dissatisfaction, copy the complete Nickname from the detail view, page through ties, and never infer names/text from narration — is correct and directly on-point. Fully following it (verify each low-rated review for the Olivia zip jacket and copy the reviewer names) would yield the gold answer {Emma Lopez, Seam Miller}. Both nomem and withmem rewards are 1, consistent with a valid, applicable, sufficient lesson."
+ },
+ {
+  "task_id": 119,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson describes using Marketing → All Reviews grid, filtering by the product name, and reading review-level details (over a look-alike Reports aggregate). The source task (\"dissatisfaction with Circe fleece\") and the current task (\"dissatisfaction with Antonia racer tank\") are the identical task pattern: find customers who left dissatisfied reviews for a named product. The lesson's guidance — filter the reviews grid by the product query and inspect review-level details/status — is exactly the required approach here, letting the agent identify the dissatisfied customers (Shaunte, Merrie). Valid, applicable, and sufficient; consistent with withmem_reward=1."
+ },
+ {
+  "task_id": 120,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson (open Marketing -> All Reviews, filter by Product, activate Search, prefer this operational grid over the Reports look-alike which lacks status/review-level detail) was distilled from an identical-pattern task (\"customers dissatisfied with Circe fleece\"). The advice is correct and useful there (valid). CURRENT_TASK (\"customers dissatisfied with tanks products\") needs the exact same approach and data source: filter the reviews grid to the product, then read customer names of negative reviews (applicable). Following the lesson gets the agent to the right grid with the product filter where the customer names for dissatisfied reviews live, which is the load-bearing move for getting the gold customer names (sufficient). The withmem failure (reward 0 vs nomem 1) therefore lies in model execution, not in the experience content or its retrieval."
+ },
+ {
+  "task_id": 121,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson (verify/extract the single top-ranked product type from a best-selling report, handling ties and truncated names) is sound advice for its source task \"top-1 best-selling product type in Jan 2023.\" But CURRENT_TASK asks which brands appear most frequently among the top search terms — a different data source (Search Terms report, not best-selling products) and a different operation: scanning multiple top search terms and identifying/counting recurring brand names (gold expects three brands: Hollister, Joust, Antonia), not returning one top row. The lesson's \"return only the single top type unless tied\" guidance would actively mislead here. Mis-retrieved on cosine 0.553; should not have been injected."
+ },
+ {
+  "task_id": 122,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson teaches how to use the status-filterable Orders Report (Reports > Sales > Orders) with Date Used/Period/From/To/Order Status filters, which is correct and useful for its source task (monthly count of successful orders over a date range). But the current task asks for the total number of ITEMS sold in the most recent 2 orders (gold=9). That requires identifying the 2 latest orders (via the dashboard's \"Last Orders\" or the orders grid sorted by date) and summing their item quantities — not a status-filtered, date-range aggregate report. The lesson's guidance targets a genuinely different need and data source, so it is a fine lesson mis-retrieved onto this task (cosine only 0.613). Both nomem and withmem rewards are 1, consistent with the memory being irrelevant rather than harmful here."
+ },
+ {
+  "task_id": 123,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson explains how to run Reports > Sales > Orders with date/status filters to count successful orders in a period — correct and useful for its source task (monthly count of successful orders). But the current task needs the total QUANTITY of items across the 4 MOST RECENT orders, which requires reading the recent orders list (e.g., the Admin sales orders grid sorted by date) and summing item quantities. The status-filtered Orders Report by date range does not give per-order item counts nor a \"most recent 4\" slice, so the guidance targets a different need/data source. Valid but mis-retrieved (cosine 0.597); the model still got it right (both rewards 1), so any help came from elsewhere."
+ },
+ {
+  "task_id": 124,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is a valid, useful recipe for its source task (monthly counts of successful orders via Reports > Sales > Orders with Date Used/Period/From/To and a confirmed Order Status). But CURRENT_TASK asks for the total items sold in the most recent 5 orders. That needs the recent-orders view sorted by date, taking the 5 newest and summing per-order item quantities — not a date-period, status-filtered aggregate report. The status-filterable Orders Report does not surface \"most recent 5 orders\" nor per-order item counts, so the guidance addresses a genuinely different need. Valid but mis-retrieved (cosine only 0.589), hence wrong scope."
+ },
+ {
+  "task_id": 125,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson teaches how to run the status-filterable Orders Report (Reports > Sales > Orders) by setting Date Used/Period/From/To and choosing a \"Specified\" order status, confirming the visible label. That is correct and useful for its source task (a monthly COUNT of successful orders over a date range), so valid=true. But the current task asks for the total number of ITEMS sold across the most recent 7 orders (gold 25). That need is about sorting orders by date, taking the top 7, and summing item quantities — not about date-period/status filtering. The lesson's central guidance (period/status \"Specified\" selection) does not fit this need and would not, if followed, produce the item-count sum for the 7 latest orders. It is a fine Orders-Report lesson mis-retrieved onto a different requirement, so applicable=false and category is H3."
+ },
+ {
+  "task_id": 126,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "CURRENT_TASK asks for the name of products with 0 units left — an inventory/stock query answered via the Products/Catalog grid filtered by quantity (gold: \"Sinbad Fitness Tank\"). The retrieved lesson explains how to use the MARKETING > All Reviews grid to filter by product name and read review rows, distilled from a \"why customers like Antonia Racer Tank\" task. That advice is correct and useful for reading reviews (valid), but it points to an entirely different data source (reviews, not stock levels) and does not fit the out-of-stock need, so it is not applicable and following it would not yield the answer. Both nomem and withmem reward are 0. Classic mis-retrieval by embedding similarity (cosine 0.596)."
+ },
+ {
+  "task_id": 127,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "The lesson correctly describes filtering the Magento Products grid by an exact Quantity range (equal lower/upper bounds), which is sound and useful for its source task (\"name of products with 0 units left\") — valid. The current task also requires filtering products by an exact quantity (3), so the filtering approach fits — applicable. However, the current task asks for the BRAND of the matching products, and the gold answer is brands (Eos, Minerva). The source task's target field (name) is a default grid column, but brand is a product attribute typically not shown in the default Products grid; it must be surfaced via the Columns control or read from the product detail. The lesson stops at \"apply the quantity filter and read the records\" and omits the key extra move of obtaining the brand attribute. Following it exactly filters to the right rows but leaves the agent without brand data, so it is not sufficient for this task — right topic, incomplete fix."
+ },
+ {
+  "task_id": 128,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson teaches using CATALOG → Products Quantity filter (clear filters, set from/to bounds, Apply, confirm chip/count) — correct and useful for its source task (products with 2-3 units left). The current task (\"SKU of products with 1-3 units left\") has the identical need: filter the Products grid by a quantity range, just with bounds 1-3 and reading the SKU column instead of name/size. The SKU is available in the same Products grid the filter produces, so fully following the lesson is enough to get the answer. Both nomem and withmem rewards are 1, consistent with a sufficient, well-scoped lesson."
+ },
+ {
+  "task_id": 129,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson describes using the aggregate Orders Report (Reports > Sales > Orders) with a date range and status filter to produce a period-based count of successful orders — correct and useful for its source task (monthly count of successful orders 01-05/2023). But the current task needs the total payment amount of the last 2 completed orders, which requires the individual Sales > Orders grid sorted by date, filtering to complete status, and reading the Grand Total of the two most recent orders (summing to 182.4). The aggregated report the lesson describes yields period counts, not per-order payment amounts for the 'last 2' orders — a genuinely different need/data source. Valid advice, mis-retrieved by embedding similarity ('successful/completed orders'), so it should not have been injected here."
+ },
+ {
+  "task_id": 130,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson (\"Read payment totals from each order detail\": open each qualifying completed order, verify Order Status, read the labeled \"Total Paid\" value, and sum only those observed values — never grand total/amount due/refunded/invoiced) was distilled from the near-identical source task \"total payment of the last 2 completed orders.\" CURRENT_TASK is the same task shape with n=5 instead of 2, so the required approach and data source (per-order detail \"Total Paid\") match exactly. The advice is correct for its origin (valid), fits this task's need (applicable), and captures the full key move — identify the qualifying completed orders, read each Total Paid, and sum — which scales directly to 5 orders and would yield the correct gold answer (555.2), so it is sufficient. Both nomem and withmem rewards are 0, indicating the failure is in model execution (e.g., miscounting/misreading orders), not the experience or retrieval."
+ },
+ {
+  "task_id": 131,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson (distilled from \"total of last 5 COMPLETED orders\") tells the agent to read and sum the labeled \"Total Paid\" row and explicitly warns against using \"a near-identical total field.\" That is sound advice for completed orders, where payment has been captured. But CURRENT_TASK asks for the last 5 PENDING orders. Pending orders are typically unpaid, so \"Total Paid\" is 0/absent and the payment amount must come from the different \"Grand Total\" field — precisely the \"near-identical total field\" the lesson tells the agent to avoid. So the guidance is valid for its source task but targets the wrong data source/field for this one, mis-steering the agent (withmem_reward=0 vs nomem_reward=1). Valid but not applicable to this pending-orders need."
+ },
+ {
+  "task_id": 132,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson teaches the correct admin-panel discipline for capturing per-order \"Total Paid\": open each qualifying row's View link, confirm Order Status, scroll to totals, and read the exact \"Total Paid\" value rather than substituting Grand Total/Total Due. That advice is correct and useful for its source task (summing last 5 pending orders), so valid=true. It is also applicable to the current task, which needs Total Paid values for the last 4 cancelled and last 4 completed orders from the same data source via the same navigation/extraction approach. The only mismatch is framing (\"sum only those displayed values\" and the Pending-status caveat) versus the current task's need for a difference between two groups, but the load-bearing hard move — correctly identifying and reading each order's Total Paid — is exactly what the lesson provides; the group difference is trivial arithmetic that needs no guidance. So following the lesson fully would yield the correct per-order values and thus the answer. The regression (nomem_reward 1 -> withmem_reward 0) therefore stems from model execution, not from the experience content or retrieval."
+ },
+ {
+  "task_id": 133,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is sound advice for its source task (\"last 5 pending orders\"): open each qualifying row, confirm Order Status, capture the exact \"Total Paid\" value, keep evidence, and sum displayed values without substituting Grand Total/Total Due or inferring from Pending status — valid=true. But the current task is \"last 5 non-cancelled orders,\" a different filtering need. The lesson is tuned to the Pending-status semantics (its warning literally centers on \"do not infer an unpaid amount from Pending status\" and picking \"Total Paid\" over \"Grand Total\"). Selecting non-cancelled orders is an exclusion criterion over a mixed set of statuses (complete/processing/etc.), not a single-status match, and the appropriate amount field differs from the pending case. The lesson gives no guidance for the \"exclude cancelled\" filter and its Total-Paid fixation likely steered toward the wrong field/set — consistent with nomem_reward=1 but withmem_reward=0. Right topic family (order totals) but mis-retrieved onto a genuinely different need, so applicable=false (and thus not sufficient)."
+ },
+ {
+  "task_id": 134,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "CURRENT_TASK wants the customer name on the most recent cancelled order — filter orders by status=Cancelled and sort by date descending, then read the top row. The retrieved lesson is about ranking customers by aggregate order COUNT across paginated groups (the 'fifth most orders' task): set page size, audit every page, carry a customer's count across page boundaries, reconcile all groups before ranking, and enumerate ties. That count-aggregation/pagination-reconciliation guidance is correct and useful for its source task (valid=true), but it addresses a genuinely different need than the current recency-filter task; the only faint overlap ('report names exactly as displayed / open detail view') is incidental. The core moves the current task requires (filter to Cancelled, sort by recency) are absent, so it does not fit and would not by itself get the task right. Mis-retrieved on embedding similarity (cosine 0.696, both about customers/orders in the admin grid). Both runs scored 1, so the failure/success lies with execution, not this experience helping."
+ },
+ {
+  "task_id": 135,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson describes the exact Orders-grid workflow (SALES to Orders, use Filters to set Status, sort Purchase Date newest-first, then confirm the active filter/sort before reading rows). The source task (total payment of last 2 completed orders) is legitimately served by this filter+sort procedure, so the advice is valid. The current task (order ID of the newest pending order) needs the same approach: filter Status=Pending, sort Purchase Date newest-first, and read the top row's order ID (299). The guidance fits the need and, if fully followed, is enough to reach the correct answer — both nomem and withmem rewards are 1, consistent with the lesson being helpful/sufficient. The tied-row caveat is harmless extra rigor."
+ },
+ {
+  "task_id": 136,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is a sound, correct procedure for its source task (\"total payment of last 5 non-cancelled orders\"): open each qualifying order detail, read the exact \"Total Paid\" currency value, avoid confusing it with Grand Total/Total Due, then sum. So valid=TRUE. But the CURRENT_TASK asks for the billing NAME of the OLDEST COMPLETE order — a single-record lookup that requires (a) sorting/filtering to find the oldest complete order and (b) reading its billing name field. The lesson addresses neither: it is exclusively about locating and summing the \"Total Paid\" money field, a different data source and a different approach. Following it would send the agent reading Total Paid values instead of the billing name, so it is not applicable and not sufficient. A payment-sum lesson mis-retrieved (cosine 0.679, both share the shared \"order detail\" vocabulary) onto a billing-name task -> H3."
+ },
+ {
+  "task_id": 137,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "Current task is a customer lookup by phone number (+1 2058812302) to retrieve name and email — a customer-grid/search flow. The retrieved lesson is about opening each order's detail, reading the \"Total Paid\" value, and summing across orders, distilled from \"Get the total payment amount of the last 5 non-cancelled orders.\" That advice is correct and useful for its own order-payment task (valid=true), but it targets a completely different data source and approach that does not fit finding a customer by phone (applicable=false). Following it would not help solve the current task, so it should not have been injected here (cosine only 0.543)."
+ },
+ {
+  "task_id": 138,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is valid for its source task (\"fifth most orders\"): it correctly advises paging through the full customer grid, reconciling counts across page boundaries, handling ties at the requested rank, and reading detail views to get exact names. That is sound ranking/pagination guidance. But CURRENT_TASK is a simple point lookup: find the customer name and email for phone number 2137418080. This needs a filtered search/lookup on the customer by phone, not full-grid pagination, count reconciliation, or tie-ranking. The advice about ranking and group reconciliation does not fit the required approach here (mis-retrieved on ~0.56 cosine, likely on the shared \"customer\" surface term). Not sufficient either, since following it would not tell the agent to search by phone and read the email field. Both runs already scored reward 1, so nothing was lost, but the lesson should not have been injected for this task."
+ },
+ {
+  "task_id": 139,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is sound advice for its source task (ranking customers by order count: set a page size, audit every page, reconcile counts across page boundaries, enumerate ties at the requested rank, read exact names). That makes it valid. But the current task is a simple single-record lookup — find the customer name and email associated with phone number 2065555555 — which needs a targeted search/filter by phone, not full-grid pagination, tie enumeration, or count reconciliation. The lesson also says nothing about retrieving an email, which is half the gold answer (gamingpro456@gmail.com). It is a fine lesson mis-retrieved onto a genuinely different need, so applicable (and therefore sufficient) is false. Both nomem and withmem rewards are 1, consistent with the lesson being irrelevant rather than helpful."
+ },
+ {
+  "task_id": 140,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is sound advice for its source task (ranking customers by order count: paginate through all rows, carry counts across page boundaries, reconcile groups, enumerate ties, open detail views for exact names). That makes it valid. But the current task is a targeted lookup: find the customer with phone number 8015551212 and report their name and email. This requires searching/filtering by phone, not auditing every page, counting orders, or ranking. The lesson's pagination-and-ranking guidance addresses a genuinely different need and does not help retrieve an email by phone, so it is not applicable and should not have been injected here (cosine only 0.567). A textbook mis-retrieval onto an unrelated lookup task."
+ },
+ {
+  "task_id": 141,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is about auditing every page, reconciling customer groups across page boundaries, and ranking to find the Nth-most-orders customer (its source task: \"which customer completed the fifth most orders\"). That advice is correct and useful for such counting/ranking tasks, so valid=true. But CURRENT_TASK is a targeted lookup: find the customer name and email for a specific phone number (555-229-3326). That needs a filtered search of the customer grid by phone, not pagination-wide enumeration or rank reconciliation. The lesson never addresses searching/filtering by phone or where to read an email, so it does not fit this task's need (applicable=false) and following it would not lead to the answer (sufficient=false). Mis-retrieved by embedding cosine (0.548)."
+ },
+ {
+  "task_id": 142,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is valid for its source task (\"key aspects customers don't like about Pursuit Tone Band\"): read the full review set across all pages, open review details, and enumerate every complaint theme rather than inferring from marketing. That advice is correct and useful for a dislike-summarization task. But CURRENT_TASK needs the EMAIL ADDRESS of the single most-unhappy customer for Circe fleece — this requires identifying a specific reviewer (most negative review) and then cross-referencing that person's contact info in the customer/account records. The lesson says nothing about identifying an individual customer or retrieving an email; it only guides exhaustive enumeration of complaint themes, which does not surface emails (reviews don't contain them). Same product-review surface, but a genuinely different need, so it was mis-retrieved (cosine 0.599). Both runs scored reward 1, so this injection did not cause failure, but it should not have been injected here."
+ },
+ {
+  "task_id": 143,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson (inspect the full review set, traverse pages, open each review, enumerate every recurring complaint theme) is correct and useful for its source task, which asks to summarize the aspects customers dislike about a product (Pursuit Tone Band) -- so valid is TRUE. But the CURRENT_TASK asks for the EMAIL ADDRESS of the single most unhappy customer of the Olivia zip jacket (gold: emma.lopez@gmail.com). That requires identifying the specific reviewer with the most negative/lowest-rated review and retrieving their contact/email, not enumerating and summarizing complaint themes. The lesson's guidance is about a genuinely different need (theme summarization vs. reviewer-identity + email lookup), so applicable is FALSE, and following it would not produce the email so sufficient is FALSE. Right topic-area (product reviews) but mis-retrieved onto a lookup task, hence H3."
+ },
+ {
+  "task_id": 144,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson advises inspecting the complete review set: verify the filtered count, traverse every page, and open each review detail rather than inferring from product attributes. This advice is correct and useful for its source task (summarizing what customers dislike about Pursuit Tone Band). It is also applicable to the current task (name the most unhappy customer for Antonia racer tank), which lives in the same domain (product reviews) and requires the same core move: enumerating and reading the full review set to find the lowest-rated/most negative reviewer, then reading that review's author name. Following the lesson (read all reviews, open details, don't infer from marketing) is enough to surface every review including the most negative one and its customer name, so the guidance is sufficient. Consistent with both nomem and withmem scoring reward 1."
+ },
+ {
+  "task_id": 145,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "Source task (\"key aspects customers don't like about Pursuit Tone Band\") is a review-mining task, and the lesson's advice to verify the filtered review count, traverse every page, open each detail, and read all visible review content rather than inferring is correct and useful there (valid). The current task (\"most unhappy customer with Chloe tank\") is also a per-product review task whose required data source and approach are the same: you must enumerate the full filtered review set and read the actual review content/ratings to identify the worst reviewer — so the guidance genuinely fits (applicable). Following the lesson fully — read all reviews rather than inferring, don't stop at an abbreviated grid — is the load-bearing move needed to spot the lowest-rated/angriest review and its author \"Teofila\"; withmem reward went 0->1, consistent with the lesson being enough (sufficient)."
+ },
+ {
+  "task_id": 146,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson (paginate every page, carry a customer's count across page boundaries, reconcile all groups before ranking, enumerate ties, report names exactly as displayed / open detail view when abbreviated) is correct and useful for its source task (rank customer by Nth-most orders) — valid. The current task \"customer with the most cancellations\" is the same shape: aggregate a per-customer count from a paginated/grouped report and return the top-ranked name, so the paginate-reconcile-rank-then-report-exactly approach fits directly — applicable. Fully following it (audit all pages, reconcile counts, rank, report exact name) yields the correct single top customer, and withmem_reward=1 (vs nomem 0) confirms it flipped the case to correct — sufficient. The only nuance (filtering to canceled orders) is implicit in the task and does not change the required approach."
+ },
+ {
+  "task_id": 147,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "The lesson correctly teaches how to audit canceled orders in the Orders grid (filter Status=Canceled, sort by Bill-to Name, paginate carefully, handle ties) to find the customer with the most cancellations — valid advice for its source task (finding that customer's contact info). It is on-topic and applicable here since the current task shares that same first step: identifying the customer with the most cancellations. However it is insufficient: the current task then requires finding that customer's MOST RECENT canceled orders and extracting the product SKUs from them. The lesson stops at identifying the leading customer and omits the key downstream moves — filtering/sorting the customer's canceled orders by date to find the most recent, opening those orders, and reading the ordered product SKUs (gold: WSH09-29-White, WSH09-28-Green, MSH11-34-Blue, WP09-29-Purple). It captures only the customer-identification symptom, not the full fix."
+ },
+ {
+  "task_id": 148,
+  "valid": true,
+  "applicable": true,
+  "sufficient": false,
+  "category": "H2_too_coarse_incomplete",
+  "reason": "The lesson correctly explains how to identify the customer with the most cancellations by filtering the Orders grid to Status=Canceled, sorting by Bill-to Name, paging through, and combining name groups across page boundaries — this is valid advice and directly matches the shared first sub-goal of the current task (both tasks hinge on 'the customer who has the most cancellations'). However, the current task goes further: after identifying that customer it needs the total product spend of their MOST RECENT cancelled order(s). The lesson stops at identifying the customer and says nothing about drilling into that customer's most recent cancelled order(s) or summing the product line totals (gold answer 148). Fully following the lesson identifies the right customer but not the spend, so it is on-topic but too coarse/incomplete for this task."
+ },
+ {
+  "task_id": 149,
+  "valid": true,
+  "applicable": true,
+  "sufficient": true,
+  "category": "OK_valid_applicable_sufficient",
+  "reason": "The lesson describes auditing canceled orders via SALES -> Orders, filtering Status=Canceled, sorting by Bill-to Name, paging through and recording each customer's count to find the highest — which is the correct method for identifying the top-cancellation customer. The source task asked for that customer's email/name/phone; the current task asks for that same customer's total cancellation count. The lesson explicitly involves counting cancellations per customer and finding the max (\"recording every customer tied for the highest count\"), so following it fully yields the count (9). Same data source and approach; the count is a direct byproduct of the audit the lesson prescribes. Both nomem and withmem rewards are 1, consistent with the lesson being genuinely sufficient here."
+ },
+ {
+  "task_id": 150,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "CURRENT_TASK needs the total number of reviews the whole shop has received (gold 351) — a shop-wide aggregate. The retrieved lesson is about resolving a single product's catalog identity (full Product Name + SKU) and filtering All Reviews to that one product, distilled from \"customer dislikes of Pursuit Tone Band.\" That advice is sound for its source (per-product review inspection), so valid=true. But it targets a fundamentally different need: no product resolution, SKU filtering, or per-product review loading is involved in counting all shop reviews; you just read the total review count (e.g., Reports/dashboard). Mis-retrieved on the shared word \"reviews\" (cosine 0.659), hence applicable=false and sufficient=false. Correct classification: H3."
+ },
+ {
+  "task_id": 151,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "CURRENT_TASK is a time-filtered numeric aggregation (\"how many reviews in Apr 2023?\"), answered by a count (gold 351) from the admin review report filtered by date. The lesson, distilled from a qualitative \"what do customers dislike about Pursuit Tone Band\" task, correctly advises traversing all review pages and opening each detail to enumerate complaint themes — sound and useful for that dislike-summary need (valid=true). But it targets a different need: reading review content/themes for one product, not counting reviews across the whole shop within a date range. Following it (reading review text, enumerating themes) would not produce the Apr 2023 count, so it neither fits nor suffices here. A fine lesson mis-retrieved via surface \"reviews\" similarity (cosine 0.612)."
+ },
+ {
+  "task_id": 152,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "CURRENT_TASK is a shop-wide, time-filtered aggregate (\"how many reviews during 2022\", gold=0) that requires filtering the entire All Reviews set by date/year, not resolving any single product. The retrieved lesson is about pinning down one specific product via full Product Name + SKU to read that product's reviews — sound advice for its source task (Pursuit Tone Band per-product sentiment), so it is valid. But it addresses a genuinely different need: there is no target product to disambiguate here, and copying a product's SKU does nothing to count 2022 reviews across the shop. Mis-retrieved by surface \"reviews\" similarity (cosine 0.627); should not have been injected."
+ },
+ {
+  "task_id": 153,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "CURRENT_TASK needs a shop-wide total review count (gold 351) across the whole store since inception. The lesson teaches how to resolve a single product's identity via Catalog Products search + full Name/SKU, then filter All Reviews by that SKU or expand the product's Product Reviews — a per-product review workflow distilled from \"what customers dislike about Pursuit Tone Band.\" That advice is correct and useful for its source task (valid), but it targets a genuinely different need: the current task requires no product resolution or per-product filtering at all, just an aggregate count of all reviews. So it does not fit the task's approach/data scope (applicable false), and following it would steer the agent toward one product's reviews rather than the total (sufficient false). Classic mis-retrieval on surface \"review\" similarity (cosine 0.651)."
+ },
+ {
+  "task_id": 154,
+  "valid": true,
+  "applicable": false,
+  "sufficient": false,
+  "category": "H3_wrong_scope_misretrieved",
+  "reason": "The lesson is valid for its source task (\"what customers dislike about Pursuit Tone Band\"): thoroughly traversing every review page and reading full detail before summarizing dislikes is correct, useful advice for a per-product qualitative review-reading task. But it does not fit CURRENT_TASK, which asks for a time-filtered COUNT of shop-wide reviews in May 2023 (gold = 0). That needs a date-ranged aggregate/report lookup, not enumerating and reading the text of a single product's reviews for complaint themes. Different data source and required approach, so it should not have been injected here. Only reason it's not H2 is that applicable is already false."
+ }
+]

@@ -1,0 +1,3 @@
+idx,instance_id,repo,judge_success,nc,n,steps,cost
+1,django__django-14011,django/django,0,0,1,60,0.2458
+2,django__django-14017,django/django,1,1,1,48,0.2168

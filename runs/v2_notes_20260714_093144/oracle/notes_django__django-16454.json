@@ -1,0 +1,1 @@
+{"django/core/management/base.py": [{"anchor": "CommandParser", "note": "CommandParser.add_subparsers() must propagate the called_from_command_line parameter to subparsers via parser_class so that error formatting (which depends on this flag) is preserved in nested parsers."}]}

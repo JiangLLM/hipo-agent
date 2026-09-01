@@ -1,0 +1,25 @@
+{
+  "n_tasks": 106,
+  "site": "reddit",
+  "arms": [
+    "nomem",
+    "withmem"
+  ],
+  "nomem": {
+    "n": 106,
+    "reward_sr": 0.7547,
+    "layer1_writes": 0,
+    "layer2_writes": 0
+  },
+  "withmem": {
+    "n": 105,
+    "reward_sr": 0.7619,
+    "layer1_writes": 142,
+    "layer2_writes": 42
+  },
+  "learned_memory": {
+    "n_reasoning": 184,
+    "n_fact": 0
+  },
+  "spent_usd": 693.4879
+}

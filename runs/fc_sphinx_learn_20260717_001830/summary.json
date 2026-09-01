@@ -1,0 +1,22 @@
+{
+  "n_instances": 30,
+  "arms": [
+    "withmem"
+  ],
+  "withmem": {
+    "n": 30,
+    "judge_sr": 0.3,
+    "judge_sr_first_half": 0.3333,
+    "judge_sr_second_half": 0.2667,
+    "divergent_tasks": 12,
+    "total_cost": 33.85,
+    "layer1_writes": 52,
+    "layer2_writes": 16
+  },
+  "learned_memory": {
+    "n_reasoning": 68,
+    "n_fact": 0
+  },
+  "judge_llm_calls": 82,
+  "spent_usd": 34.7572
+}

@@ -1,0 +1,14 @@
+{
+  "n_tasks": 3,
+  "site": "gitlab",
+  "arms": [
+    "nomem"
+  ],
+  "nomem": {
+    "n": 3,
+    "reward_sr": 1.0,
+    "layer1_writes": 0,
+    "layer2_writes": 0
+  },
+  "spent_usd": 0.4286
+}

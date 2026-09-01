@@ -1,0 +1,75 @@
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+[info] run_id=wa_vfy_175021_20260720_175023 site=gitlab tasks=6 arms=['withmem']
+[info] [withmem] parallel rollouts ON: 8 worker processes
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 1/6 t132 reward=1 nc=8/8 cumSR=1.00 win10=1.00 mem=7 spent=$1.22
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 2/6 t133 reward=1 nc=8/8 cumSR=1.00 win10=1.00 mem=15 spent=$2.49
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 3/6 t134 reward=1 nc=8/8 cumSR=1.00 win10=1.00 mem=24 spent=$3.75
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 4/6 t135 reward=1 nc=2/8 cumSR=1.00 win10=1.00 mem=39 spent=$5.10
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+/Users/yutongs/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 5 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

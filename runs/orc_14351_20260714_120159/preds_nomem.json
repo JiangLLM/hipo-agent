@@ -1,0 +1,7 @@
+{
+  "django__django-14351": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "django__django-14351",
+    "model_patch": "diff --git a/django/db/models/lookups.py b/django/db/models/lookups.py\nindex 5089737034..7c3b010f9e 100644\n--- a/django/db/models/lookups.py\n+++ b/django/db/models/lookups.py\n@@ -415,6 +415,22 @@ class In(FieldGetDbPrepValueIterableMixin, BuiltinLookup):\n             return self.split_parameter_list_as_sql(compiler, connection)\n         return super().as_sql(compiler, connection)\n \n+\n+    def get_group_by_cols(self, alias=None):\n+        # For IN lookups, only the LHS should be in the GROUP BY clause.\n+        # The RHS is a subquery that provides the values to match against,\n+        # so it should not be included in the GROUP BY. However, we still\n+        # need to ensure that if the RHS is a queryset without explicit\n+        # select_fields, it gets reset to only the 'pk' field (same logic\n+        # as in process_rhs()) to prevent \"subquery must return only one\n+        # column\" errors when the subquery is included in SQL generation.\n+        if not getattr(self.rhs, 'has_select_fields', True):\n+            self.rhs.clear_select_clause()\n+            self.rhs.add_fields(['pk'])\n+        # Only return the LHS columns for GROUP BY\n+        return self.lhs.get_group_by_cols()\n+\n+\n     def split_parameter_list_as_sql(self, compiler, connection):\n         # This is a special case for databases which limit the number of\n         # elements which can appear in an 'IN' clause.\n"
+  }
+}

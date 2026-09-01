@@ -1,0 +1,3739 @@
+[
+ {
+  "site": "reddit",
+  "task_id": 28,
+  "etype": "must",
+  "intent": "Tell me the count of comments that have received more downvotes than upvotes for the user who made the latest post on the Worcester forum.",
+  "refs": {
+   "must_include": [
+    "0"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [],
+  "retrieved_lessons": {},
+  "nomem_answer": "1",
+  "withmem_answer": "1",
+  "nomem_trace": [
+   [
+    "click('42')",
+    "I need locate the Worcester forum, identify its latest post and author, then inspect that user’s complete comm"
+   ],
+   [
+    "fill('50', 'Worcester')",
+    "The forum list is sorted by submissions and Worcester is not on the first page. The visible search box is the "
+   ],
+   [
+    "keyboard_press('Enter')",
+    "The search query is entered, but the forum list has not updated. Submitting the search with Enter is the next "
+   ],
+   [
+    "click('132')",
+    "The search results identify the relevant forum as WorcesterMA, but they are not a reliable view of the forum’s"
+   ],
+   [
+    "click('128')",
+    "The forum is currently sorted by Hot, so the first submission is not necessarily the latest. I need change the"
+   ],
+   [
+    "click('137')",
+    "The sort menu is open and includes “New.” Selecting it will reorder submissions chronologically so the first r"
+   ],
+   [
+    "click('155')",
+    "The forum is now sorted by New, and the top submission is the latest: “Best place for a foot rub?” by mineinhu"
+   ],
+   [
+    "click('116')",
+    "The overview mixes submissions with comments, but the task requires counting all comments. A negative displaye"
+   ],
+   [
+    "click('1504')",
+    "The comments page shows 25 comments and a “More” link, so the list is not complete. On this page, exactly one "
+   ],
+   [
+    "send_msg_to_user(\"1\")",
+    ""
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('42')",
+    "I need locate the Worcester forum, identify its latest post and author, then inspect all of that user's commen"
+   ],
+   [
+    "fill('50', 'Worcester')",
+    "The forums list is sorted by submissions and Worcester is not on the visible first page. The search box is the"
+   ],
+   [
+    "keyboard_press('Enter')",
+    "The search box contains “Worcester,” but the forum list has not updated, so I need submit the search query wit"
+   ],
+   [
+    "click('132')",
+    "The search results consistently identify the relevant forum as “WorcesterMA.” I need open that forum directly,"
+   ],
+   [
+    "click('128')",
+    "The forum is currently sorted by Hot, which does not identify the latest post. I need change the sort order to"
+   ],
+   [
+    "click('137')",
+    "The sort menu is open and offers “New.” Clicking it should reorder submissions newest-first so I can identify "
+   ],
+   [
+    "click('155')",
+    "The forum is now sorted by New, and the first submission is the latest: “Best place for a foot rub?” by minein"
+   ],
+   [
+    "click('116')",
+    "The overview mixes submissions with comments, and the visible first page has one negative-scoring comment (“Hi"
+   ],
+   [
+    "click('1504')",
+    "The first comments page contains 25 comments, with one negative score (−2), but a “More” link confirms additio"
+   ],
+   [
+    "send_msg_to_user(\"1\")",
+    ""
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('42')",
+    "I need open the forum directory, find Showerthoughts, then sort its posts by latest and inspect the latest pos"
+   ],
+   [
+    "click('404')",
+    "The Showerthoughts forum is visible in the directory, so I should open it and then identify its latest post an"
+   ],
+   [
+    "click('128')",
+    "The forum is currently sorted by Hot. I need change it to the latest/newest ordering before identifying the re"
+   ],
+   [
+    "click('137')",
+    "The sort menu is open and offers “New,” which is the correct ordering for identifying the latest post."
+   ],
+   [
+    "click('155')",
+    "The “New” sort is confirmed, and the first post is the latest one, submitted by nirinaron at March 31, 2023 5:"
+   ],
+   [
+    "click('115')",
+    "I’m on nirinaron’s profile overview, which currently shows only a submission. I need open the Comments tab and"
+   ],
+   [
+    "send_msg_to_user(\"0\")",
+    ""
+   ]
+  ],
+  "sibling_task": 27
+ },
+ {
+  "site": "reddit",
+  "task_id": 31,
+  "etype": "must",
+  "intent": "Tell me the count of comments that have received more downvotes than upvotes for the user who made the latest post on the photoshopbattles forum.",
+  "refs": {
+   "must_include": [
+    "0"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Navigate from newest forum post to full comment history"
+  ],
+  "retrieved_lessons": {
+   "Navigate from newest forum post to full comment history": "Open the forum, change the visible sort control from “Hot” to “New,” and use the author of the first submission. On the profile, select “Comments” rather than “Overview,” which mixes submissions and comments, then follow"
+  },
+  "nomem_answer": "1",
+  "withmem_answer": "1",
+  "nomem_trace": [
+   [
+    "click('42')",
+    "I need open the forums directory, find the photoshopbattles forum, sort its submissions by latest/newest, iden"
+   ],
+   [
+    "click('117')",
+    "The forum list is currently sorted by submission count and spans multiple pages. Switching to the alphabetical"
+   ],
+   [
+    "click('299')",
+    "The alphabetical forum list shows the exact “photoshopbattles” link. I’ll open it to identify the latest post "
+   ],
+   [
+    "click('128')",
+    "The forum is currently sorted by Hot, so these are not necessarily the latest submissions. I need change the s"
+   ],
+   [
+    "click('137')",
+    "The sort menu is open and “New” is available. Clicking it should load submissions newest-first so I can identi"
+   ],
+   [
+    "click('612')",
+    "The page is sorted by New. Ignoring the older no-comment block that appears before the chronological results, "
+   ],
+   [
+    "click('115')",
+    "RoyBratty is confirmed as the latest post’s author. The overview mixes submissions and comments; I need use th"
+   ],
+   [
+    "send_msg_to_user(\"1\")",
+    "The complete comments list is visible through the page footer with no pagination. Exactly one comment has a ne"
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('42')",
+    "I need locate the photoshopbattles forum, sort its submissions by newest, identify the first post’s author, th"
+   ],
+   [
+    "fill('50', 'photoshopbattles')",
+    "The forum list is sorted by submission count and spans multiple pages. The visible search box is the cheapest "
+   ],
+   [
+    "keyboard_press('Enter')",
+    "The search query is entered but results have not updated, so submit it with Enter."
+   ],
+   [
+    "click('36')",
+    "The global search only found comments containing the term, not the forum itself. I should return to the Forums"
+   ],
+   [
+    "click('117')",
+    "The forum directory has an “Alphabetical” view, which should make locating “photoshopbattles” faster and more "
+   ],
+   [
+    "click('299')",
+    "The alphabetical directory shows the exact “photoshopbattles” forum link, so I should open it and then sort it"
+   ],
+   [
+    "click('128')",
+    "The forum is currently sorted by Hot. I need open the sort menu and choose New so the first submission identif"
+   ],
+   [
+    "click('137')",
+    "The sort menu is open and contains the “New” option. Selecting it will show the latest submission first so I c"
+   ],
+   [
+    "click('612')",
+    "The newest timestamp visible is March 31, 2023 at 7:32:25 PM EDT, and that submission’s author is RoyBratty. I"
+   ],
+   [
+    "click('115')",
+    "The profile is on Overview, which mixes submissions and comments. I need switch to Comments, then inspect ever"
+   ],
+   [
+    "send_msg_to_user(\"1\")",
+    "The complete Comments page ends after 11 comments with no “More” link. Exactly one comment has a negative scor"
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('42')",
+    "I need open the forum directory, find Showerthoughts, then sort its posts by latest and inspect the latest pos"
+   ],
+   [
+    "click('404')",
+    "The Showerthoughts forum is visible in the directory, so I should open it and then identify its latest post an"
+   ],
+   [
+    "click('128')",
+    "The forum is currently sorted by Hot. I need change it to the latest/newest ordering before identifying the re"
+   ],
+   [
+    "click('137')",
+    "The sort menu is open and offers “New,” which is the correct ordering for identifying the latest post."
+   ],
+   [
+    "click('155')",
+    "The “New” sort is confirmed, and the first post is the latest one, submitted by nirinaron at March 31, 2023 5:"
+   ],
+   [
+    "click('115')",
+    "I’m on nirinaron’s profile overview, which currently shows only a submission. I need open the Comments tab and"
+   ],
+   [
+    "send_msg_to_user(\"0\")",
+    ""
+   ]
+  ],
+  "sibling_task": 27
+ },
+ {
+  "site": "reddit",
+  "task_id": 68,
+  "etype": "must",
+  "intent": "Among the top 10 post in \"books\" forum, show me the author name and the book name from posts that recommand a single book",
+  "refs": {
+   "must_include": [
+    "A Christmas Carol",
+    "Levar Burton",
+    "The Hobbit",
+    "J. R. R. Tolkien"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Navigate from newest forum post to full comment history"
+  ],
+  "retrieved_lessons": {
+   "Navigate from newest forum post to full comment history": "Open the forum, change the visible sort control from “Hot” to “New,” and use the author of the first submission. On the profile, select “Comments” rather than “Overview,” which mixes submissions and comments, then follow"
+  },
+  "nomem_answer": "J. R. R. Tolkien — The Hobbit, Charles Dickens — A Christmas Carol",
+  "withmem_answer": "Shaosil — The Hobbit, ancienthippo — A Christmas Carol",
+  "nomem_trace": [
+   [
+    "click('42')",
+    "I need open the forums directory to locate the “books” forum and then inspect its top 10 posts."
+   ],
+   [
+    "click('544')",
+    "The “books — books” forum is visible in the directory, so I’ll open it and inspect its post ranking controls a"
+   ],
+   [
+    "click('128')",
+    "The page is currently sorted by Hot and shows more than 10 posts. I need switch to Top, then inspect the first"
+   ],
+   [
+    "click('141')",
+    "The sort menu is open and “Top” is available. I need select it before identifying the first 10 ranked posts."
+   ],
+   [
+    "click('146')",
+    "“Top” defaults to “Past 24 hours,” which has no results. I need expand the time filter and choose a broader ra"
+   ],
+   [
+    "click('161')",
+    "The time filter menu offers broader ranges; to interpret “top 10 posts” without a specified period, I should c"
+   ],
+   [
+    "click('433')",
+    "The first 10 posts run from the T. S. Eliot letters post through “What Is It That Makes Used Bookstores So Won"
+   ],
+   [
+    "go_back()",
+    "The current post confirms the recommended/read book is “The Hobbit,” but the post does not display its author."
+   ],
+   [
+    "click('470')",
+    "The verified top 10 contain two posts that recommend or praise a single book: “The Hobbit” and “A Christmas Ca"
+   ],
+   [
+    "send_msg_to_user(\"J. R. R. Tolkien — The Hobbit, Charles Dic",
+    ""
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('42')",
+    "I need open the forum list and navigate to the “books” forum, then inspect the complete top 10 posts and ident"
+   ],
+   [
+    "click('544')",
+    "The “books — books” forum is visible in the forum list, so I should open it to inspect its top 10 posts."
+   ],
+   [
+    "click('453')",
+    "The page is sorted by Hot and shows more than 10 items, so the relevant set is the first 10 articles only. Wit"
+   ],
+   [
+    "go_back()",
+    "This post identifies author Shaosil and the single book The Hobbit. I still need to verify all of the first 10"
+   ],
+   [
+    "click('490')",
+    "The first 10 Hot posts end with the Apple Books post. The ninth was verified as a single-book recommendation f"
+   ],
+   [
+    "send_msg_to_user(\"Shaosil — The Hobbit, ancienthippo — A Chr",
+    ""
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('42')",
+    "I need open the forum directory and locate the “books” forum before sorting its posts by top."
+   ],
+   [
+    "click('544')",
+    "The “books — books” forum is visible in the forum list, so I should open it."
+   ],
+   [
+    "click('128')",
+    "The forum is currently sorted by Hot. I need change the sort to Top, then inspect exactly the first 10 posts a"
+   ],
+   [
+    "click('141')",
+    "The sort menu is open and includes the “Top” option. I should select it, then inspect the first 10 results in "
+   ],
+   [
+    "click('146')",
+    "“Top” is now selected, but the current “Past 24 hours” range has no posts. I need change the time range, likel"
+   ],
+   [
+    "click('161')",
+    "The time-range menu is open and “All time” is available. Selecting it should reveal the all-time top posts nee"
+   ],
+   [
+    "send_msg_to_user(\"The Hobbit, A Christmas Carol\")",
+    ""
+   ]
+  ],
+  "sibling_task": 67
+ },
+ {
+  "site": "gitlab",
+  "task_id": 135,
+  "etype": "must",
+  "intent": "How many commits did Eric and Kilian make to a11yproject on 1/3/2023?",
+  "refs": {
+   "must_include": [
+    "1"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [],
+  "retrieved_lessons": {},
+  "nomem_answer": "3",
+  "withmem_answer": "2",
+  "nomem_trace": [
+   [
+    "click('394')",
+    "The relevant project is “The A11Y Project / a11yproject.com”; I need open it and inspect its commit history fo"
+   ],
+   [
+    "click('687')",
+    "The project page has a “2,320 Commits” link, which should open the complete commit history where I can locate "
+   ],
+   [
+    "send_msg_to_user(\"3\")",
+    ""
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('320')",
+    "The dashboard lists the relevant project as “The A11Y Project / a11yproject.com.” I’ll open it to inspect its "
+   ],
+   [
+    "click('687')",
+    "The project page has a “2,320 Commits” link, which should open the complete commit history where I can inspect"
+   ],
+   [
+    "send_msg_to_user(\"2\")",
+    ""
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('394')",
+    "The relevant project is listed as “The A11Y Project / a11yproject.com.” I’ll open it and inspect its repositor"
+   ],
+   [
+    "click('687')",
+    "The project page has a “2,320 Commits” link, which should open the complete commit history where I can inspect"
+   ],
+   [
+    "send_msg_to_user(\"1\")",
+    "The 05 Mar, 2023 group shows “1 commit,” and that commit was authored by Kilian Valkhof."
+   ]
+  ],
+  "sibling_task": 132
+ },
+ {
+  "site": "gitlab",
+  "task_id": 207,
+  "etype": "must",
+  "intent": "How many commits did Eric and Kilian make on 1/3/2023 in total?",
+  "refs": {
+   "must_include": [
+    "1"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Enumerate and verify every qualifying commit"
+  ],
+  "retrieved_lessons": {
+   "Enumerate and verify every qualifying commit": "Inspect every row in the requested date group, match each displayed author exactly, and count all qualifying rows across every named person rather than guessing from the question. Open a commit’s detail view if the list "
+  },
+  "nomem_answer": "2",
+  "withmem_answer": "2",
+  "nomem_trace": [
+   [
+    "click('687')",
+    "The project overview shows a “2,320 Commits” link, which should open the complete commit history where I can i"
+   ],
+   [
+    "send_msg_to_user(\"2\")",
+    ""
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('687')",
+    "The project overview shows a link to the complete commit history, which is the relevant place to inspect all c"
+   ],
+   [
+    "send_msg_to_user(\"2\")",
+    ""
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('687')",
+    "The project page shows a “2,320 Commits” link, which should open the complete commit history where I can inspe"
+   ],
+   [
+    "send_msg_to_user(\"1\")",
+    ""
+   ]
+  ],
+  "sibling_task": 205
+ },
+ {
+  "site": "gitlab",
+  "task_id": 297,
+  "etype": "exact",
+  "intent": "Show me the command to clone the most stared Covid location tracker with SSH.",
+  "refs": {
+   "exact_match": "ssh://git@metis.lti.cs.cmu.edu:2222/yjlou/2019-nCov.git"
+  },
+  "same_tmpl_success_exists": false,
+  "retrieved_titles": [
+   "Capture the displayed SSH clone value"
+  ],
+  "retrieved_lessons": {
+   "Capture the displayed SSH clone value": "Open the visible “Clone” control and wait until the expanded menu is present in a fresh page observation. Copy the complete value labeled “Clone with SSH” exactly—including scheme, host, port if shown, namespace, project"
+  },
+  "nomem_answer": "git clone ssh://git@10.44.12.29:2222/covid19india/covid19india-react.git",
+  "withmem_answer": "git clone ssh://git@10.44.12.29:2222/covid19india/covid19india-react.git",
+  "nomem_trace": [
+   [
+    "fill('130', 'Covid location tracker')",
+    "I need locate all projects matching “Covid location tracker,” compare their star counts, open the most-starred"
+   ],
+   [
+    "keyboard_press('Enter')",
+    "The search term is entered and the autocomplete reports one option to search across all GitLab. Submitting wit"
+   ],
+   [
+    "fill('227', 'covid tracker')",
+    "The exact phrase returns zero projects, so I should broaden the project search while retaining the key concept"
+   ],
+   [
+    "keyboard_press('Enter')",
+    "The broadened query “covid tracker” is entered but the results still reflect the prior search, so I need submi"
+   ],
+   [
+    "fill('227', 'covid')",
+    "The two-word query still yields zero projects, so I should broaden to the core term “covid” to retrieve candid"
+   ],
+   [
+    "keyboard_press('Enter')",
+    "The search box contains the broadened query “covid,” but the page still shows results for “covid tracker.” I n"
+   ],
+   [
+    "click('320')",
+    "The complete project results for “covid” show two candidates. The first, “covid19india / covid19india-react,” "
+   ],
+   [
+    "click('839')",
+    "The project page confirms 34 stars and has a “Clone” control. I need open it to read and copy the SSH clone co"
+   ],
+   [
+    "send_msg_to_user(\"git clone ssh://git@10.44.12.29:2222/covid",
+    ""
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "fill('130', 'Covid location tracker')",
+    "I need locate the relevant project and compare star counts, then open the project’s Clone menu and copy the vi"
+   ],
+   [
+    "keyboard_press('Enter')",
+    "The search box contains the query and the suggestion indicates Enter will submit it across all GitLab. I need "
+   ],
+   [
+    "fill('227', 'covid')",
+    "The exact phrase returns zero projects, so I should broaden the project search to “covid” and then inspect all"
+   ],
+   [
+    "click('231')",
+    "The search field has been broadened to “covid,” but the page still displays results for the previous query, so"
+   ],
+   [
+    "click('320')",
+    "The complete project result set contains two projects. The first metric is the star count: covid19india / covi"
+   ],
+   [
+    "click('839')",
+    "The project page visibly confirms 34 stars and describes tracking COVID-19 in India. To provide the exact SSH "
+   ],
+   [
+    "send_msg_to_user(\"git clone ssh://git@10.44.12.29:2222/covid",
+    "The Clone menu is expanded and the complete “Clone with SSH” value is visibly shown. Prepending `git clone ` g"
+   ]
+  ],
+  "sibling_success_trace": [],
+  "sibling_task": null
+ },
+ {
+  "site": "gitlab",
+  "task_id": 306,
+  "etype": "must",
+  "intent": "How many commits did Anthony make between 08/2022-09/2022?",
+  "refs": {
+   "must_include": [
+    "0"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Count every visibly matching commit"
+  ],
+  "retrieved_lessons": {
+   "Count every visibly matching commit": "Enumerate every commit whose displayed date and author exactly match the requested criteria, continuing through all rows and any next page or load-more control for that date. Open a commit detail when an author name is a"
+  },
+  "nomem_answer": "",
+  "withmem_answer": "",
+  "nomem_trace": [
+   [
+    "click('474')",
+    "The project’s Analytics section is the relevant place to find commit counts by contributor and date range, so "
+   ],
+   [
+    "click('480')",
+    "Value Stream Analytics shows aggregate workflow metrics, while the task asks for commits by a specific contrib"
+   ],
+   [
+    "scroll(0, 657)",
+    "The commit statistics section likely has an author table below the visible charts. I need to scroll further to"
+   ],
+   [
+    "scroll(0, 673)",
+    "The visible repository analytics only shows aggregate commit charts and no contributor/date-range table yet. I"
+   ],
+   [
+    "click('288')",
+    "The commit statistics page ends with aggregate charts and does not provide an author/date-range breakdown. Git"
+   ],
+   [
+    "click('317')",
+    "The Repository submenu is expanded and includes a Contributors report, which should provide author-specific co"
+   ],
+   [
+    "keyboard_press('ControlOrMeta+f')",
+    "The contributors list is long and Anthony is not yet visible. I’ll use the browser’s find function to locate h"
+   ],
+   [
+    "keyboard_press('a')",
+    "The browser find box is open from the previous action. I’ll enter “Anthony” to jump to his contributor entry, "
+   ],
+   [
+    "keyboard_press('nthony')",
+    "The find box currently contains only “a” because the last action entered a single character. I need complete t"
+   ],
+   [
+    "keyboard_press('ControlOrMeta+a')",
+    "The browser find field is active and currently contains only “a”. I’ll select that text so it can be replaced "
+   ],
+   [
+    "keyboard_press('A')",
+    "The browser find text is selected, so I’ll replace it by entering the first letter of “Anthony,” then continue"
+   ],
+   [
+    "keyboard_press('n')",
+    "The browser find field contains “A” and remains active. I’ll add the next character of “Anthony.”"
+   ],
+   [
+    "keyboard_press('t')",
+    "The browser find field is active with “An” entered. I’ll add the next character of “Anthony.”"
+   ],
+   [
+    "click('308')",
+    "The earlier Ctrl/Cmd+F shortcut opened GitLab’s “Find File” page rather than a browser find box, so the typed "
+   ],
+   [
+    "keyboard_press('F3')",
+    "The contributors page contains the full author list, but the accessibility tree is truncated before any Anthon"
+   ],
+   [
+    "scroll(0, 6925)",
+    "The contributor list is sorted by total commits and continues far below the currently visible entries; Anthony"
+   ],
+   [
+    "scroll(0, 6967)",
+    "The contributor list continues beyond the currently exposed entries, and Anthony has not appeared yet. I’ll sc"
+   ],
+   [
+    "scroll(0, 6967)",
+    "The contributor list is fully loaded but the accessibility tree is truncated around the 3-commit entries, befo"
+   ],
+   [
+    "scroll(0, 7000)",
+    "The contributors are sorted by total commits, and the tree now extends through 3-commit contributors but is tr"
+   ],
+   [
+    "click('301')",
+    "The contributor tree is too large and its chart values are not exposed accessibly. The commits page can provid"
+   ],
+   [
+    "click('800')",
+    "The commits page has an Author filter, and the visible history confirms the contributor’s full name is Anthony"
+   ],
+   [
+    "fill('812', 'Anthony Palomarez', True)",
+    "The Author menu is open and includes a Search field. Anthony Palomarez is confirmed in the commit list, so I’l"
+   ],
+   [
+    "noop(1000)",
+    "The author search is filled, but no matching menu item is visible yet, so the autocomplete results may still b"
+   ],
+   [
+    "click('1644')",
+    "The author selector did not return a matching option, but an Anthony Palomarez commit is visible in the commit"
+   ],
+   [
+    "scroll(0, 6905)",
+    "Clicking Anthony’s name did not apply a filter; the page remains the complete commit history. The visible list"
+   ],
+   [
+    "scroll(0, 5000)",
+    "The commit list now exposes September 2022 and most of August 2022, with no Anthony commits so far, but the tr"
+   ],
+   [
+    "scroll(0, 5000)",
+    "September through August 17 shows no Anthony commits, but the requested range includes the rest of August and "
+   ],
+   [
+    "scroll(0, 6000)",
+    "The visible commit history covers all of September and August down through August 16, with no Anthony commits "
+   ],
+   [
+    "scroll(0, 7000)",
+    "The loaded commit history now reaches August 16, 2022, and no Anthony commit appears from September 30 through"
+   ],
+   [
+    "scroll(0, 7000)",
+    "The commit history now includes the requested period through August 16 and still shows no Anthony commit, but "
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('687')",
+    "The project page shows a “2,320 Commits” link, which is the direct route to the complete commit history needed"
+   ],
+   [
+    "scroll(0, 6590)",
+    "The commit history currently reaches November 2022, so I need to continue loading older commits until all Augu"
+   ],
+   [
+    "scroll(0, 6362)",
+    "The visible September and late-August rows contain no commits by Anthony, but the list is truncated at 16 Aug,"
+   ],
+   [
+    "scroll(0, 6000)",
+    "The commit list now includes the requested September and August range, but the accessibility tree is truncated"
+   ],
+   [
+    "keyboard_press('ControlOrMeta+f')",
+    "The full commit list is loaded past the requested period, but the accessibility tree truncates after mid-Augus"
+   ],
+   [
+    "keyboard_press('Anthony')",
+    "The full list is loaded and the requested date range is present. I need to use the open browser find box to lo"
+   ],
+   [
+    "click('800')",
+    "The full commit history is loaded beyond September and August 2022. Rather than relying on the browser find bo"
+   ],
+   [
+    "fill('812', 'Anthony Palomarez')",
+    "The Author menu is open and has a searchbox. The commit list confirms the relevant full identity is Anthony Pa"
+   ],
+   [
+    "noop(1000)",
+    "The author search field contains “Anthony Palomarez,” but no matching menu item is yet shown, so I need to wai"
+   ],
+   [
+    "keyboard_press('Enter')",
+    "The author search has the exact verified full name, but no autocomplete item appeared. The next best step is t"
+   ],
+   [
+    "click('4826')",
+    "The exact full-name query did not produce a selectable autocomplete result, and pressing Enter did not apply a"
+   ],
+   [
+    "fill('812', 'Anthony', True)",
+    "The exact full-name search produced no result, but the menu is open with an empty focused searchbox. Searching"
+   ],
+   [
+    "click('800')",
+    "The short author query still yields no selectable autocomplete item, so this filter cannot be applied. The com"
+   ],
+   [
+    "scroll(0, 5757)",
+    "The visible range confirms no Anthony commits from September through August 16, but the accessibility tree tru"
+   ],
+   [
+    "keyboard_press('ControlOrMeta+f')",
+    "The complete commit history is loaded and the visible rows verify no Anthony commits from September through Au"
+   ],
+   [
+    "keyboard_press('a')",
+    "The browser find box is now open and focused. Since keyboard input accepts individual keys, I can enter “Antho"
+   ],
+   [
+    "keyboard_press('n')",
+    "The browser find box is focused and currently contains “a”. I need to complete “Anthony” one character at a ti"
+   ],
+   [
+    "keyboard_press('t')",
+    "The browser find box is focused and contains “an”. I need to complete “Anthony” one character at a time, then "
+   ],
+   [
+    "click('299')",
+    "The GitLab shortcut opened the project’s “Find File” page rather than browser find, so the prior search attemp"
+   ],
+   [
+    "scroll(0, 6153)",
+    "The commit list is chronological and currently reaches November 2022. I must continue through all of September"
+   ],
+   [
+    "scroll(0, 6162)",
+    "The loaded chronological list currently reaches only November 2022 in the accessibility tree. I need continue "
+   ],
+   [
+    "scroll(0, 5275)",
+    "The visible list confirms no Anthony commits from September 22 through August 17, but August 16 and earlier ar"
+   ],
+   [
+    "scroll(0, 4333)",
+    "The visible rows verify no Anthony commits from September 22 through August 16, but the tree truncates exactly"
+   ],
+   [
+    "goto('https://gitlab.com/api/v4/projects/a11yproject%2Fa11yp",
+    "The unfiltered page’s accessibility tree is permanently truncated before the remaining August rows, so repeate"
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('474')",
+    "The project page has an Analytics section, which is the most likely place to filter contributor activity by ye"
+   ],
+   [
+    "click('480')",
+    "Value Stream Analytics is limited to 180 days and does not show contributor-specific annual totals. The “Repos"
+   ],
+   [
+    "click('288')",
+    "Repository Analytics only shows aggregate statistics and has no year or author filter. The repository’s commit"
+   ],
+   [
+    "click('317')",
+    "The Repository submenu includes a Contributors page, which is the most likely place to show per-contributor co"
+   ],
+   [
+    "click('301')",
+    "The contributor entry shows Kilian Valkhof has 3 commits in total, but the task asks specifically for 2023. Th"
+   ],
+   [
+    "click('800')",
+    "The visible history includes one Kilian Valkhof commit in 2023, but I need filter by author and inspect the co"
+   ],
+   [
+    "fill('812', 'Kilian Valkhof')",
+    "The Author menu is open and includes a search field. Kilian is not in the initially listed suggestions, so I’l"
+   ],
+   [
+    "noop(1000)",
+    "The author search has been filled, but no matching result is visible yet, likely because the suggestions are s"
+   ],
+   [
+    "send_msg_to_user(\"1\")",
+    ""
+   ]
+  ],
+  "sibling_task": 303
+ },
+ {
+  "site": "gitlab",
+  "task_id": 307,
+  "etype": "must",
+  "intent": "How many commits did Nic make in April 2021?",
+  "refs": {
+   "must_include": [
+    "16"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Count every visibly matching commit"
+  ],
+  "retrieved_lessons": {
+   "Count every visibly matching commit": "Enumerate every commit whose displayed date and author exactly match the requested criteria, continuing through all rows and any next page or load-more control for that date. Open a commit detail when an author name is a"
+  },
+  "nomem_answer": "",
+  "withmem_answer": "",
+  "nomem_trace": [
+   [
+    "click('474')",
+    "The project’s Analytics section is the most likely place to find contributor commit counts by date, so I’ll op"
+   ],
+   [
+    "click('480')",
+    "Repository Analytics is more likely to provide contributor commit counts and a date range than Value Stream An"
+   ],
+   [
+    "click('288')",
+    "Repository Analytics only shows aggregate statistics and no author/month filter. I need the repository commit "
+   ],
+   [
+    "click('308')",
+    "The repository navigation includes a Commits page, which should expose the commit list and available filtering"
+   ],
+   [
+    "click('800')",
+    "The commits page is open and provides an Author filter. Filtering by Nic should reduce the complete history to"
+   ],
+   [
+    "fill('812', 'Nic')",
+    "The Author menu has a search field that can find contributors not shown in the initial suggestions. I’ll searc"
+   ],
+   [
+    "noop(1000)",
+    "The author search is populated with “Nic,” but no matching results are visible yet, so I’ll wait for the menu’"
+   ],
+   [
+    "click('309')",
+    "The author picker only searches GitLab user accounts and returns no match for “Nic,” so it cannot filter this "
+   ],
+   [
+    "click('604')",
+    "Nic is identified here as Nic Chan with email channicoleelise@gmail.com, but the chart does not expose monthly"
+   ],
+   [
+    "scroll(0, 6489)",
+    "The unfiltered commit history currently spans March 2023 to November 2022, so I need to continue through the c"
+   ],
+   [
+    "scroll(0, 6489)",
+    "The large scroll loaded commit history through at least August 2022, but April 2021 is not yet visible. I need"
+   ],
+   [
+    "scroll(0, 6489)",
+    "The commit history has now loaded through August 2022, still well after April 2021. I need to continue scrolli"
+   ],
+   [
+    "scroll(0, 6489)",
+    "The loaded history is still showing August 2022 at the visible lower portion, well after April 2021. I need to"
+   ],
+   [
+    "scroll(0, 6489)",
+    "The commit list has loaded substantially more history, but the visible tree is truncated before its oldest loa"
+   ],
+   [
+    "scroll(0, 6489)",
+    "The commit history now contains much more content than the accessibility tree can display, but the visible por"
+   ],
+   [
+    "keyboard_press('ControlOrMeta+f')",
+    "The page now contains a very large loaded commit history, and the accessibility tree is truncated. Using the b"
+   ],
+   [
+    "keyboard_press('A')",
+    "The browser Find box is open and focused. I need enter the distinctive month label “Apr, 2021” one key at a ti"
+   ],
+   [
+    "keyboard_press('p')",
+    "The browser Find box remains focused with the first character “A” entered. I need complete the search phrase “"
+   ],
+   [
+    "keyboard_press('r')",
+    "The browser Find box is still focused with “Ap” entered. I need add “r” to continue forming the exact month la"
+   ],
+   [
+    "keyboard_press(',')",
+    "The Find box currently contains “Apr”. I need complete the target phrase by adding the comma next."
+   ],
+   [
+    "keyboard_press(' ')",
+    "The browser Find query is currently “Apr,”. I need add a space and then “2021” to complete the exact month lab"
+   ],
+   [
+    "keyboard_press('2')",
+    "The Find box contains “Apr, ” and remains focused. I need type “2” as the next character of the exact month la"
+   ],
+   [
+    "keyboard_press('0')",
+    "The browser Find box is focused and currently contains “Apr, 2”. I need type “0” as the next character of “Apr"
+   ],
+   [
+    "keyboard_press('2')",
+    "The browser Find query is currently “Apr, 20”. I need type “2” as the next character of the exact month label "
+   ],
+   [
+    "keyboard_press('1')",
+    "The browser Find query is currently “Apr, 202”. I need type the final “1” to complete “Apr, 2021” and jump to "
+   ],
+   [
+    "keyboard_press('Escape')",
+    "The exact browser Find query “Apr, 2021” has been completed. I need close the Find overlay while preserving th"
+   ],
+   [
+    "click('800')",
+    "The browser find did not yield a readable target section in the accessibility tree, which remains dominated by"
+   ],
+   [
+    "fill('812', 'Nic')",
+    "The Author menu is open and includes a focused searchbox. Filtering by “Nic” should reveal the matching author"
+   ],
+   [
+    "noop(1500)",
+    "The author searchbox contains “Nic,” but no matching author options are visible yet, so the menu may still be "
+   ],
+   [
+    "keyboard_press('Escape')",
+    "The Author menu produced no matching option for “Nic,” so this filter cannot be used. The full commit history "
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('687')",
+    "The project page shows a “2,320 Commits” link, which is the direct route to the full commit history needed to "
+   ],
+   [
+    "click('800')",
+    "Filtering by author first should greatly reduce the history that must be traversed and ensure only commits vis"
+   ],
+   [
+    "fill('812', 'Nic')",
+    "The Author menu is open and contains a searchbox. Searching for “Nic” should reveal matching author accounts s"
+   ],
+   [
+    "noop(1000)",
+    "The author search has been filled with “Nic,” but no matching option is visible yet, indicating the menu may s"
+   ],
+   [
+    "goto('http://gitlab.com/a11yproject/a11yproject.com/-/commit",
+    "The author search produced no selectable result after waiting, so this menu is not yielding a matching account"
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('474')",
+    "The project page has an Analytics section, which is the most likely place to filter contributor activity by ye"
+   ],
+   [
+    "click('480')",
+    "Value Stream Analytics is limited to 180 days and does not show contributor-specific annual totals. The “Repos"
+   ],
+   [
+    "click('288')",
+    "Repository Analytics only shows aggregate statistics and has no year or author filter. The repository’s commit"
+   ],
+   [
+    "click('317')",
+    "The Repository submenu includes a Contributors page, which is the most likely place to show per-contributor co"
+   ],
+   [
+    "click('301')",
+    "The contributor entry shows Kilian Valkhof has 3 commits in total, but the task asks specifically for 2023. Th"
+   ],
+   [
+    "click('800')",
+    "The visible history includes one Kilian Valkhof commit in 2023, but I need filter by author and inspect the co"
+   ],
+   [
+    "fill('812', 'Kilian Valkhof')",
+    "The Author menu is open and includes a search field. Kilian is not in the initially listed suggestions, so I’l"
+   ],
+   [
+    "noop(1000)",
+    "The author search has been filled, but no matching result is visible yet, likely because the suggestions are s"
+   ],
+   [
+    "send_msg_to_user(\"1\")",
+    ""
+   ]
+  ],
+  "sibling_task": 303
+ },
+ {
+  "site": "gitlab",
+  "task_id": 786,
+  "etype": "must",
+  "intent": "Tell me the number of commits of the contributor who has the most commits to branch main",
+  "refs": {
+   "must_include": [
+    "412"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Use the project’s branch commit history"
+  ],
+  "retrieved_lessons": {
+   "Use the project’s branch commit history": "Open “Repository” → “Commits,” select the intended branch, and navigate the history using its date or pagination controls rather than relying on repeated wheel scrolling. If using the repository commits API, call the API"
+  },
+  "nomem_answer": "",
+  "withmem_answer": "414",
+  "nomem_trace": [
+   [
+    "click('291')",
+    "I need open the repository navigation to find the contributors page and then filter it to branch main."
+   ],
+   [
+    "click('311')",
+    "The Repository submenu is open and includes the relevant “Contributors” link. I need open it, then select bran"
+   ],
+   [
+    "click('494')",
+    "The contributors page is currently filtered to branch master, but the task asks for branch main. I need open t"
+   ],
+   [
+    "fill('504', 'main')",
+    "The branch dropdown is open and its search box is focused. The current report is still for master, so I need s"
+   ],
+   [
+    "noop(1500)",
+    "The search was entered, but the dropdown still shows only “master” and the report remains on master. I should "
+   ],
+   [
+    "click('298')",
+    "The branch picker’s filtered results show no branch named “main”; “master” appears only under the separate Com"
+   ],
+   [
+    "fill('503', 'main')",
+    "The branches page is open and provides a branch-name filter. I need search for “main” across the branch list t"
+   ],
+   [
+    "click('505')",
+    "The branch filter contains “main,” but the displayed stale-branch results have not been refreshed. I need clic"
+   ],
+   [
+    "click('499')",
+    "The current branch search was performed only within the selected branch category, so “No branches to show” doe"
+   ],
+   [
+    "click('499')",
+    "The previous click on “All” timed out, but the page remains on the branches list and the “All” tab is still av"
+   ],
+   [
+    "click('302')",
+    "The branch list is on a stale filtered state, and repeated clicks on the “All” tab failed. The direct Contribu"
+   ],
+   [
+    "click('494')",
+    "The current report is still explicitly “Commits to master,” so 414 cannot answer the requested main branch. Th"
+   ],
+   [
+    "fill('504', 'main')",
+    "The branch picker is open again with an unfiltered complete branch list. To verify and select the requested br"
+   ],
+   [
+    "goto('/Vinta/awesome-python/-/graphs/main/charts')",
+    "The branch search conclusively shows no branch result for “main,” only a commit result named “master,” so the "
+   ],
+   [
+    "goto('http://gitlab.local/Vinta/awesome-python/-/graphs/main",
+    "The relative URL failed because `goto` requires an absolute URL. This benchmark’s GitLab host is `gitlab.local"
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('291')",
+    "The current project page is on branch master, but the task specifically asks about branch main. The Repository"
+   ],
+   [
+    "click('305')",
+    "The repository is currently on `master`, so I need to verify that `main` exists before counting its commits. T"
+   ],
+   [
+    "fill('503', 'main')",
+    "The branches page is showing stale branches, so I should filter by the exact branch name `main` to confirm and"
+   ],
+   [
+    "click('505')",
+    "The branch filter contains `main`, but the stale branch list has not updated yet. I need to submit the search "
+   ],
+   [
+    "click('499')",
+    "The current filtered branch view says no branches, but it may be limited to the selected branch category. I sh"
+   ],
+   [
+    "click('293')",
+    "The branch list search did not establish whether `main` exists, and the task requires the top contributor’s co"
+   ],
+   [
+    "click('496')",
+    "The Commits page is loaded and currently shows branch `master`. To get the exact contributor ranking for `main"
+   ],
+   [
+    "fill('505', 'main')",
+    "The branch selector is open and has a focused “Search by Git revision” field. I should filter it for the exact"
+   ],
+   [
+    "click('304')",
+    "The repository has no branch literally named `main`; its primary branch is `master`, which is the only branch "
+   ],
+   [
+    "send_msg_to_user(\"414\")",
+    "The contributors page is sorted by commit count in descending order. The top contributor, Vinta Chen, has 414 "
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('421')",
+    "The project navigation includes an Analytics section, which is the most likely place to find contributor commi"
+   ],
+   [
+    "click('427')",
+    "The current Value Stream page does not show contributor commit totals. The Analytics submenu includes “Reposit"
+   ],
+   [
+    "click('542')",
+    "The commit statistics section is currently filtered to the development branch. I need to switch the branch sel"
+   ],
+   [
+    "fill('552', 'main')",
+    "The branch picker is open and “main” is not among the currently listed branches. I’ll search for it using the "
+   ],
+   [
+    "noop(1500)",
+    "The branch search has been entered, but the result list still shows the prior development entry, so the filter"
+   ],
+   [
+    "keyboard_press('Enter')",
+    "The search query is present, but the picker has not applied it and still shows only “development.” Pressing En"
+   ],
+   [
+    "click('542')",
+    "Pressing Enter did not change the selected branch, so I should reopen the branch selector and inspect its curr"
+   ],
+   [
+    "click('694')",
+    "The complete branch list is visible and contains no branch literally named “main”; the repository’s primary br"
+   ],
+   [
+    "scroll(0, 1051)",
+    "The master branch statistics are loaded, but the contributor table is below the visible charts. I’ll scroll do"
+   ],
+   [
+    "scroll(0, 1050)",
+    "The contributor table is still below the visible commit charts, so I need to scroll further down until the ran"
+   ],
+   [
+    "scroll(0, 1034)",
+    "The contributor rows are not yet visible; the current viewport ends at the final commit chart. I’ll scroll far"
+   ],
+   [
+    "scroll(0, 1100)",
+    "The page still ends at the final commit chart, and no contributor ranking is visible yet. I’ll continue scroll"
+   ],
+   [
+    "click('282')",
+    "The analytics page contains only aggregate commit charts and no contributor ranking, so continuing to scroll w"
+   ],
+   [
+    "click('311')",
+    "The Repository submenu now exposes a dedicated “Contributors” page, which should provide contributor commit co"
+   ],
+   [
+    "send_msg_to_user(\"secupwn@users.noreply.github.com\")",
+    ""
+   ]
+  ],
+  "sibling_task": 784
+ },
+ {
+  "site": "shopping",
+  "task_id": 21,
+  "etype": "must",
+  "intent": "List out reviewers, if exist, who mention about ear cups being small",
+  "refs": {
+   "must_include": [
+    "Joseph Brzezinski",
+    "Catso",
+    "Dibbins",
+    "Anglebert Dinkherhump",
+    "Michelle Davis"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [],
+  "retrieved_lessons": {},
+  "nomem_answer": "Catso, Dibbins, Anglebert Dinkherhump, Michelle DavisMichelle Davis",
+  "withmem_answer": "Catso, Dibbins, Anglebert Dinkherhump, Michelle Davis",
+  "nomem_trace": [
+   [
+    "click('1576')",
+    "The page shows 12 reviews, but their content is hidden in the collapsed “Reviews (12)” tab. I need to open it "
+   ],
+   [
+    "click('1990')",
+    "Page 1 contains several reviews discussing undersized ear cups or fit, but the review list has a second page. "
+   ],
+   [
+    "click('2085')",
+    "Page 2 has two reviews. Michelle Davis says the padding goes over small ears but not adult-sized ears, which i"
+   ],
+   [
+    "send_msg_to_user(\"Catso, Dibbins, Anglebert Dinkherhump, Mic",
+    "The full first page shows four reviewers mentioning undersized ear cups or that the cups/padding do not fit ad"
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('1636')",
+    "The product has 12 reviews, but their contents are not yet visible. I need to open the Reviews tab and inspect"
+   ],
+   [
+    "click('2050')",
+    "Page 1 shows several potentially relevant reviews, but the full list spans two pages. I need to inspect page 2"
+   ],
+   [
+    "click('2145')",
+    "Page 2 contains Michelle Davis mentioning that the padding does not go over adult-sized ears, which is relevan"
+   ],
+   [
+    "click('2429')",
+    "Page 1 contains relevant mentions by Catso, Dibbins, Anglebert Dinkherhump, and Michelle DavisMichelle Davis. "
+   ],
+   [
+    "send_msg_to_user(\"Catso, Dibbins, Anglebert Dinkherhump, Mic",
+    ""
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('1551')",
+    "The product has 12 reviews, currently hidden under the “Reviews (12)” tab. I need open it and inspect the enti"
+   ],
+   [
+    "click('1944')",
+    "Page 1 shows two reviewers positively mentioning fingerprint resistance: Rachel and T. Gannon. Since there are"
+   ],
+   [
+    "send_msg_to_user(\"Rachel, T. Gannon\")",
+    ""
+   ]
+  ],
+  "sibling_task": 23
+ },
+ {
+  "site": "shopping",
+  "task_id": 25,
+  "etype": "must",
+  "intent": "List out reviewers, if exist, who mention about average print quality",
+  "refs": {
+   "must_include": [
+    "Goldfish",
+    "Roxanne Brandon Coffey"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Ground every qualifying reviewer in visible text"
+  ],
+  "retrieved_lessons": {
+   "Ground every qualifying reviewer in visible text": "For every review, visibly read the complete reviewer name and full comment, opening any detail or expanded view if text is abbreviated. Record every qualifying row across all pages, deduplicate only exact repeated rows, "
+  },
+  "nomem_answer": "Roxanne Brandon Coffey",
+  "withmem_answer": "Roxanne Brandon Coffey",
+  "nomem_trace": [
+   [
+    "click('1894')",
+    "The product page shows 12 reviews, but their contents are collapsed under the “Reviews (12)” tab. I need open "
+   ],
+   [
+    "click('2287')",
+    "Page 1 shows 10 of 12 reviews. Roxanne Brandon Coffey explicitly says “The print quality was average,” but I m"
+   ],
+   [
+    "send_msg_to_user(\"Roxanne Brandon Coffey\")",
+    ""
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('1954')",
+    "The product has 12 reviews, currently hidden under the “Reviews (12)” tab. I need open it and inspect the comp"
+   ],
+   [
+    "click('2347')",
+    "Page 1 shows Roxanne Brandon Coffey explicitly saying “The print quality was average.” Since there are 12 revi"
+   ],
+   [
+    "click('2442')",
+    "Page 2 contains the final two reviews, and neither mentions average print quality. I need return to page 1 and"
+   ],
+   [
+    "send_msg_to_user(\"Roxanne Brandon Coffey\")",
+    ""
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('1551')",
+    "The product has 12 reviews, currently hidden under the “Reviews (12)” tab. I need open it and inspect the enti"
+   ],
+   [
+    "click('1944')",
+    "Page 1 shows two reviewers positively mentioning fingerprint resistance: Rachel and T. Gannon. Since there are"
+   ],
+   [
+    "send_msg_to_user(\"Rachel, T. Gannon\")",
+    ""
+   ]
+  ],
+  "sibling_task": 23
+ },
+ {
+  "site": "shopping",
+  "task_id": 124,
+  "etype": "must",
+  "intent": "What is the price range of wireless earphone in the One Stop Market?",
+  "refs": {
+   "must_include": [
+    "0.14",
+    "745.00"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Open Reviews and traverse its pager"
+  ],
+  "retrieved_lessons": {
+   "Open Reviews and traverse its pager": "Select the visible “Reviews” tab, then inspect the review list and use its labeled page or “Next” controls until every review page has been visited. After each navigation, confirm that the displayed review rows changed a"
+  },
+  "nomem_answer": "$0.01 - $17,774.32",
+  "withmem_answer": "$0.01 - $17,774.32",
+  "nomem_trace": [
+   [
+    "fill('272', 'wireless earphone')",
+    "I need search the store for “wireless earphone” and inspect all matching results to determine the minimum and "
+   ],
+   [
+    "click('277')",
+    "The query is entered but the search has not yet been submitted; the current page still shows unrelated showcas"
+   ],
+   [
+    "select_option('1387', 'Price')",
+    "There are 6,209 results, so paging through manually is unnecessary if I sort all results by price. I should so"
+   ],
+   [
+    "click('1390')",
+    "The results are currently sorted by Price in descending order, confirmed by the decreasing prices and the “Set"
+   ],
+   [
+    "send_msg_to_user(\"$0.01 - $17,774.32\")",
+    "The current price-ascending results confirm the minimum is $0.01, and the previously displayed price-descendin"
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "fill('332', 'wireless earphone')",
+    "The homepage does not show wireless earphones, so I need to search the catalog and inspect all matching result"
+   ],
+   [
+    "click('337')",
+    "The search text is entered but results have not loaded; the page still shows unrelated product showcases. I ne"
+   ],
+   [
+    "select_option('1447', 'Price')",
+    "The search has 6,209 results, so paging through all of them is unnecessary if I sort the complete result set b"
+   ],
+   [
+    "click('1450')",
+    "The results are sorted by price in descending order, confirmed by the “Set Ascending Direction” control, so th"
+   ],
+   [
+    "send_msg_to_user(\"$0.01 - $17,774.32\")",
+    "The complete search result set was sorted by price in both directions. The minimum shown in ascending order is"
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "fill('272', 'Canon photo printer')",
+    "I need search for Canon photo printer products, then inspect all result pages to identify the minimum and maxi"
+   ],
+   [
+    "click('277')",
+    "The search query is entered but results have not yet been submitted; the current products are unrelated homepa"
+   ],
+   [
+    "click('277')",
+    "The general search returned 6,444 broad OR-matched results, including unrelated accessories, so sorting the en"
+   ],
+   [
+    "fill('1372', 'Canon photo printer')",
+    "The Advanced Search form allows restricting the query to Product Name, which should avoid the broad OR-matched"
+   ],
+   [
+    "click('1404')",
+    "The Product Name field contains “Canon photo printer,” and the Advanced Search button is ready. I should submi"
+   ],
+   [
+    "click('1367')",
+    "The exact product-name phrase returned no items, so I need broaden the Product Name criterion to “Canon” and t"
+   ],
+   [
+    "fill('1372', 'Canon')",
+    "The Advanced Search form is visible again with the prior exact phrase still in Product Name. I should replace "
+   ],
+   [
+    "click('1404')",
+    "The Product Name field now contains “Canon.” I should submit this broader advanced search, then inspect the fu"
+   ],
+   [
+    "click('1381')",
+    "The broader Canon search succeeded and returned 456 items, too many unrelated products. Searching Product Name"
+   ],
+   [
+    "fill('1372', 'photo printer')",
+    "The Advanced Search form still has “Canon” in Product Name because the previous click targeted the Description"
+   ],
+   [
+    "click('1404')",
+    "The Product Name field is now set to “photo printer.” I should submit the advanced search, then inspect the en"
+   ],
+   [
+    "select_option('1808', '36')",
+    "There are 33 matching products across three pages, and page 1 already shows several Canon photo printers with "
+   ],
+   [
+    "send_msg_to_user(\"$2.56 - $649.99\")",
+    ""
+   ]
+  ],
+  "sibling_task": 126
+ },
+ {
+  "site": "shopping",
+  "task_id": 125,
+  "etype": "must",
+  "intent": "What is the price range of teeth grinding mouth guard in the One Stop Market?",
+  "refs": {
+   "must_include": [
+    "1.46",
+    "85"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Read visible endpoint listings"
+  ],
+  "retrieved_lessons": {
+   "Read visible endpoint listings": "Scroll or load far enough to expose the product grid, then copy the complete displayed price and verify the product is a genuine match rather than a near-identical accessory or variant. Inspect every row tied at the endp"
+  },
+  "nomem_answer": "$14.99",
+  "withmem_answer": "$10.99–$89.00",
+  "nomem_trace": [
+   [
+    "fill('272', 'teeth grinding mouth guard')",
+    "I need search for the specified product and inspect all matching results to determine the minimum and maximum "
+   ],
+   [
+    "click('277')",
+    "The query is entered but the homepage results have not updated; I need submit the search to view the matching "
+   ],
+   [
+    "select_option('1387', 'Price')",
+    "There are 4,944 results, so I should use price sorting to identify the minimum and maximum rather than page th"
+   ],
+   [
+    "click('276')",
+    "Sorting exposed unrelated keyword matches because the basic search uses broad matching. I need narrow the cata"
+   ],
+   [
+    "fill('1372', 'teeth grinding mouth guard')",
+    "The Advanced Search page provides a Product Name field, which is the appropriate way to restrict matches to pr"
+   ],
+   [
+    "click('1404')",
+    "The Product Name field contains the exact requested phrase, so I need submit the advanced search and inspect t"
+   ],
+   [
+    "send_msg_to_user(\"$14.99\")",
+    ""
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "fill('332', 'teeth grinding mouth guard')",
+    "The site search is the cheapest way to locate all matching teeth grinding mouth guards, after which I can insp"
+   ],
+   [
+    "click('337')",
+    "The query is entered but the page still shows the homepage showcase, so I need to execute the search before in"
+   ],
+   [
+    "select_option('1447', 'Price')",
+    "The result set has 4,944 items, so paging through it manually is impractical. Sorting by price lets me verify "
+   ],
+   [
+    "fill('333', '\"teeth grinding mouth guard\"')",
+    "Sorting exposed unrelated keyword matches, so the current endpoints do not establish the range for the actual "
+   ],
+   [
+    "keyboard_press('ControlOrMeta+a')",
+    "The search field now contains a malformed concatenation rather than the intended exact phrase. I need to selec"
+   ],
+   [
+    "fill('333', '\"teeth grinding mouth guard\"')",
+    "The entire malformed query is selected, so I can now replace it cleanly with the exact quoted phrase and then "
+   ],
+   [
+    "click('338')",
+    "The exact quoted phrase is now cleanly entered, but the results still reflect the old broad query. I need to s"
+   ],
+   [
+    "send_msg_to_user(\"$10.99–$89.00\")",
+    ""
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "fill('272', 'Canon photo printer')",
+    "I need search for Canon photo printer products, then inspect all result pages to identify the minimum and maxi"
+   ],
+   [
+    "click('277')",
+    "The search query is entered but results have not yet been submitted; the current products are unrelated homepa"
+   ],
+   [
+    "click('277')",
+    "The general search returned 6,444 broad OR-matched results, including unrelated accessories, so sorting the en"
+   ],
+   [
+    "fill('1372', 'Canon photo printer')",
+    "The Advanced Search form allows restricting the query to Product Name, which should avoid the broad OR-matched"
+   ],
+   [
+    "click('1404')",
+    "The Product Name field contains “Canon photo printer,” and the Advanced Search button is ready. I should submi"
+   ],
+   [
+    "click('1367')",
+    "The exact product-name phrase returned no items, so I need broaden the Product Name criterion to “Canon” and t"
+   ],
+   [
+    "fill('1372', 'Canon')",
+    "The Advanced Search form is visible again with the prior exact phrase still in Product Name. I should replace "
+   ],
+   [
+    "click('1404')",
+    "The Product Name field now contains “Canon.” I should submit this broader advanced search, then inspect the fu"
+   ],
+   [
+    "click('1381')",
+    "The broader Canon search succeeded and returned 456 items, too many unrelated products. Searching Product Name"
+   ],
+   [
+    "fill('1372', 'photo printer')",
+    "The Advanced Search form still has “Canon” in Product Name because the previous click targeted the Description"
+   ],
+   [
+    "click('1404')",
+    "The Product Name field is now set to “photo printer.” I should submit the advanced search, then inspect the en"
+   ],
+   [
+    "select_option('1808', '36')",
+    "There are 33 matching products across three pages, and page 1 already shows several Canon photo printers with "
+   ],
+   [
+    "send_msg_to_user(\"$2.56 - $649.99\")",
+    ""
+   ]
+  ],
+  "sibling_task": 126
+ },
+ {
+  "site": "shopping",
+  "task_id": 141,
+  "etype": "must",
+  "intent": "How much I spent on food-related shopping during March 2023",
+  "refs": {
+   "must_include": [
+    "47.41"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Open the complete order-history table"
+  ],
+  "retrieved_lessons": {
+   "Open the complete order-history table": "From “My Account,” open “My Orders,” then use the items-per-page selector to show enough rows to cover the history or traverse every pagination page. Confirm the “Orders” table exposes the “Date,” “Order Total,” and “Sta"
+  },
+  "nomem_answer": "$24.42",
+  "withmem_answer": "$34.42",
+  "nomem_trace": [
+   [
+    "click('227')",
+    "I need inspect the signed-in account’s order history and identify all March 2023 purchases that are food-relat"
+   ],
+   [
+    "click('1500')",
+    "The recent-orders table shows one March 2023 order, but I must inspect the complete order history and the item"
+   ],
+   [
+    "click('1421')",
+    "There are exactly two March 2023 orders visible: #000000180 for $65.32 and #000000166 for $17.99. I need inspe"
+   ],
+   [
+    "go_back()",
+    "Order #000000180 contains one actual food item, Jiffy Corn Muffin Cornbread Mix, with a subtotal of $11.43. Th"
+   ],
+   [
+    "click('1432')",
+    "I’ve confirmed the full order list has only two March 2023 orders. Order #000000180 contributed $11.43 in food"
+   ],
+   [
+    "send_msg_to_user(\"$24.42\")",
+    "The complete March 2023 order history contains two food purchases: Jiffy Corn Muffin Cornbread Mix at $11.43 a"
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('227')",
+    "I need inspect the complete order history for March 2023, then determine which purchases were food-related and"
+   ],
+   [
+    "click('1560')",
+    "The Recent Orders table is only partial. I need open the complete My Orders history and inspect every March 20"
+   ],
+   [
+    "click('1481')",
+    "The complete order table is sorted by date and shows exactly two March 2023 orders before February begins: ord"
+   ],
+   [
+    "click('1602')",
+    "Order 000000180 contains one clearly food-related item, Jiffy Corn Muffin Cornbread Mix, with a subtotal of $1"
+   ],
+   [
+    "click('1492')",
+    "The complete history shows only two March 2023 orders. I confirmed order 000000180 includes $11.43 of food-rel"
+   ],
+   [
+    "send_msg_to_user(\"$34.42\")",
+    "The complete March 2023 history has two food-related orders. Order 000000180 totaled $16.43 ($11.43 plus $5.00"
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('227')",
+    "The relevant purchase history should be under the signed-in user's account, so I will open My Account."
+   ],
+   [
+    "click('1416')",
+    "The Recent Orders table only shows 2023 orders, so I need the complete order history to find every March 2022 "
+   ],
+   [
+    "select_option('1509', '50')",
+    "The order history has 37 total entries and is sorted newest first. To inspect the complete list and identify e"
+   ],
+   [
+    "click('1773')",
+    "March 2022 has three orders, but two are canceled and therefore were not spending. I need inspect the sole com"
+   ],
+   [
+    "send_msg_to_user(\"$52.35\")",
+    "The only completed March 2022 order contains food products, and its Grand Total, including shipping and handli"
+   ]
+  ],
+  "sibling_task": 145
+ },
+ {
+  "site": "shopping",
+  "task_id": 142,
+  "etype": "must",
+  "intent": "How much I spent on hair care and hair style shopping during Jan 2023",
+  "refs": {
+   "must_include": [
+    "95.23"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Use the complete order history"
+  ],
+  "retrieved_lessons": {
+   "Use the complete order history": "Open “My Account,” then select “My Orders.” Inspect every page of the “Orders” table, using the displayed dates to cover the full requested interval and checking the adjacent older and newer rows; do not claim the number"
+  },
+  "nomem_answer": "$80.50",
+  "withmem_answer": "$80.50",
+  "nomem_trace": [
+   [
+    "click('227')",
+    "The requested amount should be determined from Emma Lopez’s account order history, so I’ll open My Account."
+   ],
+   [
+    "click('1500')",
+    "The recent-orders table does not include January, so I need to open the complete order history and inspect eve"
+   ],
+   [
+    "select_option('1509', '50')",
+    "There are 37 orders across four pages, and January orders will be later in the descending list. Showing 50 ord"
+   ],
+   [
+    "click('1487')",
+    "The full history shows exactly two January 2023 orders, both complete: 000000148 and 000000163. I need to insp"
+   ],
+   [
+    "click('1487')",
+    "Order 000000148 contains only an artificial topiary tree and speakers, so none of its items count as hair care"
+   ],
+   [
+    "click('1492')",
+    "Returning from order 000000148 reset the list to 10 items per page. The other January 2023 order, 000000163, s"
+   ],
+   [
+    "click('1388')",
+    "Order 000000163 dated 1/16/23 is visible on the current page. I need to open its details and identify the hair"
+   ],
+   [
+    "send_msg_to_user(\"$80.50\")",
+    "The January 2023 hair care and hair style items are the conditioner ($50.52), crystal headbands ($11.99), and "
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('227')",
+    "The task requires reviewing the complete order history for January 2023 and summing qualifying hair care and h"
+   ],
+   [
+    "click('1560')",
+    "The account page only shows recent orders, which is insufficient. The “My Orders” link opens the complete orde"
+   ],
+   [
+    "select_option('1569', '50')",
+    "The table has 37 total orders and can display 50 per page, which is the cheapest way to expose the complete hi"
+   ],
+   [
+    "click('1547')",
+    "The complete history shows exactly two January 2023 orders, on 1/29 and 1/16, with adjacent February and Decem"
+   ],
+   [
+    "click('1547')",
+    "The January 29 order contains only an artificial topiary tree and outdoor speakers, so none of its item subtot"
+   ],
+   [
+    "select_option('1569', '50')",
+    "Returning from the order detail reset the table to 10 items per page. To inspect the January 16 order efficien"
+   ],
+   [
+    "click('1558')",
+    "The full 37-order history confirms January 16 is the only remaining January 2023 order to inspect. I should op"
+   ],
+   [
+    "send_msg_to_user(\"$80.50\")",
+    "The complete January 2023 history has two orders. The January 29 order had no qualifying items. In the January"
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('227')",
+    "The relevant purchase history should be under the signed-in user's account, so I will open My Account."
+   ],
+   [
+    "click('1416')",
+    "The Recent Orders table only shows 2023 orders, so I need the complete order history to find every March 2022 "
+   ],
+   [
+    "select_option('1509', '50')",
+    "The order history has 37 total entries and is sorted newest first. To inspect the complete list and identify e"
+   ],
+   [
+    "click('1773')",
+    "March 2022 has three orders, but two are canceled and therefore were not spending. I need inspect the sole com"
+   ],
+   [
+    "send_msg_to_user(\"$52.35\")",
+    "The only completed March 2022 order contains food products, and its Grand Total, including shipping and handli"
+   ]
+  ],
+  "sibling_task": 145
+ },
+ {
+  "site": "shopping",
+  "task_id": 143,
+  "etype": "must",
+  "intent": "How much I spent on home decoration shopping during 1/29/2023",
+  "refs": {
+   "must_include": [
+    "265.69"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Use the complete order history"
+  ],
+  "retrieved_lessons": {
+   "Use the complete order history": "Open “My Account,” then select “My Orders.” Inspect every page of the “Orders” table, using the displayed dates to cover the full requested interval and checking the adjacent older and newer rows; do not claim the number"
+  },
+  "nomem_answer": "$260.69",
+  "withmem_answer": "$260.69",
+  "nomem_trace": [
+   [
+    "click('227')",
+    "The requested amount should be derived from the signed-in user's order history. The relevant entry point is “M"
+   ],
+   [
+    "click('1500')",
+    "The recent-orders table does not reach 1/29/23, so I need to open the complete order history and inspect every"
+   ],
+   [
+    "select_option('1509', '50')",
+    "There are 37 orders total, and displaying all 50 on one page will let me find every order dated 1/29/23 and ve"
+   ],
+   [
+    "click('1487')",
+    "The complete list confirms there is exactly one order on 1/29/23, order 000000148. I need to open its details "
+   ],
+   [
+    "send_msg_to_user(\"$260.69\")",
+    "The only home-decoration item in the sole order dated January 29, 2023 is the artificial spiral topiary tree, "
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('227')",
+    "I need review the complete order history and identify all home decoration purchases on 1/29/2023, then total t"
+   ],
+   [
+    "click('1560')",
+    "The Recent Orders table is only partial and does not reach 1/29/2023. I need open the complete order history v"
+   ],
+   [
+    "select_option('1569', '50')",
+    "The full order history has 37 orders, and the target date is older than the rows currently shown. Showing 50 o"
+   ],
+   [
+    "click('1547')",
+    "The complete 37-order history is visible and shows exactly one order on 1/29/23: order 000000148 for $440.64. "
+   ],
+   [
+    "send_msg_to_user(\"$260.69\")",
+    ""
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('227')",
+    "The relevant purchase history should be under the signed-in user's account, so I will open My Account."
+   ],
+   [
+    "click('1416')",
+    "The Recent Orders table only shows 2023 orders, so I need the complete order history to find every March 2022 "
+   ],
+   [
+    "select_option('1509', '50')",
+    "The order history has 37 total entries and is sorted newest first. To inspect the complete list and identify e"
+   ],
+   [
+    "click('1773')",
+    "March 2022 has three orders, but two are canceled and therefore were not spending. I need inspect the sole com"
+   ],
+   [
+    "send_msg_to_user(\"$52.35\")",
+    "The only completed March 2022 order contains food products, and its Grand Total, including shipping and handli"
+   ]
+  ],
+  "sibling_task": 145
+ },
+ {
+  "site": "shopping",
+  "task_id": 147,
+  "etype": "must",
+  "intent": "What is the size configuration of the picture frame I bought 2022",
+  "refs": {
+   "must_include": [
+    "16x24"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Verify each qualifying order in detail"
+  ],
+  "retrieved_lessons": {
+   "Verify each qualifying order in detail": "Open each matching row through its “View Order” link and read the complete “Items Ordered” section and displayed totals, expanding or opening details if names are abbreviated. Enumerate every qualifying item/order, disti"
+  },
+  "nomem_answer": "",
+  "withmem_answer": "",
+  "nomem_trace": [
+   [
+    "click('227')",
+    "The requested information concerns a past purchase, so I need to open the signed-in user's account and inspect"
+   ],
+   [
+    "click('1500')",
+    "The account page only shows recent 2023 orders. I need the complete order history to locate the picture frame "
+   ],
+   [
+    "select_option('1509', '50')",
+    "The order history has 37 entries and is sorted newest first. To inspect all 2022 orders without paging and ens"
+   ],
+   [
+    "click('1619')",
+    "The full 2022 order list is visible, but product names are only available in each order’s detail view. A pictu"
+   ],
+   [
+    "go_back()",
+    "Order #000000185 contains a dress, not a picture frame. I need to return to the full order list and inspect th"
+   ],
+   [
+    "click('1520')",
+    "The $18.99 order was not the frame. A picture frame is likely another low-value completed 2022 order, and the "
+   ],
+   [
+    "go_back()",
+    "Order #000000184 contains a clapperboard, not a picture frame. I need to return to the full 2022 order list an"
+   ],
+   [
+    "click('1729')",
+    "The two cheapest completed 2022 orders checked so far were not the picture frame. The next-lowest completed or"
+   ],
+   [
+    "go_back()",
+    "Order #000000168 contains peanut puffs, not a picture frame. I need to return to the full 2022 order list and "
+   ],
+   [
+    "click('1542')",
+    "The three lowest-value completed 2022 orders checked were not the picture frame. The next-lowest uninspected c"
+   ],
+   [
+    "go_back()",
+    "Order #000000174 contains toothpaste and a brush/comb, not a picture frame. I need to return to the complete 2"
+   ],
+   [
+    "click('1674')",
+    "Four low-value 2022 orders have been ruled out. The next-lowest uninspected completed order is #000000165 for "
+   ],
+   [
+    "go_back()",
+    "Order #000000165 contains a lens filter and horseradish, not a picture frame. I need to return to the full 202"
+   ],
+   [
+    "click('1663')",
+    "The next-lowest uninspected completed 2022 order is #000000155 for $38.99, a plausible total for a picture fra"
+   ],
+   [
+    "go_back()",
+    "Order #000000155 contains makeup tools and a mask, not a picture frame. I need to return to the full 2022 orde"
+   ],
+   [
+    "click('1696')",
+    "Six low-value completed orders have been ruled out. The next-lowest uninspected completed 2022 order is #00000"
+   ],
+   [
+    "go_back()",
+    "Order #000000167 contains cosmetics, compression shorts, and orthodontic chewies, not a picture frame. I need "
+   ],
+   [
+    "click('1575')",
+    "The next-lowest uninspected completed 2022 order is #000000183 for $51.94, a plausible total for a picture fra"
+   ],
+   [
+    "go_back()",
+    "Order #000000183 contains chocolate and olive oil, not a picture frame. I need to return to the full 2022 orde"
+   ],
+   [
+    "click('1773')",
+    "Eight low-value completed 2022 orders have been ruled out. The next-lowest uninspected completed order is #000"
+   ],
+   [
+    "go_back()",
+    "Order #000000169 contains food and beverages, not a picture frame. I need to return to the full 2022 order lis"
+   ],
+   [
+    "click('1531')",
+    "The next-lowest uninspected completed 2022 order is #000000162 for $53.29, so I should inspect its order detai"
+   ],
+   [
+    "go_back()",
+    "Order #000000162 contains bread, not a picture frame. I need to return to the complete 2022 order list and con"
+   ],
+   [
+    "click('1740')",
+    "The completed 2022 orders through $53.29, including the three lowest, have already been checked and ruled out."
+   ],
+   [
+    "go_back()",
+    "Order #000000159 contains pancake mix and hot sauce, not a picture frame. I need to return to the full 2022 or"
+   ],
+   [
+    "click('1509')",
+    "The checked completed 2022 orders include all totals through $77.96. The next-lowest uninspected completed ord"
+   ],
+   [
+    "go_back()",
+    "Order #000000154 contains popcorn, a wall hook, a gift basket, and a coffee table, not a picture frame. I need"
+   ],
+   [
+    "click('1564')",
+    "All completed 2022 orders through $97.15 have been checked except #000000184, #000000174, #000000185, and #000"
+   ],
+   [
+    "go_back()",
+    "Order #000000171 contains hair clippers, slimming gel, and a bath pillow, not a picture frame. I need to retur"
+   ],
+   [
+    "click('1641')",
+    "The previous search ruled out completed 2022 orders through $133.07. The next uninspected completed 2022 order"
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('227')",
+    "I need inspect the account’s order history and open the relevant 2022 picture-frame order to read its exact si"
+   ],
+   [
+    "click('1476')",
+    "The Recent Orders table only shows 2023 orders, so I need open the complete order history to locate every 2022"
+   ],
+   [
+    "select_option('1569', '50')",
+    "The order list is chronological with 37 total entries, and the page-size control can show all 37 at once. I sh"
+   ],
+   [
+    "click('1679')",
+    "The order history itself does not show product names, so I need inspect 2022 order details. A picture frame is"
+   ],
+   [
+    "click('1529')",
+    "Order #000000185 contains a dress, not a picture frame. I need return to the complete orders list and continue"
+   ],
+   [
+    "select_option('1569', '50')",
+    "The failed click targeted the wrong element ID after returning; the complete-list setting also did not persist"
+   ],
+   [
+    "click('1580')",
+    "The full 2022 list is visible. Order #000000184 on 12/14/22 has a low total of $20.49, which is plausible for "
+   ],
+   [
+    "click('1524')",
+    "Order #000000184 contains a clapperboard, not a picture frame. I need return to My Orders, show the full list "
+   ],
+   [
+    "select_option('1569', '50')",
+    "The order list reverted to 10 items after returning. I need show all 37 orders again, then continue opening th"
+   ],
+   [
+    "click('1789')",
+    "The two lowest completed 2022 orders already checked were not the picture frame. The next-lowest completed 202"
+   ],
+   [
+    "click('1524')",
+    "Order #000000168 contains peanut puffs, not a picture frame. I need return to the order list, restore the full"
+   ],
+   [
+    "select_option('1569', '50')",
+    "I am back on the orders list with only 10 rows shown. I need restore the 50-item view, then inspect the remain"
+   ],
+   [
+    "click('1602')",
+    "The complete 2022 list is visible, and orders #000000185, #000000184, and #000000168 have already been ruled o"
+   ],
+   [
+    "click('1542')",
+    "Order #000000174 contains toothpaste and a hair brush, so it is not the picture-frame order. I need return to "
+   ],
+   [
+    "select_option('1569', '50')",
+    "The order list has reverted to 10 items after returning. I need restore the 50-item view, then inspect the rem"
+   ],
+   [
+    "click('1734')",
+    "The remaining low-value completed 2022 orders are the most efficient candidates. Order #000000165 for $36.99 l"
+   ],
+   [
+    "click('1542')",
+    "Order #000000165 contains a polarizing lens filter and horseradish, not a picture frame. I need return to the "
+   ],
+   [
+    "select_option('1569', '50')",
+    "The list reverted to 10 items after returning. I need restore the 50-item view and continue checking all unrev"
+   ],
+   [
+    "click('1723')",
+    "The complete 2022 list is visible. Orders #000000185, #000000184, #000000168, #000000174, and #000000165 have "
+   ],
+   [
+    "click('1545')",
+    "Order #000000155 contains a makeup blender and a rhinestone mask, not a picture frame. I need return to the or"
+   ],
+   [
+    "select_option('1569', '50')",
+    "The order list has reverted to 10 items after returning. I need restore the 50-item view and continue inspecti"
+   ],
+   [
+    "click('1756')",
+    "The full 2022 list is visible. Previously checked orders have been ruled out; the next-lowest unreviewed compl"
+   ],
+   [
+    "click('1571')",
+    "Order #000000167 contains lip glaze, compression shorts, and orthodontic chewies, not a picture frame. I need "
+   ],
+   [
+    "select_option('1569', '50')",
+    "The order list reverted to 10 items after returning. I need restore the 50-item view and continue inspecting a"
+   ],
+   [
+    "click('1635')",
+    "The full 2022 list is visible. After ruling out the previously inspected orders, the lowest-value unreviewed c"
+   ],
+   [
+    "click('1542')",
+    "Order #000000183 contains an Easter egg and olive oil, not a picture frame. I need return to the orders list, "
+   ],
+   [
+    "select_option('1569', '50')",
+    "The order list has reverted to 10 rows. I need restore the 50-item view, then continue inspecting the remainin"
+   ],
+   [
+    "click('1833')",
+    "The full 2022 order list is visible, and the previously checked orders have been ruled out. The lowest-value u"
+   ],
+   [
+    "click('1545')",
+    "Order #000000169 contains roast beef meals and Orangina, not a picture frame. I need return to the orders list"
+   ],
+   [
+    "select_option('1569', '50')",
+    "The list reverted to 10 rows after returning from order #000000169. I need restore the 50-item view and contin"
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('227')",
+    "The requested information should be in the signed-in account’s order history. I’ll open My Account to locate t"
+   ],
+   [
+    "click('1416')",
+    "The recent orders only show 2023 entries, so I need to open the complete order history and locate all Septembe"
+   ],
+   [
+    "select_option('1509', '50')",
+    "The order list has 37 total orders and can display 50 per page, which will let me inspect the complete history"
+   ],
+   [
+    "click('1630')",
+    "There are exactly two September 2022 orders, dated 9/29/22 and 9/1/22. I need inspect their order details to i"
+   ],
+   [
+    "go_back()",
+    "The September 29 order does not contain a picture frame, so the relevant purchase must be in the other Septemb"
+   ],
+   [
+    "click('1641')",
+    "The complete order list confirms the other September 2022 order is dated 9/1/22. I’ll open its details and ins"
+   ],
+   [
+    "send_msg_to_user(\"Mist 16*24\")",
+    ""
+   ]
+  ],
+  "sibling_task": 148
+ },
+ {
+  "site": "shopping",
+  "task_id": 163,
+  "etype": "must",
+  "intent": "What are the main criticisms of this product? Please extract the relevant sentences.",
+  "refs": {
+   "must_include": [
+    "I ordered the 16gb but I only got 14 gigs even though I formatted the card",
+    "The memory card is kind of slow on games and downloads",
+    "No original packaging It's used and the previous owners data has not been erased",
+    "The product is a legit sony hardware that have been owned by someone else before",
+    "The media could not be loaded",
+    "I could not format the card so I wasn’t able to use it for my VITA"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Open and paginate the product reviews"
+  ],
+  "retrieved_lessons": {
+   "Open and paginate the product reviews": "Select the visible “Reviews (count)” tab, then inspect every displayed review and follow the visible page/next controls until no review pages remain. After each action, ensure the page observation visibly contains the re"
+  },
+  "nomem_answer": "The Sony branding is simply photoshopped off of the store picture. My Vita told me to format the memory card before usin",
+  "withmem_answer": "",
+  "nomem_trace": [
+   [
+    "click('1691')",
+    "The page shows 12 reviews, but their content is hidden in the collapsed “Reviews (12)” tab. I need to open it "
+   ],
+   [
+    "click('2105')",
+    "Page 1 shows 10 of 12 reviews and includes criticisms, but the task requires checking the complete review list"
+   ],
+   [
+    "click('2200')",
+    "Page 2 contains two criticisms: the card appeared used and required formatting, with unknown prior contents; a"
+   ],
+   [
+    "send_msg_to_user(\"The Sony branding is simply photoshopped o",
+    ""
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('1751')",
+    "The product has 12 reviews, and the Reviews tab is visible. I need open it and inspect every review page befor"
+   ],
+   [
+    "click('2165')",
+    "Page 1 shows 10 of 12 reviews and a visible Page 2 link. I need inspect the remaining two reviews before extra"
+   ],
+   [
+    "click('2256')",
+    "I have verified page 2, which contains two criticisms: the card appeared previously used and required formatti"
+   ],
+   [
+    "click('2544')",
+    "I have reviewed page 1, but the task requires the exact relevant sentences from all 12 reviews. The prior hist"
+   ],
+   [
+    "click('2639')",
+    "Page 2 provides two exact criticism sentences. To extract all main criticisms across the complete review list,"
+   ],
+   [
+    "click('2923')",
+    "Page 1 contains several relevant criticism sentences, but I need verify the exact wording of the two remaining"
+   ],
+   [
+    "click('3018')",
+    "Page 2 confirms the exact criticisms about the card being previously used and needing formatting, and a defect"
+   ],
+   [
+    "click('3302')",
+    "Page 1 provides the exact criticism sentences about reduced usable capacity, slow performance, absent original"
+   ],
+   [
+    "click('3397')",
+    "Page 2 confirms two exact criticism sentences. I need revisit page 1 and read the exact relevant sentences the"
+   ],
+   [
+    "click('3681')",
+    "Page 1 is fully visible and I have recorded its verbatim criticism sentences. I still need the exact wording o"
+   ],
+   [
+    "click('3776')",
+    "Page 2 shows the exact two remaining criticism sentences. I need return to page 1 once more so the exact wordi"
+   ],
+   [
+    "click('4060')",
+    "I have the exact criticism sentences from page 1, while the prior history does not preserve page 2’s wording v"
+   ],
+   [
+    "click('4155')",
+    "Page 2 confirms the exact criticisms about prior use, required formatting, and a defective unusable card. I ne"
+   ],
+   [
+    "click('4439')",
+    "I have the exact criticism sentences from the 10 visible reviews on page 1. To ensure the extraction covers al"
+   ],
+   [
+    "click('4534')",
+    "Page 2 verifies the final two reviews verbatim. I now need return to page 1 to read and compile its exact crit"
+   ],
+   [
+    "click('4818')",
+    "I have verified all 10 reviews on page 1 and identified the relevant criticism sentences. To include the remai"
+   ],
+   [
+    "click('4913')",
+    "Page 2 shows two exact criticism sentences, but the current tree does not include page 1’s verbatim review tex"
+   ],
+   [
+    "click('5197')",
+    "I have recorded the relevant criticism sentences from page 1. To verify the complete review set and extract th"
+   ],
+   [
+    "click('5292')",
+    "Page 2 confirms the criticisms that the card appeared previously used, required formatting, contained unknown "
+   ],
+   [
+    "click('5576')",
+    "Page 1 shows the exact criticism sentences about reduced capacity, slow performance, missing original packagin"
+   ],
+   [
+    "click('5671')",
+    "Page 2 provides the final two criticism sentences. I need return to page 1 to verify the exact wording of the "
+   ],
+   [
+    "click('5955')",
+    "Page 1 provides the exact criticism sentences concerning reduced usable capacity, slow performance, missing or"
+   ],
+   [
+    "click('6050')",
+    "Page 2 confirms the remaining criticisms verbatim. I need inspect page 1 one final time so I can extract all r"
+   ],
+   [
+    "click('6334')",
+    "Page 1 provides the exact relevant criticism sentences from 10 reviews. To include all 12 reviews and extract "
+   ],
+   [
+    "click('6429')",
+    "Page 2’s relevant criticism sentences are verified. I need return to page 1 and read its verbatim review text "
+   ],
+   [
+    "click('6713')",
+    "Page 1’s criticism sentences are visible and verified. I need open page 2 to capture the exact wording of the "
+   ],
+   [
+    "click('6808')",
+    "Page 2 confirms the final criticisms verbatim: prior use with existing data, required formatting, and a defect"
+   ],
+   [
+    "click('7092')",
+    "I have verified all 10 reviews on page 1 and recorded their relevant criticism sentences. I need inspect page "
+   ],
+   [
+    "click('7187')",
+    "Page 2 confirms the final criticisms verbatim. I need return to page 1 to retrieve the exact wording of all re"
+   ],
+   [
+    "click('7471')",
+    "Page 1 provides the exact criticism sentences about reduced usable capacity, slow performance, missing origina"
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('1554')",
+    "The product page shows there are 3 reviews, but their text is hidden in the collapsed “Reviews (3)” tab. I nee"
+   ],
+   [
+    "send_msg_to_user(\"DryUneven color\")",
+    ""
+   ]
+  ],
+  "sibling_task": 164
+ },
+ {
+  "site": "shopping",
+  "task_id": 165,
+  "etype": "must",
+  "intent": "What are the main criticisms of this product? Please extract the relevant sentences.",
+  "refs": {
+   "must_include": [
+    "The 39 was too small. I am afraid the 40 will be too big",
+    "I was very sad when the shoe rubbed up against my baby toe",
+    "I had to return them because I knew in time it would tear up my feet",
+    "The problem is that the strap is made of some really stiff leather and is painful to my heel",
+    "The front is also uncomfortably tight",
+    "The Dansko's were similar (not as bad) and loosened up over time"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Open and paginate the product reviews"
+  ],
+  "retrieved_lessons": {
+   "Open and paginate the product reviews": "Select the visible “Reviews (count)” tab, then inspect every displayed review and follow the visible page/next controls until no review pages remain. After each action, ensure the page observation visibly contains the re"
+  },
+  "nomem_answer": "The 39 was too small. I am afraid the 40 will be too big. I was very sad when the shoe rubbed up against my baby toe. I ",
+  "withmem_answer": "The 39 was too small. I am afraid the 40 will be too big. I was very sad when the shoe rubbed up against my baby toe. I ",
+  "nomem_trace": [
+   [
+    "click('1905')",
+    "The product page shows 4 reviews, but their text is hidden in the collapsed “Reviews (4)” tab. I need to open "
+   ],
+   [
+    "send_msg_to_user(\"The 39 was too small. I am afraid the 40 w",
+    ""
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('1965')",
+    "The product has a visible “Reviews (4)” tab, and the task asks for criticisms extracted from the reviews. I ne"
+   ],
+   [
+    "send_msg_to_user(\"The 39 was too small. I am afraid the 40 w",
+    ""
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('1554')",
+    "The product page shows there are 3 reviews, but their text is hidden in the collapsed “Reviews (3)” tab. I nee"
+   ],
+   [
+    "send_msg_to_user(\"DryUneven color\")",
+    ""
+   ]
+  ],
+  "sibling_task": 164
+ },
+ {
+  "site": "shopping",
+  "task_id": 167,
+  "etype": "must",
+  "intent": "What are the main criticisms of this product? Please extract the relevant sentences.",
+  "refs": {
+   "must_include": [
+    "The wireless connection works on a whim (about 40% of the time I've owned it)",
+    "It seems to constantly run out of ink",
+    "Cartridge prices are less than some printers I've had",
+    "This printer seems to have more reasons NOT to work (none that are findable or correctable) Ex: error boxes saying that it's out of paper when it automatically switches to photo printing for some reason",
+    "Scanner is as slow as my first scanner I ever owned in the mid-90's",
+    "For the $176 I paid, there isn't even a fax component on it. I guess the \"PLUS\" part of it's name is in reference to the migraines it causes when you can't figure out the new reason why it's not working for the 10th time in the past 2 months."
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Extract criticisms only from observed review text"
+  ],
+  "retrieved_lessons": {
+   "Extract criticisms only from observed review text": "Read every displayed review completely, expand truncated text, and copy each criticism as a full visible sentence without inventing missing words. Include all qualifying reviews, keep near-identical complaints distinct w"
+  },
+  "nomem_answer": "The wireless connection works on a whim (about 40% of the time I've owned it). It seems to constantly run out of ink. Ca",
+  "withmem_answer": "The wireless connection works on a whim (about 40% of the time I've owned it). It seems to constantly run out of ink. Ca",
+  "nomem_trace": [
+   [
+    "click('1527')",
+    "The page shows two reviews, but their text is not yet visible. I need to open the Reviews tab and inspect the "
+   ],
+   [
+    "send_msg_to_user(\"The wireless connection works on a whim (a",
+    ""
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('1587')",
+    "The product page shows there are exactly 2 reviews, but their text is not currently visible because the Review"
+   ],
+   [
+    "send_msg_to_user(\"The wireless connection works on a whim (a",
+    ""
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('1554')",
+    "The product page shows there are 3 reviews, but their text is hidden in the collapsed “Reviews (3)” tab. I nee"
+   ],
+   [
+    "send_msg_to_user(\"DryUneven color\")",
+    ""
+   ]
+  ],
+  "sibling_task": 164
+ },
+ {
+  "site": "shopping",
+  "task_id": 226,
+  "etype": "must",
+  "intent": "What is the price range for products from Amazon basic?",
+  "refs": {
+   "must_include": [
+    "5.49",
+    "375.19"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Verify both visible price endpoints"
+  ],
+  "retrieved_lessons": {
+   "Verify both visible price endpoints": "After sorting by price, inspect every qualifying product needed to establish the lowest and highest displayed current prices, using the sort-direction control or final results page for the opposite endpoint. Confirm each"
+  },
+  "nomem_answer": "$5.49 - $508.37",
+  "withmem_answer": "$0.01 - $28,942.99",
+  "nomem_trace": [
+   [
+    "fill('272', 'Amazon basic')",
+    "The site has a search field that can find products matching the requested brand. I’ll search for “Amazon basic"
+   ],
+   [
+    "click('277')",
+    "The query is entered but results have not been submitted; the current product list is unrelated. I’ll click Se"
+   ],
+   [
+    "select_option('1387', 'Price')",
+    "The complete result set has 7,332 items, so paging manually is impractical. Sorting by Price lets me verify th"
+   ],
+   [
+    "click('276')",
+    "The current results are not limited to Amazon Basics products, so the displayed price endpoints are invalid. A"
+   ],
+   [
+    "fill('1372', 'Amazon basic')",
+    "Advanced Search has no brand field, but Product Name can restrict results to items containing “Amazon basic,” "
+   ],
+   [
+    "click('1404')",
+    "The Product Name field contains “Amazon basic.” I’ll submit the advanced search, then sort the resulting full "
+   ],
+   [
+    "select_option('1396', 'Price')",
+    "The advanced search returned 38 matching products across four pages. Sorting by Price will order the entire re"
+   ],
+   [
+    "click('1399')",
+    "The results are sorted by price ascending, confirming the minimum price is $5.49. I’ll switch to descending or"
+   ],
+   [
+    "send_msg_to_user(\"$5.49 - $508.37\")",
+    ""
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "fill('332', 'Amazon basic')",
+    "The site has a search box that can retrieve all matching Amazon basic products, after which I can sort and ins"
+   ],
+   [
+    "click('337')",
+    "The search term is entered and an autocomplete suggestion is open, but the displayed products are still the ho"
+   ],
+   [
+    "select_option('1447', 'Price')",
+    "The current result set contains 7,332 matches, so paging through all results is unnecessary if I sort by price"
+   ],
+   [
+    "click('1450')",
+    "Sorting by Price currently shows the descending endpoint, with the highest displayed current price at $28,942."
+   ],
+   [
+    "click('1450')",
+    "The ascending sort is confirmed by the visible first products at $0.01, establishing the minimum. The previous"
+   ],
+   [
+    "send_msg_to_user(\"$0.01 - $28,942.99\")",
+    "The price-sorted results verify a minimum displayed price of $0.01 and a maximum of $28,942.99, so the complet"
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "fill('272', 'EYZUTAK')",
+    "I need search for the exact brand, then inspect the complete result list and identify the minimum and maximum "
+   ],
+   [
+    "click('277')",
+    "The brand term is entered and an exact autocomplete option is visible, but the displayed products are still th"
+   ],
+   [
+    "send_msg_to_user(\"$9.99 - $9.99\")",
+    ""
+   ]
+  ],
+  "sibling_task": 227
+ },
+ {
+  "site": "shopping",
+  "task_id": 228,
+  "etype": "must",
+  "intent": "What is the price range for products from sephora?",
+  "refs": {
+   "must_include": [
+    "18.18",
+    "94.99"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Verify both visible price endpoints"
+  ],
+  "retrieved_lessons": {
+   "Verify both visible price endpoints": "After sorting by price, inspect every qualifying product needed to establish the lowest and highest displayed current prices, using the sort-direction control or final results page for the opposite endpoint. Confirm each"
+  },
+  "nomem_answer": "$10.99–$94.99",
+  "withmem_answer": "$10.99 - $94.99",
+  "nomem_trace": [
+   [
+    "fill('272', 'sephora')",
+    "I need search the catalog for “sephora,” then inspect all result pages to identify the minimum and maximum pri"
+   ],
+   [
+    "click('277')",
+    "The query is entered, but the page still shows the default product showcase rather than search results. I need"
+   ],
+   [
+    "send_msg_to_user(\"$10.99–$94.99\")",
+    "All 8 search results are visible on one page. Their prices range from the minimum of $10.99 to the maximum of "
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "fill('332', 'sephora')",
+    "I need retrieve all products associated with “sephora” and verify the minimum and maximum displayed prices. Th"
+   ],
+   [
+    "click('337')",
+    "The term is entered but the search results have not yet been submitted; the current product showcase is unrela"
+   ],
+   [
+    "select_option('1445', 'Price')",
+    "The page shows all 8 search results, but to verify the price endpoints rather than infer them from relevance o"
+   ],
+   [
+    "send_msg_to_user(\"$10.99 - $94.99\")",
+    "All 8 search results are visible on one page and sorted by price descending. The highest displayed price is $9"
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "fill('272', 'EYZUTAK')",
+    "I need search for the exact brand, then inspect the complete result list and identify the minimum and maximum "
+   ],
+   [
+    "click('277')",
+    "The brand term is entered and an exact autocomplete option is visible, but the displayed products are still th"
+   ],
+   [
+    "send_msg_to_user(\"$9.99 - $9.99\")",
+    ""
+   ]
+  ],
+  "sibling_task": 227
+ },
+ {
+  "site": "shopping",
+  "task_id": 279,
+  "etype": "must",
+  "intent": "Provide me with the complete names of Bluetooth headphones from Sony, and also share the price range for the available models",
+  "refs": {
+   "must_include": [
+    "SONY WH1000XM3 Bluetooth Wireless Noise Canceling Headphones Silver WH-1000XM3/S (Renewed)",
+    "Sony WH-CH710N/H Wireless Bluetooth Noise Cancelling Headphones",
+    "Sony WH-1000XM3B Wireless Bluetooth Noise-Canceling Over-Ear Headphones (Black) Basic Headphone Bundle Kit with Stylus",
+    "Sony Wireless Headphones WH-CH510: Wireless Bluetooth On-Ear Headset with Mic for Phone-Call, Black",
+    "Sony WHCH710N Wireless Bluetooth Noise Canceling Over-The-Ear Headphones (Black) with Kratos 18W PD Two-Port Power Adapter and Kratos 6-Feet Nylon Braided USB-C Cable Bundle (3 Items)",
+    "Sony WI-SP500 Wireless in-Ear Sports Headphones, White (WISP500/W)",
+    "Sony WI-SP510 Extra BASS Wireless in-Ear Headset/Headphones with mic for Phone Call Sports IPX5 Bluetooth, Black (WISP510/B)",
+    "Sony MDRAS600BT Active Sports Bluetooth Headset (Black)",
+    "Sony WH-1000XM4 Wireless Noise Canceling Over-Ear Headphones (Black) with Sony WLA-NS7 Wireless TV Adapter Bundle (2 Items)",
+    "Sony WI-C300 Wireless In-Ear Headphones, Red (WIC300/R)",
+    "Sony XB950N1 Extra Bass Wireless Noise Canceling Headphones, Black",
+    "SONY - H900N Hi-Res Noise Cancelling Wireless Headphone Grayish Black Renewed",
+    "18.99",
+    "406"
+   ]
+  },
+  "same_tmpl_success_exists": false,
+  "retrieved_titles": [
+   "Verify both visible price endpoints"
+  ],
+  "retrieved_lessons": {
+   "Verify both visible price endpoints": "After sorting by price, inspect every qualifying product needed to establish the lowest and highest displayed current prices, using the sort-direction control or final results page for the opposite endpoint. Confirm each"
+  },
+  "nomem_answer": "Sony MDRAS600BT Active Sports Bluetooth Headset (Black), Sony WH-1000XM3B Wireless Bluetooth Noise-Canceling Over-Ear He",
+  "withmem_answer": "Sony MDRAS600BT Active Sports Bluetooth Headset (Black), Sony WH-1000XM3B Wireless Bluetooth Noise-Canceling Over-Ear He",
+  "nomem_trace": [
+   [
+    "fill('272', 'Bluetooth headphones')",
+    "The search field is available and is the most direct way to find all relevant Bluetooth headphone products bef"
+   ],
+   [
+    "click('277')",
+    "The query is entered but results have not yet loaded; the page still shows generic product showcases. The next"
+   ],
+   [
+    "fill('273', 'Sony Bluetooth headphones')",
+    "The broad search has 4,473 results, so paging through it is impractical. Refining the query to “Sony Bluetooth"
+   ],
+   [
+    "keyboard_press('ControlOrMeta+a')",
+    "The search query was appended to the existing text instead of replacing it, so it currently reads “Bluetooth h"
+   ],
+   [
+    "fill('273', 'Sony Bluetooth headphones')",
+    "The search field still contains the concatenated query, but it is focused and its contents were just selected."
+   ],
+   [
+    "keyboard_press('Enter')",
+    "The refined query is correctly entered and focused, while the displayed results are still for the old broad qu"
+   ],
+   [
+    "click('277')",
+    "The current search uses broad full-text matching and returns 5,578 items, including irrelevant adapters and ac"
+   ],
+   [
+    "fill('1372', 'Sony')",
+    "Advanced Search allows targeted field matching. Entering “Sony” in Product Name should return products whose c"
+   ],
+   [
+    "click('1404')",
+    "The Product Name field contains “Sony.” Submitting the advanced search will produce a targeted result list tha"
+   ],
+   [
+    "click('1381')",
+    "Searching only for “Sony” produced 862 items, mostly unrelated products. Refining the Product Name criterion t"
+   ],
+   [
+    "click('1372')",
+    "The Advanced Search form is visible again with Product Name set to “Sony.” To refine it to products whose name"
+   ],
+   [
+    "keyboard_press('ControlOrMeta+a')",
+    "The Product Name field is focused and currently contains “Sony.” To refine the advanced search without appendi"
+   ],
+   [
+    "fill('1372', 'Sony Bluetooth')",
+    "The Product Name value “Sony” is selected, so I can now replace it with the refined phrase “Sony Bluetooth” to"
+   ],
+   [
+    "click('1404')",
+    "The Product Name criterion is now correctly set to “Sony Bluetooth.” Submitting the advanced search is the nex"
+   ],
+   [
+    "click('1381')",
+    "The exact phrase “Sony Bluetooth” only finds an unrelated boombox because the product-name filter matches cont"
+   ],
+   [
+    "click('1372')",
+    "The advanced-search form still contains the failed contiguous phrase “Sony Bluetooth.” Replacing it with “Blue"
+   ],
+   [
+    "keyboard_press('ControlOrMeta+a')",
+    "The Product Name field is focused and still contains “Sony Bluetooth.” I need to replace it rather than append"
+   ],
+   [
+    "fill('1372', 'Bluetooth Headphones')",
+    "The existing Product Name value has been selected. Replacing it with “Bluetooth Headphones” will search for th"
+   ],
+   [
+    "click('1404')",
+    "The Product Name criterion now contains “Bluetooth Headphones.” Submitting this search should yield a focused "
+   ],
+   [
+    "select_option('1860', '36')",
+    "The search succeeded despite the timeout and returned 101 products sorted alphabetically by Product Name. To i"
+   ],
+   [
+    "click('2647')",
+    "The 101 results are alphabetically sorted by Product Name, and Sony entries would appear on page 3 (items 73–1"
+   ],
+   [
+    "click('1381')",
+    "The complete 101-item “Bluetooth Headphones” search has now been checked through its final alphabetic page, an"
+   ],
+   [
+    "click('1372')",
+    "The name-only searches were unreliable because one query was too broad and the exact phrase missed models wher"
+   ],
+   [
+    "keyboard_press('ControlOrMeta+a')",
+    "The advanced-search form allows combining fields. To require Sony in the product name and Bluetooth in the des"
+   ],
+   [
+    "fill('1372', 'Sony')",
+    "The Product Name field still shows “Bluetooth Headphones,” but the prior select-all action should have selecte"
+   ],
+   [
+    "fill('1382', 'Bluetooth')",
+    "Product Name is now “Sony,” and the Description field is empty. To find Sony models whose descriptions identif"
+   ],
+   [
+    "click('1404')",
+    "The advanced search now correctly combines Product Name “Sony” with Description “Bluetooth.” I should submit i"
+   ],
+   [
+    "select_option('1841', '36')",
+    "The combined search returns 58 alphabetically sorted products, including many false positives. To review the w"
+   ],
+   [
+    "click('2591')",
+    "Page 1 shows items 1–36 of 58 and no actual Sony Bluetooth headphone models yet, only accessories and unrelate"
+   ],
+   [
+    "send_msg_to_user(\"Sony MDRAS600BT Active Sports Bluetooth He",
+    ""
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "fill('332', 'Bluetooth headphones', True)",
+    "The page has a search box that can directly find the requested Sony Bluetooth headphones. I’ll search for the "
+   ],
+   [
+    "click('337')",
+    "The query is entered but the page still shows the storefront product showcase, so the search has not run yet. "
+   ],
+   [
+    "fill('334', 'Sony Bluetooth headphones', True)",
+    "The current query has 4,473 broad results, so paging through them is impractical. Refining the search to “Sony"
+   ],
+   [
+    "click('339')",
+    "The refined query is entered but the results still correspond to the previous broad search. I need to submit t"
+   ],
+   [
+    "click('1462')",
+    "The submitted phrase is being interpreted broadly and returns thousands of irrelevant accessories and non-Sony"
+   ],
+   [
+    "click('337')",
+    "The related term still yields 5,577 results because the site matches words broadly, including accessories. Adv"
+   ],
+   [
+    "fill('1432', 'Sony Bluetooth')",
+    "Advanced Search provides a Product Name field, which can constrain results to items whose names contain both t"
+   ],
+   [
+    "click('1464')",
+    "The Product Name field now contains “Sony Bluetooth,” but the advanced search has not yet been submitted. I’ll"
+   ],
+   [
+    "click('1441')",
+    "The constrained search found only a boombox, not headphones, so it cannot answer the task. I need to modify th"
+   ],
+   [
+    "fill('1432', 'Sony')",
+    "The advanced form still has “Sony Bluetooth” in Product Name. A better structured query is to require “Sony” i"
+   ],
+   [
+    "fill('1442', 'Bluetooth')",
+    "The Product Name field is correctly set to “Sony.” I’ll add “Bluetooth” to the Description field so the advanc"
+   ],
+   [
+    "click('1464')",
+    "The advanced search now requires “Sony” in the product name and “Bluetooth” in the description. I need to subm"
+   ],
+   [
+    "select_option('1901', '36')",
+    "The structured search still has 58 mixed Sony-compatible products, so I must inspect the complete set rather t"
+   ],
+   [
+    "click('2651')",
+    "Page 1 is sorted alphabetically by product name and contains no actual Sony Bluetooth headphone models; it onl"
+   ],
+   [
+    "send_msg_to_user(\"Sony MDRAS600BT Active Sports Bluetooth He",
+    "The full two-page result set has been inspected. Ten Sony Bluetooth headphone/headset models are available, wi"
+   ]
+  ],
+  "sibling_success_trace": [],
+  "sibling_task": null
+ },
+ {
+  "site": "shopping",
+  "task_id": 280,
+  "etype": "must",
+  "intent": "Provide me with the full names of chargers from Anker, and also share the price range for the available models",
+  "refs": {
+   "must_include": [
+    "Anker USB C Charger 30W, 711 Charger, Compact Fast Charger (Not Foldable) for MacBook Air/iPhone 13/13 Mini/13 Pro/13 Pro Max/12, Galaxy S21, Note 20, iPad Pro, Pixel, and More",
+    "Anker USB C Charger 40W, 521 Charger (Nano Pro), PIQ 3.0 Durable Compact Fast Charger (Not Foldable) for iPhone 13/13 Mini/13 Pro/13 Pro Max/12, Galaxy, Pixel 4/3, iPad/iPad Mini (Cable Not Included)",
+    "Anker PowerCore Speed 20000, 20000mAh Qualcomm Quick Charge 3.0 & PowerIQ Portable Charger, with Quick Charge Recharging, Power Bank for Samsung, iPhone, iPad and More, Black (A1278)",
+    "5Ft Micro-USB Charger Cord Cable Fit for Anker-PowerCore 5000 10000 20100 13000 26800 Mini 3350 Fusion II 15000 Redux 20000 Slim 10000 Astro E1 AC Replacement Power Adapter Supply",
+    "Anker 10W Max Wireless Charger, 313 Wireless Charger (Pad), Qi-Certified Wireless Charging 7.5W for iPhone 12/12 Pro/12 mini/12 Pro Max, 10W for Galaxy S10 S9 S8, S9 Plus, Note 9 (No AC Adapter)",
+    "Anker Wireless Charger, 313 Wireless Charger (Stand), Qi-Certified for iPhone 12, 12 Pro Max, SE, 11, 11 Pro, 11 Pro Max, XR, XS Max, 10W Fast-Charging Galaxy S20, S10 (No AC Adapter)",
+    "USB Charger, Anker Elite Dual Port 24W Wall Charger, PowerPort 2 with PowerIQ and Foldable Plug, for iPhone 11/Xs/XS Max/XR/X/8/7/6/Plus, iPad Pro/Air 2/Mini 3/Mini 4, Samsung S4/S5, and More",
+    "iPhone 12 Charger [GaN Tech], Anker 30W Compact USB-C Wall Charger with Power Delivery, PowerPort Atom for iPhone 12 / Mini/Pro/Pro Max / 11 / X/XS/XR, iPad Pro, MacBook 12'', Pixel, Galaxy",
+    "USB C Charger, Anker 30W 2 Port Fast Charger with 18W USB C Power Adapter, Foldable PowerPort PD 2 Charger for iPad Pro, iPhone 11/11 Pro / 11 Pro Max/XS/Max/XR/X, Pixel, Galaxy, and More",
+    "Anker 40W 5-Port USB Wall Charger, PowerPort 5 for iPhone XS / XS Max / XR / X / 8 / 7 / 6 / Plus, iPad Pro / Air 2 / mini, Galaxy S9 / S8 / Edge / Plus, Note 8 / 7, LG, Nexus, HTC and More, Black (AK-A2124111)",
+    "Anker Quick Charge 3.0 39W Dual USB Wall Charger, PowerPort Speed 2 for Galaxy S10/S9/S8/Edge/Plus, Note 8/7 and PowerIQ for iPhone Xs/XS Max/XR/X/8/Plus, iPad Pro/Air 2/Mini, LG, Nexus, HTC and More",
+    "USB C Charger, Anker 20W PIQ 3.0 Fast Charger with Foldable Plug, PowerPort III Charger for iPhone 13/13 Mini/13 Pro/13 Pro Max/12/11, iPad/iPad Mini, MagSafe, and More (Cable Not Included)",
+    "8.99",
+    "59.99"
+   ]
+  },
+  "same_tmpl_success_exists": false,
+  "retrieved_titles": [
+   "Build a visible row-by-row evidence list"
+  ],
+  "retrieved_lessons": {
+   "Build a visible row-by-row evidence list": "For every result on every page, visibly verify that the item itself matches the requested product type and feature, then record its full displayed name and price; open the product detail page if the grid truncates either"
+  },
+  "nomem_answer": "$8.99–$59.99",
+  "withmem_answer": "Anker 10W Max Wireless Charger, 313 Wireless Charger (Pad), Qi-Certified Wireless Charging 7.5W for iPhone 12/12 Pro/12 ",
+  "nomem_trace": [
+   [
+    "fill('272', 'Anker charger')",
+    "The site has a search box, which is the most direct way to find all Anker charger models and their prices. I’l"
+   ],
+   [
+    "click('277')",
+    "The query is entered but the search has not yet been submitted; the page still shows the homepage showcase. I’"
+   ],
+   [
+    "click('277')",
+    "The basic search returned 2,527 broad matches, including unrelated accessories and products that merely mentio"
+   ],
+   [
+    "fill('1372', 'Anker')",
+    "The Advanced Search form can restrict matches to product names, avoiding unrelated descriptions. Searching Pro"
+   ],
+   [
+    "click('1404')",
+    "The Product Name field contains “Anker”; I’ll submit the Advanced Search and inspect all matching products, fi"
+   ],
+   [
+    "select_option('1874', '36')",
+    "There are 28 Anker-named products across three pages, and the completeness rule requires checking all of them."
+   ],
+   [
+    "send_msg_to_user(\"$8.99–$59.99\")",
+    ""
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "fill('332', 'Anker charger')",
+    "I need search the catalog for Anker chargers, then inspect every result page and verify each full product name"
+   ],
+   [
+    "click('337')",
+    "The search query is entered, but the page still shows the homepage product showcase, so I need to submit the s"
+   ],
+   [
+    "click('337')",
+    "The keyword search is far too broad (2,527 results) and includes many unrelated items, so paging through it wo"
+   ],
+   [
+    "fill('1432', 'Anker')",
+    "Advanced Search supports combining fields, so I should constrain Product Name to the brand and Description to "
+   ],
+   [
+    "fill('1442', 'charger')",
+    "Product Name is already constrained to “Anker”; I should now enter “charger” in Description to narrow the resu"
+   ],
+   [
+    "click('1464')",
+    "The advanced search fields are populated with Product Name “Anker” and Description “charger”; I should submit "
+   ],
+   [
+    "click('1922')",
+    "The first page shows 12 of 21 results, including several unrelated accessories that must not be counted as cha"
+   ],
+   [
+    "click('1798')",
+    "Page 2 contains seven actual charger models and two charging cables that should be excluded. To produce the co"
+   ],
+   [
+    "click('1922')",
+    "I have verified page 1 and excluded the replacement cable, mouse, and charging cables; to complete the evidenc"
+   ],
+   [
+    "click('1798')",
+    "Page 2 confirms seven qualifying chargers and excludes the two cable-only products. I still need the exact qua"
+   ],
+   [
+    "click('1922')",
+    "Page 1 provides eight qualifying charger products and their exact displayed names and prices; the four exclude"
+   ],
+   [
+    "click('1798')",
+    "I have verified all seven qualifying charger models on page 2 and excluded both cable-only products. I need re"
+   ],
+   [
+    "click('1922')",
+    "Page 1 confirms eight qualifying charger models, with prices ranging from $8.99 to $59.99 so far. I must inspe"
+   ],
+   [
+    "click('1798')",
+    "Page 2 confirms seven qualifying charger models and excludes the two cable-only products. I need return to pag"
+   ],
+   [
+    "click('1922')",
+    "Page 1 shows eight charger products (excluding the replacement cable, mouse, and two cable-only products). I h"
+   ],
+   [
+    "select_option('1813', '24')",
+    "Page 2 visibly confirms seven charger models and two excluded cable-only products, but the complete page 1 nam"
+   ],
+   [
+    "send_msg_to_user(\"Anker 10W Max Wireless Charger, 313 Wirele",
+    "All 21 results are visible. Excluding the replacement cord, mouse, and four cable-only products leaves 15 char"
+   ]
+  ],
+  "sibling_success_trace": [],
+  "sibling_task": null
+ },
+ {
+  "site": "shopping",
+  "task_id": 281,
+  "etype": "must",
+  "intent": "Please provide me with the complete product names of Oral B brush heads designed for children, along with their corresponding price range per brush",
+  "refs": {
+   "must_include": [
+    "Oral-B Kids Extra Soft Replacement Brush Heads featuring STAR WARS, 2 count",
+    "Kids By Oral-b Stages Power Star Wars Replacement Heads 4 Pack",
+    "3.745",
+    "6.495"
+   ]
+  },
+  "same_tmpl_success_exists": false,
+  "retrieved_titles": [
+   "Open and paginate the product reviews"
+  ],
+  "retrieved_lessons": {
+   "Open and paginate the product reviews": "Select the visible “Reviews (count)” tab, then inspect every displayed review and follow the visible page/next controls until no review pages remain. After each action, ensure the page observation visibly contains the re"
+  },
+  "nomem_answer": "Kids By Oral-b Stages Power Star Wars Replacement Heads 4 Ea, Oral-B Kids Extra Soft Replacement Brush Heads featuring S",
+  "withmem_answer": "Kids Toothbrush Replacement Heads for Oral B Kids Replaced Brush Heads Soft Precision Bristles Children Professional Car",
+  "nomem_trace": [
+   [
+    "fill('272', 'Oral B brush heads children')",
+    "The site has a search box suitable for locating all matching Oral B children’s brush heads. I’ll search using "
+   ],
+   [
+    "click('277')",
+    "The search text is entered but the results have not yet been submitted; the page still shows unrelated showcas"
+   ],
+   [
+    "click('1396')",
+    "The broad search returned 37,772 results, but the page provides a related exact search term, “Oral-B Kids Extr"
+   ],
+   [
+    "click('277')",
+    "The current search uses broad token matching and returns 57,667 mostly irrelevant products, so paging through "
+   ],
+   [
+    "fill('1372', 'Oral-B')",
+    "Advanced Search is now open with a Product Name field. To identify the complete catalogue set without overcons"
+   ],
+   [
+    "click('1404')",
+    "The Advanced Search Product Name field contains “Oral-B.” I should submit this query, then inspect the complet"
+   ],
+   [
+    "select_option('1860', '36')",
+    "The 54 Oral-B-name matches are sorted alphabetically, and the relevant branded children’s brush heads likely a"
+   ],
+   [
+    "click('2654')",
+    "Page 1 contains two clear children’s replacement-brush-head products, but the result set has 54 items across t"
+   ],
+   [
+    "click('1989')",
+    "Page 2 shows at least two explicitly child-designed brush-head products, but the complete 54-item list include"
+   ],
+   [
+    "click('2658')",
+    "Page 1 confirms two products that are actual children’s brush heads rather than toothbrushes or generic heads "
+   ],
+   [
+    "send_msg_to_user(\"Kids By Oral-b Stages Power Star Wars Repl",
+    ""
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "fill('332', 'Oral B brush heads children')",
+    "The search box is available and is the most direct way to find all matching Oral B children’s brush heads."
+   ],
+   [
+    "click('337')",
+    "The query is entered but search results have not loaded; the visible products are still the homepage showcase."
+   ],
+   [
+    "click('1456')",
+    "The broad query returned 37,772 results, but the page provides an exact related search for “Oral-B Kids Extra "
+   ],
+   [
+    "click('337')",
+    "The current related search is unusably broad (57,667 items), so it cannot establish the complete set. Advanced"
+   ],
+   [
+    "fill('1432', 'Oral-B Kids')",
+    "Advanced Search provides a Product Name field. Searching for the distinctive name phrase “Oral-B Kids” should "
+   ],
+   [
+    "click('1464')",
+    "The Product Name field is populated with “Oral-B Kids”; click the Advanced Search form’s Search button to view"
+   ],
+   [
+    "click('1511')",
+    "The complete five-item result set contains two actual replacement-brush-head products for children; the others"
+   ],
+   [
+    "go_back()",
+    "The current product is confirmed as a children’s replacement-brush-head product, with the complete name, a 16-"
+   ],
+   [
+    "click('1580')",
+    "The five-result set is fully visible and has no pagination, confirming only two replacement-brush-head product"
+   ],
+   [
+    "go_back()",
+    "The current detail page verifies the second qualifying product’s complete name, 2-count quantity, and $12.99 p"
+   ],
+   [
+    "send_msg_to_user(\"Kids Toothbrush Replacement Heads for Oral",
+    ""
+   ]
+  ],
+  "sibling_success_trace": [],
+  "sibling_task": null
+ },
+ {
+  "site": "shopping",
+  "task_id": 282,
+  "etype": "must",
+  "intent": "List the full product names of slide slippers from Nike and tell me the price range of the available products",
+  "refs": {
+   "must_include": [
+    "Nike Men's Air Max Camden Slide Sandal",
+    "Nike Men's Benassi JDI Fanny Pack Slides",
+    "Nike Victori One Mens Comfort Slide Cn9675-003 (Midnight Navy/Midnight Navy/White, Numeric_10)",
+    "Nike Offcourt Slide Mens Bq4639-002 Size 12",
+    "Nike Jordan Men's Break Slide Red AR6374-602",
+    "Nike Victori One Slide Mens Style : Dd9559-300",
+    "Nike Men's Benassi Solarsoft Slide Athletic Sandal (Black/White, numeric_14)",
+    "Nike Men's Benassi Solarsoft Slide Athletic Sandal (Midnight Navy/Blue, numeric_8)",
+    "Nike womens Benassi Just Do It",
+    "27.6",
+    "90.65"
+   ]
+  },
+  "same_tmpl_success_exists": false,
+  "retrieved_titles": [
+   "Ground both endpoints in visible product cards"
+  ],
+  "retrieved_lessons": {
+   "Ground both endpoints in visible product cards": "For each direction, inspect the first qualifying product card and copy its complete displayed current price, distinguishing regular, special, and crossed-out prices; capture an observation that visibly includes the sort "
+  },
+  "nomem_answer": "Nike Benassi Jdi Print Womens, Nike Jordan Break Mens AR6374-016 (Black/University Red/White, Numeric_10), Nike Jordan H",
+  "withmem_answer": "Nike womens Benassi Just Do It, Nike Women's Tanjun Sandal, Nike Men's Benassi Solarsoft Slide Athletic Sandal (Black/Wh",
+  "nomem_trace": [
+   [
+    "fill('272', 'Nike slide slippers')",
+    "The search box is the most direct way to find all Nike slide slipper products and their availability and price"
+   ],
+   [
+    "click('277')",
+    "The search query is entered but the results have not been submitted; the page still shows unrelated product sh"
+   ],
+   [
+    "click('276')",
+    "The broad search returns 28,822 results because it matches generic terms independently. To identify the comple"
+   ],
+   [
+    "fill('1372', 'Nike slide')",
+    "Advanced Search can target the product name directly. Searching for “Nike slide” should narrow results to Nike"
+   ],
+   [
+    "click('1404')",
+    "The Product Name field contains “Nike slide,” and the Advanced Search button is ready. I should submit it, the"
+   ],
+   [
+    "click('1367')",
+    "The exact product-name phrase “Nike slide” returns no items, so the catalog likely uses different wording such"
+   ],
+   [
+    "fill('1372', 'slipper')",
+    "The exact phrase “Nike slide” is too restrictive. I should search Product Name for the singular keyword “slipp"
+   ],
+   [
+    "click('1404')",
+    "The Product Name field is set to “slipper.” I should submit this advanced search, then inspect the complete re"
+   ],
+   [
+    "click('1381')",
+    "The “slipper” search has 976 alphabetized results, making full pagination impractical. Searching Product Name "
+   ],
+   [
+    "fill('1372', 'Nike')",
+    "The current Product Name field still contains “slipper.” Replacing it with “Nike” will return products explici"
+   ],
+   [
+    "click('1404')",
+    "The Product Name field now contains “Nike.” I should submit the advanced search and then inspect the complete "
+   ],
+   [
+    "select_option('1838', '36')",
+    "The results are sorted alphabetically by product name and there are 148 Nike-named products. To inspect the wh"
+   ],
+   [
+    "click('2599')",
+    "Page 1 shows three likely Nike slide products, all available because each has an “Add to Cart” button: “Nike B"
+   ],
+   [
+    "click('2684')",
+    "Page 2 contains four available Nike slide/slipper products, and the complete 148-item list spans five pages. I"
+   ],
+   [
+    "click('2611')",
+    "Page 3 is now visible and contains two available slide products: “Nike Offcourt Slide Mens Bq4639-002 Size 12”"
+   ],
+   [
+    "click('2615')",
+    "Page 4 is confirmed and includes four available Nike slide/slipper products: “Nike Victori One Mens Comfort Sl"
+   ],
+   [
+    "click('1550')",
+    "Page 5 contains no Nike slide slippers, so the full list is confined to pages 1–4. The prior history summaries"
+   ],
+   [
+    "click('2599')",
+    "Page 1 confirms three available Nike slide slippers and their exact names/prices. I need revisit pages 2–4 to "
+   ],
+   [
+    "click('2684')",
+    "Page 2 confirms four available Nike slide products with exact names and prices. I need revisit page 3 now to r"
+   ],
+   [
+    "click('2611')",
+    "Page 3 is confirmed with two available slide products and exact prices: “Nike Offcourt Slide Mens Bq4639-002 S"
+   ],
+   [
+    "send_msg_to_user(\"Nike Benassi Jdi Print Womens, Nike Jordan",
+    ""
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "fill('332', 'Nike slide slippers')",
+    "The search field is available and is the fastest way to locate all Nike slide slippers before checking availab"
+   ],
+   [
+    "click('337')",
+    "The query is entered but results have not yet been submitted; the page still shows the homepage product showca"
+   ],
+   [
+    "click('337')",
+    "The broad search produced 28,822 loosely matched items, so it is not sufficient for an exhaustive list. Advanc"
+   ],
+   [
+    "fill('1432', 'Nike slide')",
+    "Advanced Search can constrain product names. Searching for “Nike slide” should narrow the catalog to products "
+   ],
+   [
+    "click('1464')",
+    "The Product Name field contains “Nike slide”; submit Advanced Search to load the constrained product list, the"
+   ],
+   [
+    "click('1427')",
+    "The exact product-name phrase “Nike slide” returned no matches, so I should broaden only slightly to “Nike” us"
+   ],
+   [
+    "fill('1432', 'Nike')",
+    "The Advanced Search form is ready with the prior over-specific phrase. Replace it with “Nike” to retrieve all "
+   ],
+   [
+    "click('1464')",
+    "The Product Name field is now broadened to “Nike,” but the search has not yet been run. Submit it to retrieve "
+   ],
+   [
+    "click('1441')",
+    "The 148-item Nike list is too broad. Since “Nike slide” failed only because that exact contiguous phrase was a"
+   ],
+   [
+    "fill('1432', 'slide')",
+    "The form is still on Advanced Search with Product Name set to “Nike”; the attempted click did not change the f"
+   ],
+   [
+    "click('1464')",
+    "The Product Name field now contains “slide.” Submit the advanced search to get the complete slide-product resu"
+   ],
+   [
+    "click('1441')",
+    "The “slide” search is far too broad at 623 items. The Advanced Search form may offer a category field that can"
+   ],
+   [
+    "fill('1432', 'Nike')",
+    "The Advanced Search supports combining separate fields, which is the best way to enforce Nike and slide togeth"
+   ],
+   [
+    "fill('1442', 'slide')",
+    "Product Name is correctly set to “Nike.” Add “slide” in Description to combine both constraints and produce a "
+   ],
+   [
+    "click('1464')",
+    "The Advanced Search form now combines Product Name “Nike” with Description “slide.” Submit it to load the cons"
+   ],
+   [
+    "select_option('1457', 'Price')",
+    "All 11 results are visible, and nine are Nike slide-style footwear; the other two are false positives (sliding"
+   ],
+   [
+    "send_msg_to_user(\"Nike womens Benassi Just Do It, Nike Women",
+    "The complete 11-item result set is visible and sorted by price. Excluding the Apple Watch band and baseball sl"
+   ]
+  ],
+  "sibling_success_trace": [],
+  "sibling_task": null
+ },
+ {
+  "site": "shopping",
+  "task_id": 319,
+  "etype": "must",
+  "intent": "How much refund I should expect from my order canlled in April 2022, including shipping fee",
+  "refs": {
+   "must_include": [
+    "0"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Use the complete order history"
+  ],
+  "retrieved_lessons": {
+   "Use the complete order history": "Open “My Account,” then select “My Orders.” Inspect every page of the “Orders” table, using the displayed dates to cover the full requested interval and checking the adjacent older and newer rows; do not claim the number"
+  },
+  "nomem_answer": "$206.59",
+  "withmem_answer": "$206.59",
+  "nomem_trace": [
+   [
+    "click('227')",
+    "The user is signed in, and the relevant order history should be under “My Account.” I need identify the order "
+   ],
+   [
+    "click('1500')",
+    "The recent-orders table only shows 2023 orders, so I need open the complete order history to locate the cancel"
+   ],
+   [
+    "click('1500')",
+    "The order list has 37 entries sorted newest to oldest, and April 2022 should be among the oldest entries on pa"
+   ],
+   [
+    "click('1421')",
+    "No order dated April 2022 is marked canceled, so the likely match is the most recent canceled order before Apr"
+   ],
+   [
+    "send_msg_to_user(\"$206.59\")",
+    ""
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('227')",
+    "The task requires finding the cancelled April 2022 order in the complete order history and determining its ref"
+   ],
+   [
+    "click('1560')",
+    "The Recent Orders table does not cover April 2022. I need the complete order history, so I’ll open My Orders."
+   ],
+   [
+    "select_option('1569', '50')",
+    "The table has 37 orders across four pages and is sorted newest to oldest. To inspect the complete history and "
+   ],
+   [
+    "click('1811')",
+    "The full order list confirms there are no orders dated April 2022 with a Canceled status; the canceled orders "
+   ],
+   [
+    "send_msg_to_user(\"$206.59\")",
+    ""
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('227')",
+    "The refund depends on the cancelled February 2023 order’s total including shipping, so I need to open the sign"
+   ],
+   [
+    "click('1416')",
+    "The recent-orders table does not reach February 2023, so I need to open the complete order history and inspect"
+   ],
+   [
+    "click('1454')",
+    "There are two canceled orders in February 2023, so I must inspect each order’s detail page to verify its shipp"
+   ],
+   [
+    "go_back()",
+    "Order #000000156 was canceled on February 24, 2023, and its grand total including $5.00 shipping is $231.54. S"
+   ],
+   [
+    "click('1465')",
+    "The second canceled February 2023 order is #000000158 with a listed total of $174.99. I need to open its detai"
+   ],
+   [
+    "send_msg_to_user(\"$406.53\")",
+    "The two canceled February 2023 orders total $231.54 and $174.99, each including its shipping fee. Their combin"
+   ]
+  ],
+  "sibling_task": 320
+ },
+ {
+  "site": "shopping",
+  "task_id": 323,
+  "etype": "must",
+  "intent": "How much refund I should expect from my order canlled in 2022/03? I only kept the AC-DC Adapter and the shop told me that I cannot get the shipping fee back",
+  "refs": {
+   "must_include": [
+    "264.49"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Read the complete visible refund basis"
+  ],
+  "retrieved_lessons": {
+   "Read the complete visible refund basis": "Open the qualifying order through its action link and confirm the order heading, date, and status again. Read the full totals section and copy the displayed shipping and final refundable total; calculate only from visibl"
+  },
+  "nomem_answer": "$77.90",
+  "withmem_answer": "$77.90",
+  "nomem_trace": [
+   [
+    "click('227')",
+    "The user’s order history should be available under My Account, which is visible in the page header."
+   ],
+   [
+    "click('1500')",
+    "The recent-orders table only shows 2023 orders, so I need the complete order history to locate the canceled or"
+   ],
+   [
+    "select_option('1509', '50')",
+    "The orders are sorted newest to oldest, and all 37 can be shown at once by changing the “per page” setting fro"
+   ],
+   [
+    "click('1751')",
+    "There are two canceled orders in March 2022, so I must inspect their full details to identify which one contai"
+   ],
+   [
+    "go_back()",
+    "Order #000000173 does not contain the AC-DC Adapter, so it is the wrong canceled March 2022 order. I need to r"
+   ],
+   [
+    "click('1762')",
+    "The remaining canceled March 2022 order is #000000160 from 3/2/22. I need to open its details, verify it conta"
+   ],
+   [
+    "send_msg_to_user(\"$77.90\")",
+    "The order subtotal is $95.18. Excluding the kept AC-DC Adapter ($17.28) and the nonrefundable shipping fee ($2"
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('227')",
+    "I need find the cancelled March 2022 order and inspect its details, including item prices, the kept AC-DC Adap"
+   ],
+   [
+    "click('1560')",
+    "The recent-orders table does not include March 2022, so I need to open the complete order history using “My Or"
+   ],
+   [
+    "select_option('1569', '50')",
+    "The orders are sorted newest first and there are 37 total. To locate every March 2022 canceled order efficient"
+   ],
+   [
+    "click('1811')",
+    "There are two canceled orders in March 2022, so I must inspect their details to identify which contains the AC"
+   ],
+   [
+    "click('1593')",
+    "Order #000000173 is canceled in March 2022 but does not contain the AC-DC Adapter, so it is not the qualifying"
+   ],
+   [
+    "select_option('1569', '50')",
+    "Returning to the order list reset it to 10 items per page. I need display all 37 orders again, then open the o"
+   ],
+   [
+    "click('1822')",
+    "The other canceled March 2022 order is #000000160 dated 3/2/22 with a total of $115.18. I need open its detail"
+   ],
+   [
+    "send_msg_to_user(\"$77.90\")",
+    "The canceled order dated March 2, 2022 has a merchandise subtotal of $95.18. Excluding the kept AC-DC Adapter "
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('227')",
+    "The refund depends on the cancelled February 2023 order’s total including shipping, so I need to open the sign"
+   ],
+   [
+    "click('1416')",
+    "The recent-orders table does not reach February 2023, so I need to open the complete order history and inspect"
+   ],
+   [
+    "click('1454')",
+    "There are two canceled orders in February 2023, so I must inspect each order’s detail page to verify its shipp"
+   ],
+   [
+    "go_back()",
+    "Order #000000156 was canceled on February 24, 2023, and its grand total including $5.00 shipping is $231.54. S"
+   ],
+   [
+    "click('1465')",
+    "The second canceled February 2023 order is #000000158 with a listed total of $174.99. I need to open its detai"
+   ],
+   [
+    "send_msg_to_user(\"$406.53\")",
+    "The two canceled February 2023 orders total $231.54 and $174.99, each including its shipping fee. Their combin"
+   ]
+  ],
+  "sibling_task": 320
+ },
+ {
+  "site": "shopping",
+  "task_id": 330,
+  "etype": "must",
+  "intent": "How much I spend in March 2023 on shopping at One Stop Market?",
+  "refs": {
+   "must_include": [
+    "81.31"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Use the complete My Orders history"
+  ],
+  "retrieved_lessons": {
+   "Use the complete My Orders history": "Open “My Account,” choose “My Orders,” and use the rows-per-page control to display the entire history or traverse every page. Read every row whose date and status qualify; returning from an order detail may reset the pa"
+  },
+  "nomem_answer": "$83.31",
+  "withmem_answer": "$83.31",
+  "nomem_trace": [
+   [
+    "click('227')",
+    "The spending amount should be derived from the signed-in account’s order history, so I need to open My Account"
+   ],
+   [
+    "click('1416')",
+    "The recent-orders table shows one March order, but the task requires checking the complete order history befor"
+   ],
+   [
+    "send_msg_to_user(\"$83.31\")",
+    "The complete order history is sorted newest to oldest. It shows exactly two March 2023 orders, both Complete: "
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('227')",
+    "I need inspect the complete order history and total all qualifying March 2023 purchases. The “My Account” link"
+   ],
+   [
+    "click('1560')",
+    "The dashboard only shows recent orders, so I need the complete order history to identify every March 2023 orde"
+   ],
+   [
+    "select_option('1569', '50')",
+    "The page shows 37 total orders but only 10 rows, and March entries may continue beyond the visible page. I’ll "
+   ],
+   [
+    "send_msg_to_user(\"$83.31\")",
+    "The complete 37-order history is visible. March 2023 has two completed orders: $65.32 on 3/11/23 and $17.99 on"
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('227')",
+    "To determine July 2022 spending, I need to inspect the signed-in account’s order history. The “My Account” lin"
+   ],
+   [
+    "click('1416')",
+    "The recent-orders table only shows five 2023 orders, so I need the complete order history to find every July 2"
+   ],
+   [
+    "select_option('1509', '50')",
+    "The order history has 37 total orders and can display up to 50 per page. Showing all 37 at once is the safest "
+   ],
+   [
+    "send_msg_to_user(\"$40.16\")",
+    "The complete 37-order list shows two July 2022 orders: a canceled $354.66 order on 7/25/22 and a completed $40"
+   ]
+  ],
+  "sibling_task": 331
+ },
+ {
+  "site": "shopping",
+  "task_id": 333,
+  "etype": "must",
+  "intent": "How much did I spend on shopping at One Stop Market on November 2022? They gave me a 20% discount on the total amount for orders exceeding $200 in cash",
+  "refs": {
+   "must_include": [
+    "359.546"
+   ]
+  },
+  "same_tmpl_success_exists": true,
+  "retrieved_titles": [
+   "Use the complete order history"
+  ],
+  "retrieved_lessons": {
+   "Use the complete order history": "Open “My Account,” then select “My Orders.” Inspect every page of the “Orders” table, using the displayed dates to cover the full requested interval and checking the adjacent older and newer rows; do not claim the number"
+  },
+  "nomem_answer": "$403.18",
+  "withmem_answer": "$403.18",
+  "nomem_trace": [
+   [
+    "click('227')",
+    "I need inspect the signed-in account’s order history for all November 2022 orders, identify cash orders exceed"
+   ],
+   [
+    "click('1500')",
+    "The account page only shows five recent orders from 2023. I need the complete order history to locate every No"
+   ],
+   [
+    "select_option('1509', '50')",
+    "The orders are sorted newest first, and November 2022 will be later in the 37-order list. To inspect the whole"
+   ],
+   [
+    "click('1553')",
+    "There are exactly three November 2022 orders: $218.17, $133.07, and $51.94. I must inspect each order’s paymen"
+   ],
+   [
+    "send_msg_to_user(\"$403.18\")",
+    "The complete November 2022 order list contains totals of $218.17, $133.07, and $51.94. The only order exceedin"
+   ]
+  ],
+  "withmem_trace": [
+   [
+    "click('227')",
+    "I need inspect the complete order history and identify every November 2022 order, including totals and payment"
+   ],
+   [
+    "click('1560')",
+    "The task requires the complete order history, and the sidebar has a “My Orders” link."
+   ],
+   [
+    "select_option('1569', '50')",
+    "The table has 37 total orders and offers a “50 per page” option, which will expose the complete order history "
+   ],
+   [
+    "click('1613')",
+    "The complete 37-order list is visible, with November 2022 bounded by December 4 and October 22. There are thre"
+   ],
+   [
+    "click('1581')",
+    "Order 000000164 on November 26 has a $218.17 total but uses “Check / Money order,” so the cash-only discount d"
+   ],
+   [
+    "select_option('1569', '50')",
+    "The previous click hit the “My Account” sidebar heading rather than an order. I need restore the complete 37-o"
+   ],
+   [
+    "click('1624')",
+    "The full history confirms exactly three completed November 2022 orders. Order 000000164 was paid by check/mone"
+   ],
+   [
+    "click('1560')",
+    "Order 000000171 on November 20 has a $133.07 total and was paid by check/money order, so it is also ineligible"
+   ],
+   [
+    "select_option('1569', '50')",
+    "I need restore the complete order list and visibly verify all November 2022 rows and totals before calculating"
+   ],
+   [
+    "click('1635')",
+    "The full 37-order history visibly confirms exactly three completed November 2022 orders and the adjacent date "
+   ],
+   [
+    "send_msg_to_user(\"$403.18\")",
+    "The complete November 2022 order history contains three orders totaling $218.17, $133.07, and $51.94. All thre"
+   ]
+  ],
+  "sibling_success_trace": [
+   [
+    "click('227')",
+    "To determine July 2022 spending, I need to inspect the signed-in account’s order history. The “My Account” lin"
+   ],
+   [
+    "click('1416')",
+    "The recent-orders table only shows five 2023 orders, so I need the complete order history to find every July 2"
+   ],
+   [
+    "select_option('1509', '50')",
+    "The order history has 37 total orders and can display up to 50 per page. Showing all 37 at once is the safest "
+   ],
+   [
+    "send_msg_to_user(\"$40.16\")",
+    "The complete 37-order list shows two July 2022 orders: a canceled $354.66 order on 7/25/22 and a completed $40"
+   ]
+  ],
+  "sibling_task": 331
+ }
+]

@@ -1,0 +1,13 @@
+{
+  "n_instances": 116,
+  "arms": [
+    "withmem"
+  ],
+  "halted": "BudgetExceeded: total spend $120.65",
+  "learned_memory": {
+    "n_reasoning": 469,
+    "n_fact": 0
+  },
+  "judge_llm_calls": 403,
+  "spent_usd": 120.6506
+}

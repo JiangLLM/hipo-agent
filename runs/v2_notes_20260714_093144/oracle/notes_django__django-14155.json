@@ -1,0 +1,1 @@
+{"django/urls/resolvers.py": [{"anchor": "ResolverMatch.__repr__", "note": "When a functools.partial object is used as the view function, __repr__() should use repr(self.func) to display the partial's underlying function and arguments instead of just showing the _func_path, which only works for regular functions."}]}

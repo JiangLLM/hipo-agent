@@ -1,0 +1,389 @@
+[
+ {
+  "site": "shopping_admin",
+  "arm": "nomem",
+  "task_id": 2,
+  "etype": "exact",
+  "intent": "What is the top-1 best-selling product type in Quarter 1 2022",
+  "refs": {
+   "exact_match": "Yoga ball"
+  },
+  "answer": "Dash Digital Watch, Quest Lumaflex™ Band"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "withmem",
+  "task_id": 2,
+  "etype": "exact",
+  "intent": "What is the top-1 best-selling product type in Quarter 1 2022",
+  "refs": {
+   "exact_match": "Yoga ball"
+  },
+  "answer": "Quest Lumaflex™ Band, Dash Digital Watch"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "nomem",
+  "task_id": 5,
+  "etype": "exact",
+  "intent": "What is the top-1 best-selling product type in Jan 2023",
+  "refs": {
+   "exact_match": "Duffle"
+  },
+  "answer": "Impulse Duffle, Overnight Duffle, Hawkeye Yoga Short-32-Blue"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "withmem",
+  "task_id": 5,
+  "etype": "exact",
+  "intent": "What is the top-1 best-selling product type in Jan 2023",
+  "refs": {
+   "exact_match": "Duffle"
+  },
+  "answer": "Overnight Duffle, Hawkeye Yoga Short-32-Blue, Impulse Duffle"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "nomem",
+  "task_id": 6,
+  "etype": "must",
+  "intent": "What are the top-5 best-selling product in 2023",
+  "refs": {
+   "must_include": [
+    "Sprite Yoga Strap 6 foot",
+    "Overnight Duffle",
+    "Ida Workout Parachute Pant-29-Purple",
+    "Hawkeye Yoga Short-32-Blue",
+    "Sprite Stasis Ball 65 cm"
+   ]
+  },
+  "answer": "Sprite Yoga Strap 6 foot, Overnight Duffle, Ida Workout Parachute Pant-29-Purple, Sprite Stasis Ball 65 cm, Impulse Duffle"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "nomem",
+  "task_id": 63,
+  "etype": "must",
+  "intent": "Which customer(s) has completed the second most number of orders in the entire history?",
+  "refs": {
+   "must_include": [
+    "Adam Garcia",
+    "Michael Nguyen",
+    "Sarah Miller"
+   ]
+  },
+  "answer": "Sarah Miller, Michael Nguyen"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "withmem",
+  "task_id": 63,
+  "etype": "must",
+  "intent": "Which customer(s) has completed the second most number of orders in the entire history?",
+  "refs": {
+   "must_include": [
+    "Adam Garcia",
+    "Michael Nguyen",
+    "Sarah Miller"
+   ]
+  },
+  "answer": "Grace Nguyen"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "nomem",
+  "task_id": 64,
+  "etype": "must",
+  "intent": "Which customer has placed 2 orders in the entire history?",
+  "refs": {
+   "must_include": [
+    "Lisa Kim",
+    "Lisa Green",
+    "Julia Williams",
+    "Brian Smith",
+    "Alexander Thomas"
+   ]
+  },
+  "answer": "Lisa Kim, Brian Smith, Julia Williams, Lisa Green"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "withmem",
+  "task_id": 64,
+  "etype": "must",
+  "intent": "Which customer has placed 2 orders in the entire history?",
+  "refs": {
+   "must_include": [
+    "Lisa Kim",
+    "Lisa Green",
+    "Julia Williams",
+    "Brian Smith",
+    "Alexander Thomas"
+   ]
+  },
+  "answer": "Lisa Kim, Brian Smith, Lisa Green"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "withmem",
+  "task_id": 65,
+  "etype": "must",
+  "intent": "Which customer has completed the fifth most number of orders in the entire history?",
+  "refs": {
+   "must_include": [
+    "Jane Doe"
+   ]
+  },
+  "answer": "Jason Miller, Jennifer White"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "nomem",
+  "task_id": 112,
+  "etype": "exact",
+  "intent": "Show me the customers who have expressed dissatisfaction with Circe fleece?",
+  "refs": {
+   "exact_match": "Hannah Lim"
+  },
+  "answer": "Hannah Lim, customer"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "withmem",
+  "task_id": 112,
+  "etype": "exact",
+  "intent": "Show me the customers who have expressed dissatisfaction with Circe fleece?",
+  "refs": {
+   "exact_match": "Hannah Lim"
+  },
+  "answer": "Hannah Lim, customer"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "withmem",
+  "task_id": 116,
+  "etype": "must",
+  "intent": "Show me the name of the customers who have expressed dissatisfaction with tanks products?",
+  "refs": {
+   "must_include": [
+    "Alexander",
+    "Carma",
+    "Dominic",
+    "Merrie",
+    "Monroe",
+    "Scotty",
+    "Shaunte",
+    "Teofila",
+    "Valorie"
+   ]
+  },
+  "answer": ""
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "nomem",
+  "task_id": 127,
+  "etype": "must",
+  "intent": "What brands appear most frequently among the top search terms?",
+  "refs": {
+   "must_include": [
+    "Hollister",
+    "Joust",
+    "Antonia"
+   ]
+  },
+  "answer": "hollister, nike"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "withmem",
+  "task_id": 127,
+  "etype": "must",
+  "intent": "What brands appear most frequently among the top search terms?",
+  "refs": {
+   "must_include": [
+    "Hollister",
+    "Joust",
+    "Antonia"
+   ]
+  },
+  "answer": "hollister, nike"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "nomem",
+  "task_id": 131,
+  "etype": "must",
+  "intent": "What's the total number of items sold in the most recent 7 orders?",
+  "refs": {
+   "must_include": [
+    "25"
+   ]
+  },
+  "answer": "19"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "nomem",
+  "task_id": 184,
+  "etype": "exact",
+  "intent": "Give me the name of the products that have 0 units left",
+  "refs": {
+   "exact_match": "Sinbad Fitness Tank"
+  },
+  "answer": ""
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "withmem",
+  "task_id": 184,
+  "etype": "exact",
+  "intent": "Give me the name of the products that have 0 units left",
+  "refs": {
+   "exact_match": "Sinbad Fitness Tank"
+  },
+  "answer": ""
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "withmem",
+  "task_id": 185,
+  "etype": "must",
+  "intent": "Give me the brand of the products that have 3 units left",
+  "refs": {
+   "must_include": [
+    "Eos",
+    "Minerva"
+   ]
+  },
+  "answer": ""
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "nomem",
+  "task_id": 193,
+  "etype": "must",
+  "intent": "Get the total payment amount of the last 2 completed orders",
+  "refs": {
+   "must_include": [
+    "182.4"
+   ]
+  },
+  "answer": "$0.00"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "withmem",
+  "task_id": 193,
+  "etype": "must",
+  "intent": "Get the total payment amount of the last 2 completed orders",
+  "refs": {
+   "must_include": [
+    "182.4"
+   ]
+  },
+  "answer": "$0.00"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "nomem",
+  "task_id": 194,
+  "etype": "must",
+  "intent": "Get the total payment amount of the last 5 completed orders",
+  "refs": {
+   "must_include": [
+    "555.2"
+   ]
+  },
+  "answer": "$452.00"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "withmem",
+  "task_id": 194,
+  "etype": "must",
+  "intent": "Get the total payment amount of the last 5 completed orders",
+  "refs": {
+   "must_include": [
+    "555.2"
+   ]
+  },
+  "answer": "$0.00"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "withmem",
+  "task_id": 195,
+  "etype": "must",
+  "intent": "Get the total payment amount of the last 5 pending orders",
+  "refs": {
+   "must_include": [
+    "885.4"
+   ]
+  },
+  "answer": "$0.00"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "withmem",
+  "task_id": 196,
+  "etype": "must",
+  "intent": "Compare the payment difference of the last 4 cancelled orders and completed orders",
+  "refs": {
+   "must_include": [
+    "194.25"
+   ]
+  },
+  "answer": "$0.00"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "withmem",
+  "task_id": 197,
+  "etype": "must",
+  "intent": "Get the total payment amount of the last 5 non-cancelled orders",
+  "refs": {
+   "must_include": [
+    "778.2"
+   ]
+  },
+  "answer": "$0.00"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "nomem",
+  "task_id": 212,
+  "etype": "must",
+  "intent": "Find the customer name and email with phone number 555-229-3326",
+  "refs": {
+   "must_include": [
+    "Veronica Costello",
+    "roni_cost@example.com"
+   ]
+  },
+  "answer": ""
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "nomem",
+  "task_id": 246,
+  "etype": "exact",
+  "intent": "Show me the name of the customer who is the most unhappy with Chloe tank",
+  "refs": {
+   "exact_match": "Teofila"
+  },
+  "answer": "Emerald"
+ },
+ {
+  "site": "shopping_admin",
+  "arm": "nomem",
+  "task_id": 288,
+  "etype": "exact",
+  "intent": "Tell me the name of the customer who has the most cancellations in the history",
+  "refs": {
+   "exact_match": "Samantha Jones"
+  },
+  "answer": ""
+ }
+]

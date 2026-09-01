@@ -1,0 +1,523 @@
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+[info] run_id=wa_gitlab_20260720_223735_20260720_223737 site=gitlab tasks=43 arms=['withmem']
+[info] [withmem] parallel rollouts ON: 8 worker processes
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 1/43 t132 reward=1 nc=8/8 cumSR=1.00 win10=1.00 mem=0 spent=$1.96
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 2/43 t133 reward=1 nc=8/8 cumSR=1.00 win10=1.00 mem=0 spent=$4.29
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 3/43 t134 reward=1 nc=8/8 cumSR=1.00 win10=1.00 mem=0 spent=$6.34
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 4/43 t135 reward=0 nc=1/8 cumSR=0.75 win10=0.75 mem=9 spent=$9.62
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 5/43 t136 reward=0 nc=0/8 cumSR=0.60 win10=0.60 mem=17 spent=$12.53
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 6/43 t168 reward=0 nc=2/8 cumSR=0.50 win10=0.50 mem=23 spent=$15.07
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 7/43 t169 reward=0 nc=0/8 cumSR=0.43 win10=0.43 mem=31 spent=$26.52
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 8/43 t170 reward=0 nc=0/8 cumSR=0.38 win10=0.38 mem=39 spent=$44.32
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 9/43 t171 reward=0 nc=0/8 cumSR=0.33 win10=0.33 mem=47 spent=$61.95
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 10/43 t172 reward=0 nc=0/8 cumSR=0.30 win10=0.30 mem=55 spent=$78.46
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 11/43 t205 reward=1 nc=8/8 cumSR=0.36 win10=0.30 mem=55 spent=$79.66
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 12/43 t206 reward=1 nc=8/8 cumSR=0.42 win10=0.30 mem=55 spent=$81.05
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 13/43 t207 reward=0 nc=3/8 cumSR=0.38 win10=0.20 mem=62 spent=$83.46
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 14/43 t259 reward=1 nc=7/8 cumSR=0.43 win10=0.30 mem=64 spent=$85.95
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 15/43 t293 reward=1 nc=8/8 cumSR=0.47 win10=0.40 mem=64 spent=$87.73
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 16/43 t294 reward=1 nc=8/8 cumSR=0.50 win10=0.50 mem=64 spent=$90.40
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 17/43 t295 reward=1 nc=5/8 cumSR=0.53 win10=0.60 mem=65 spent=$92.24
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 18/43 t296 reward=0 nc=0/8 cumSR=0.50 win10=0.60 mem=73 spent=$101.69
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 19/43 t297 reward=0 nc=1/8 cumSR=0.47 win10=0.60 mem=82 spent=$106.17
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 20/43 t303 reward=1 nc=8/8 cumSR=0.50 win10=0.70 mem=83 spent=$108.83
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 21/43 t304 reward=1 nc=8/8 cumSR=0.52 win10=0.70 mem=85 spent=$112.58
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 22/43 t305 reward=1 nc=8/8 cumSR=0.55 win10=0.70 mem=85 spent=$113.98
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 23/43 t306 reward=1 nc=8/8 cumSR=0.57 win10=0.80 mem=85 spent=$121.22
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 24/43 t307 reward=0 nc=0/8 cumSR=0.54 win10=0.70 mem=93 spent=$209.93
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 25/43 t308 reward=1 nc=8/8 cumSR=0.56 win10=0.70 mem=93 spent=$214.48
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+An error occurred while extracting the dom and axtree. Retrying (4/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (4/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (3/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (3/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (2/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (2/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (1/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (1/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+Cannot mark a child frame without a bid. Skipping frame.
+AXTree merging: extracted AXTree does not contain frameId '7B47249E1D3B523431D33F0002CE6313', skipping
+Cannot mark a child frame without a bid. Skipping frame.
+AXTree merging: extracted AXTree does not contain frameId '44EA3207CFBC9AD793D8F2DF87658006', skipping
+An error occurred while extracting the dom and axtree. Retrying (4/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (3/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (2/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (1/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+Cannot mark a child frame without a bid. Skipping frame.
+AXTree merging: extracted AXTree does not contain frameId '09DC6A438A60DE5EA15C62086CDB2E5B', skipping
+An error occurred while extracting the dom and axtree. Retrying (4/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (3/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (2/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (1/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+Cannot mark a child frame without a bid. Skipping frame.
+AXTree merging: extracted AXTree does not contain frameId 'DF362B03B72805B62AEA6B0116012474', skipping
+[info] [withmem] 26/43 t309 reward=0 nc=1/8 cumSR=0.54 win10=0.60 mem=101 spent=$217.31
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 27/43 t310 reward=1 nc=8/8 cumSR=0.56 win10=0.60 mem=101 spent=$222.79
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 28/43 t311 reward=1 nc=8/8 cumSR=0.57 win10=0.70 mem=101 spent=$228.05
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 29/43 t312 reward=1 nc=8/8 cumSR=0.59 win10=0.80 mem=101 spent=$234.60
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 30/43 t314 reward=1 nc=8/8 cumSR=0.60 win10=0.80 mem=101 spent=$238.01
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+An error occurred while extracting the dom and axtree. Retrying (4/5 tries left).
+Error('Frame.evaluate: Execution context was destroyed, most likely because of a navigation')
+[info] [withmem] 31/43 t315 reward=1 nc=8/8 cumSR=0.61 win10=0.80 mem=101 spent=$243.35
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+An error occurred while extracting the dom and axtree. Retrying (4/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (3/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (2/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (1/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+Cannot mark a child frame without a bid. Skipping frame.
+AXTree merging: extracted AXTree does not contain frameId '3AA060F4706F218B1740000041EF7555', skipping
+An error occurred while extracting the dom and axtree. Retrying (4/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (3/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (2/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (1/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+Cannot mark a child frame without a bid. Skipping frame.
+AXTree merging: extracted AXTree does not contain frameId 'EAFAE6C40192E96F63BD7574E8CA3962', skipping
+[info] [withmem] 32/43 t316 reward=1 nc=5/8 cumSR=0.62 win10=0.80 mem=103 spent=$248.27
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 33/43 t317 reward=0 nc=1/8 cumSR=0.61 win10=0.70 mem=110 spent=$254.70
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 34/43 t318 reward=1 nc=8/8 cumSR=0.62 win10=0.80 mem=110 spent=$256.83
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 35/43 t349 reward=0 nc=2/8 cumSR=0.60 win10=0.70 mem=116 spent=$259.02
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 36/43 t350 reward=0 nc=6/8 cumSR=0.58 win10=0.70 mem=122 spent=$261.73
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 37/43 t783 reward=1 nc=5/8 cumSR=0.59 win10=0.70 mem=130 spent=$262.78
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+An error occurred while extracting the dom and axtree. Retrying (4/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (3/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (2/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (1/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+Cannot mark a child frame without a bid. Skipping frame.
+AXTree merging: extracted AXTree does not contain frameId 'DA64AFB57A543EA9ADBF4A490B2D4838', skipping
+An error occurred while extracting the dom and axtree. Retrying (4/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (3/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (2/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (1/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+Cannot mark a child frame without a bid. Skipping frame.
+AXTree merging: extracted AXTree does not contain frameId '8B58E5977674F5B563AD5D6EC497188A', skipping
+[info] [withmem] 38/43 t784 reward=0 nc=2/8 cumSR=0.58 win10=0.60 mem=138 spent=$282.72
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 39/43 t785 reward=1 nc=8/8 cumSR=0.59 win10=0.60 mem=139 spent=$287.90
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 40/43 t786 reward=0 nc=0/8 cumSR=0.57 win10=0.50 mem=144 spent=$306.14
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 41/43 t787 reward=0 nc=0/8 cumSR=0.56 win10=0.40 mem=150 spent=$308.14
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 42/43 t788 reward=1 nc=6/8 cumSR=0.57 win10=0.40 mem=153 spent=$311.72
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 43/43 t789 reward=1 nc=6/8 cumSR=0.58 win10=0.50 mem=162 spent=$314.58
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+[info] DONE {'n_tasks': 43, 'site': 'gitlab', 'arms': ['withmem'], 'withmem': {'n': 43, 'reward_sr': 0.5814, 'layer1_writes': 148, 'layer2_writes': 14}, 'learned_memory': {'n_reasoning': 162, 'n_fact': 0}, 'spent_usd': 314.5837}

@@ -1,0 +1,15 @@
+idx,instance_id,repo,judge_success,nc,n,steps,cost
+0,sphinx-doc__sphinx-8721,sphinx-doc/sphinx,1,1,1,44,0.2313
+1,sphinx-doc__sphinx-9229,sphinx-doc/sphinx,0,0,1,60,0.2539
+2,sphinx-doc__sphinx-9230,sphinx-doc/sphinx,1,1,1,60,0.2633
+3,sphinx-doc__sphinx-9258,sphinx-doc/sphinx,0,0,1,60,0.2667
+4,sphinx-doc__sphinx-9281,sphinx-doc/sphinx,0,0,1,60,0.1866
+5,sphinx-doc__sphinx-9320,sphinx-doc/sphinx,1,1,1,33,0.1489
+6,sphinx-doc__sphinx-9367,sphinx-doc/sphinx,1,1,1,24,0.079
+7,sphinx-doc__sphinx-9461,sphinx-doc/sphinx,0,0,1,60,0.1991
+8,sphinx-doc__sphinx-9591,sphinx-doc/sphinx,0,0,1,60,0.254
+9,sphinx-doc__sphinx-9602,sphinx-doc/sphinx,0,0,1,60,0.2697
+10,sphinx-doc__sphinx-9658,sphinx-doc/sphinx,0,0,1,60,0.2279
+11,sphinx-doc__sphinx-9673,sphinx-doc/sphinx,1,1,1,60,0.2965
+12,sphinx-doc__sphinx-9698,sphinx-doc/sphinx,1,1,1,50,0.2186
+13,sphinx-doc__sphinx-9711,sphinx-doc/sphinx,1,1,1,50,0.1687

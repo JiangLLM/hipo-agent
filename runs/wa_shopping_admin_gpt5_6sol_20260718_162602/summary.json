@@ -1,0 +1,25 @@
+{
+  "n_tasks": 40,
+  "site": "shopping_admin",
+  "arms": [
+    "nomem",
+    "withmem"
+  ],
+  "nomem": {
+    "n": 40,
+    "reward_sr": 0.525,
+    "layer1_writes": 0,
+    "layer2_writes": 0
+  },
+  "withmem": {
+    "n": 40,
+    "reward_sr": 0.55,
+    "layer1_writes": 46,
+    "layer2_writes": 16
+  },
+  "learned_memory": {
+    "n_reasoning": 62,
+    "n_fact": 0
+  },
+  "spent_usd": 48.7144
+}

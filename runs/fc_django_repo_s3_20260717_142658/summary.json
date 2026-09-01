@@ -1,0 +1,18 @@
+{
+  "n_instances": 116,
+  "arms": [
+    "frozenmem"
+  ],
+  "frozenmem": {
+    "n": 114,
+    "judge_sr": 0.5088,
+    "judge_sr_first_half": 0.5088,
+    "judge_sr_second_half": 0.5088,
+    "divergent_tasks": 0,
+    "total_cost": 24.45,
+    "layer1_writes": 0,
+    "layer2_writes": 0
+  },
+  "judge_llm_calls": 60,
+  "spent_usd": 25.1233
+}

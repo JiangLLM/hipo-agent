@@ -1,0 +1,653 @@
+[
+ {
+  "i": 0,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold must_include requires the count \"0\", but the agent answered \"1\". A different number is a mismatch, so the answer is INCORRECT."
+ },
+ {
+  "i": 1,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['0'] — the correct count is 0 comments with more downvotes than upvotes. The agent answered '1', a different number. Wrong value, so INCORRECT."
+ },
+ {
+  "i": 2,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold must_include is ['0'] (the count of comments with more downvotes than upvotes is 0), but the agent answered '1'. This is a wrong number, so it is INCORRECT."
+ },
+ {
+  "i": 3,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires \"0\" (must_include: ['0']) comments with more downvotes than upvotes, but the agent answered \"1\" — a different, incorrect count."
+ },
+ {
+  "i": 4,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "The refs is a must_include list requiring TWO post URLs: post 59396 (apple-books free audiobook of a christmas carol) AND post 17445 (i-just-finished-reading-the-hobbit). The agent answer only contains http://10.44.12.29:9999/59396 (host difference is ignored, so post 59396 matches). The second required item, post 17445, is entirely missing from the answer. Since a required list item is absent, the answer is INCORRECT."
+ },
+ {
+  "i": 5,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold is a must_include of two post URLs identified by IDs 59396 and 17445. The agent answer lists both: http://10.44.12.29:9999/17445 and http://10.44.12.29:9999/59396. Per the rubric, host names are equivalent (10.44.12.29 == reddit host), so both required items are semantically present. Nothing missing."
+ },
+ {
+  "i": 6,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "must_include requires all four: A Christmas Carol, Levar Burton, The Hobbit, J. R. R. Tolkien. The answer provides \"J. R. R. Tolkien — The Hobbit\" (matches two) and \"Charles Dickens — A Christmas Carol\" (A Christmas Carol matches), but \"Levar Burton\" is entirely absent — instead the answer attributes A Christmas Carol to Charles Dickens rather than including the required author Levar Burton. A required list item is missing, so INCORRECT."
+ },
+ {
+  "i": 7,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "The gold must_include list requires all four items: \"A Christmas Carol\", \"Levar Burton\", \"The Hobbit\", \"J. R. R. Tolkien\". The answer (\"Shaosil — The Hobbit, ancienthippo — A Christmas Carol\") includes the book names \"The Hobbit\" and \"A Christmas Carol\" but is missing the required authors \"Levar Burton\" and \"J. R. R. Tolkien\". Instead it supplies incorrect author names (\"Shaosil\", \"ancienthippo\"). Since two required items are absent, it is INCORRECT."
+ },
+ {
+  "i": 8,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires the value \"1\" (must_include: [\"1\"]). The agent answered \"3\", a different number, so the required item is not present. Wrong count = INCORRECT."
+ },
+ {
+  "i": 9,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['1'], but the agent answered '2'. The required value '1' is not present in the answer; '2' is a different number, so it fails the must_include requirement."
+ },
+ {
+  "i": 10,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['5'] (Steven Woodson made 5 commits on 2/6/2023), but the agent answered '3'. Wrong number, so INCORRECT."
+ },
+ {
+  "i": 11,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "The gold reference (must_include: [\"1\"]) requires the total commit count to be 1, but the agent answered \"2\". This is a different number, so it is INCORRECT."
+ },
+ {
+  "i": 12,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold reference is must_include ['1'] (total of 1 commit). The agent answered '2', a different number. A wrong numeric answer is INCORRECT."
+ },
+ {
+  "i": 13,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "The gold exact_match is 'git clone ssh://git@metis.lti.cs.cmu.edu:2222/convexegg/super_awesome_robot.git'. The agent answered 'git clone ssh://git@10.44.12.29:2222/convexegg/super_awesome_robot.git'. These are identical except for the host name (metis.lti.cs.cmu.edu vs 10.44.12.29), which the rubric explicitly treats as equal (host names / self-hosted IP such as 10.44.12.29 are ignored). Protocol, user, port (2222), and repo path all match exactly."
+ },
+ {
+  "i": 14,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "exact_match gold is 'git clone ssh://git@metis.lti.cs.cmu.edu:2222/convexegg/super_awesome_robot.git'. Agent answer is identical except the host is the IP 10.44.12.29 instead of metis.lti.cs.cmu.edu. The rubric explicitly treats metis.lti.cs.cmu.edu as equal to any self-hosted host or IP such as 10.44.12.29. Port (2222), path (/convexegg/super_awesome_robot.git), protocol (ssh), and user (git) all match exactly."
+ },
+ {
+  "i": 15,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold exact_match is 'git clone ssh://git@metis.lti.cs.cmu.edu:2222/convexegg/chatgpt.git'. The answer is 'git clone ssh://git@10.44.12.29:2222/convexegg/chatgpt.git', identical except the host is the IP 10.44.12.29 instead of metis.lti.cs.cmu.edu. Per the rubric, host names are treated as equal (metis.lti.cs.cmu.edu equals a self-hosted IP such as 10.44.12.29). The scheme, user (git@), port (2222), and repo path (convexegg/chatgpt.git) all match exactly."
+ },
+ {
+  "i": 16,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold exact_match is 'git clone ssh://git@metis.lti.cs.cmu.edu:2222/convexegg/chatgpt.git'. The agent answer is 'git clone ssh://git@10.44.12.29:2222/convexegg/chatgpt.git', which is identical except the host is the IP 10.44.12.29. The rubric explicitly treats metis.lti.cs.cmu.edu as equal to a self-hosted IP such as 10.44.12.29. All other parts (protocol, port 2222, path convexegg/chatgpt.git) match exactly."
+ },
+ {
+  "i": 17,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold exact_match is 'git clone ssh://git@metis.lti.cs.cmu.edu:2222/root/metaseq.git'. Agent answer is 'git clone ssh://git@10.44.12.29:2222/root/metaseq.git', identical except the host metis.lti.cs.cmu.edu is replaced by the self-hosted IP 10.44.12.29, which the rubric explicitly treats as equivalent. Protocol (ssh), user (git), port (2222), and path (/root/metaseq.git) all match."
+ },
+ {
+  "i": 18,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "exact_match gold is 'git clone ssh://git@metis.lti.cs.cmu.edu:2222/root/metaseq.git'; agent answer is 'git clone ssh://git@10.44.12.29:2222/root/metaseq.git'. The only difference is the host (metis.lti.cs.cmu.edu vs IP 10.44.12.29), which the rubric explicitly treats as equivalent. Protocol, user, port 2222, and path /root/metaseq.git all match exactly."
+ },
+ {
+  "i": 19,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold exact_match is ssh://git@metis.lti.cs.cmu.edu:2222/eriklindernoren/PyTorch-GAN.git. The agent answered git clone ssh://git@10.44.12.29:2222/eriklindernoren/PyTorch-GAN.git. The only difference is the host (10.44.12.29 vs metis.lti.cs.cmu.edu), which the rubric treats as equivalent. Port (2222), path (eriklindernoren/PyTorch-GAN.git), and protocol/user (ssh://git@) all match exactly."
+ },
+ {
+  "i": 20,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold exact_match is ssh://git@metis.lti.cs.cmu.edu:2222/eriklindernoren/PyTorch-GAN.git. The answer contains ssh://git@10.44.12.29:2222/eriklindernoren/PyTorch-GAN.git, which is identical except for the host: the rubric explicitly treats metis.lti.cs.cmu.edu as equal to a self-hosted IP such as 10.44.12.29. Port (2222), user (git), and repo path (eriklindernoren/PyTorch-GAN.git) all match; the leading \"git clone \" is ignorable prose."
+ },
+ {
+  "i": 21,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "exact_match requires ssh://git@metis.lti.cs.cmu.edu:2222/yjlou/2019-nCov.git. The host difference (10.44.12.29) is ignorable, but the repository is a different entity: agent gave covid19india/covid19india-react.git instead of yjlou/2019-nCov.git. Wrong repo, so INCORRECT."
+ },
+ {
+  "i": 22,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold exact_match is the repo ssh://git@metis.lti.cs.cmu.edu:2222/yjlou/2019-nCov.git. The agent answered with a different repository: ssh://git@10.44.12.29:2222/covid19india/covid19india-react.git. Even ignoring the host difference (allowed), the repo path yjlou/2019-nCov.git does not match covid19india/covid19india-react.git — a wrong entity, so INCORRECT."
+ },
+ {
+  "i": 23,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['14'] (Eric made 14 commits between Feb 2023 and May 2023). The agent answer is an empty string, providing no value and missing the required item '14'. An empty answer is INCORRECT."
+ },
+ {
+  "i": 24,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['0'] (0 commits). The agent's answer is an empty string, which contains no content and does not convey the required value '0'. Empty answers are INCORRECT."
+ },
+ {
+  "i": 25,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['0'], meaning the answer must state 0 commits. The agent answer is an empty string, which contains no value at all and does not convey \"0\". An empty answer is explicitly INCORRECT per the rubric."
+ },
+ {
+  "i": 26,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['16'], but the agent answer is an empty string, so the required item \"16\" is missing. Empty answers are INCORRECT."
+ },
+ {
+  "i": 27,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['16'] (16 commits). The agent's answer is an empty string, which contains none of the required content. An empty answer is INCORRECT."
+ },
+ {
+  "i": 28,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "The gold reference requires exact_match \"Grayson Wright\" (the top contributor by commits to thoughtbot/administrate). The agent's answer is an empty string, providing no content and failing to include the required value. An empty answer is INCORRECT."
+ },
+ {
+  "i": 29,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "All must_include items are present with matching commit counts: \"Susan Zhang — 70 commits\" (= Susan Zhang: 70), \"Stephen Roller — 51 commits\" (= Stephen Roller: 51), and \"Peter Albert — 12 commits\" (= Peter Albert: 12). The colon-vs-dash separator difference is an ignorable formatting difference. The extra fourth entry (Zachary DeVito — 12) does not violate the rubric since every required item is present."
+ },
+ {
+  "i": 30,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold is a must_include list of three items: 'Susan Zhang: 70', 'Stephen Roller: 51', 'Peter Albert: 12'. The agent answer contains all three semantically: 'Susan Zhang — 70 commits', 'Stephen Roller — 51 commits', 'Peter Albert — 12 commits'. The dash vs colon separator is an ignorable formatting difference. The extra entry 'Zachary DeVito — 12 commits' is additional content and does not contradict or remove any required item, so the answer remains correct."
+ },
+ {
+  "i": 31,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold exact_match is \"yjlou\"; answer is \"@yjlou\". The only difference is a leading \"@\" on the username, which the rubric explicitly says to ignore. The exact value \"yjlou\" is present, so the answer conveys the same factual content."
+ },
+ {
+  "i": 32,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold exact_match is 'yjlou'. Agent answer '@yjlou' contains that exact username; the leading '@' on usernames is an ignorable formatting difference per the rubric."
+ },
+ {
+  "i": 33,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "The gold answer requires must_include ['secupwn@users.noreply.github.com'], but the agent's answer is an empty string, so the required email is missing."
+ },
+ {
+  "i": 34,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['412'], but the agent answer is an empty string, so the required value 412 is missing. An empty answer is INCORRECT."
+ },
+ {
+  "i": 35,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['412'] (the top contributor's commit count is 412). The agent answered '414', a different number. Wrong value — INCORRECT."
+ },
+ {
+  "i": 36,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['0'] (the top contributor has 0 followers). The agent answer is an empty string, which contains no value at all — the required item '0' is missing. An empty answer is INCORRECT."
+ },
+ {
+  "i": 37,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "must_include requires all five reviewers: Joseph Brzezinski, Catso, Dibbins, Anglebert Dinkherhump, Michelle Davis. The answer ('Catso, Dibbins, Anglebert Dinkherhump, Michelle DavisMichelle Davis') contains four of them but is missing 'Joseph Brzezinski'. Since a required item is absent, it is INCORRECT."
+ },
+ {
+  "i": 38,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "This is a must_include task requiring all 5 reviewers. The gold list is [Joseph Brzezinski, Catso, Dibbins, Anglebert Dinkherhump, Michelle Davis]. The answer contains only 4 (Catso, Dibbins, Anglebert Dinkherhump, Michelle Davis) and is missing the required item \"Joseph Brzezinski\". A missing required list item makes it INCORRECT."
+ },
+ {
+  "i": 39,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "The gold refs require must_include ['Goldfish', 'Roxanne Brandon Coffey'] — both reviewers must be present. The agent answer is 'Roxanne Brandon Coffey', which includes only one of the two required items and is missing 'Goldfish'. Since a required list item is absent, this is INCORRECT."
+ },
+ {
+  "i": 40,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "must_include requires both \"Goldfish\" and \"Roxanne Brandon Coffey\". The answer only contains \"Roxanne Brandon Coffey\" and is missing the required reviewer \"Goldfish\", so it is incorrect."
+ },
+ {
+  "i": 41,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include of both 0.14 and 745.00 (price range endpoints). The agent answered \"$0.01 - $17,774.32\", which contains neither required value — both endpoints are wrong. INCORRECT."
+ },
+ {
+  "i": 42,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['0.14', '745.00'] (price range 0.14 to 745.00). The agent answered '$0.01 - $17,774.32', which contains neither required endpoint — both 0.14 and 745.00 are missing, and the range endpoints are wrong. INCORRECT."
+ },
+ {
+  "i": 43,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['1.46', '85'] (price range $1.46 to $85). The agent answered only '$14.99', which contains neither required value 1.46 nor 85. Both required items are missing, so it is INCORRECT."
+ },
+ {
+  "i": 44,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "The gold reference is a must_include list requiring both \"1.46\" and \"85\" (price range $1.46–$85). The agent answer \"$10.99–$89.00\" contains neither required endpoint — both the low endpoint (10.99 vs 1.46) and the high endpoint (89.00 vs 85) are wrong. Both required items are missing, so it is INCORRECT."
+ },
+ {
+  "i": 45,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold is must_include ['2.56', '649.99']. The agent answer '$49.54 - $649.99' contains the upper endpoint 649.99 but the required lower endpoint 2.56 is missing (it gives 49.54 instead). Since a required must_include item is absent, the answer is incorrect."
+ },
+ {
+  "i": 46,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold must_include requires 47.41 (total food-related spend for March 2023). The agent answered $24.42, a different number, so the required value is not present. INCORRECT."
+ },
+ {
+  "i": 47,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['47.41'] (food-related shopping spend for March 2023). The agent answered $34.42, a different number that does not contain 47.41. Wrong value, INCORRECT."
+ },
+ {
+  "i": 48,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['95.23']. The agent answered $80.50, which is a different number and does not contain 95.23. Missing the required value, so INCORRECT."
+ },
+ {
+  "i": 49,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['95.23'] (total spent on hair care/hair style in Jan 2023). Agent answered $80.50, a different number. The required value 95.23 is missing."
+ },
+ {
+  "i": 50,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold must_include requires 265.69, but the agent answered $260.69. This is a different number (260.69 vs 265.69), so the required value is not present. INCORRECT."
+ },
+ {
+  "i": 51,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold must_include requires 265.69. The agent answered $260.69, which is a different number (260.69 vs 265.69). This is a numeric mismatch, not a formatting difference, so it is INCORRECT."
+ },
+ {
+  "i": 52,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold requires must_include ['0']. The agent answer '$0.00' equals 0 per the rubric ($0.00 equals 0, ignoring currency symbol and decimals). The required item is present."
+ },
+ {
+  "i": 53,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold requires must_include ['0']; agent answer '$0.00' semantically equals 0 (per rubric, $0.00 equals 0, currency symbols ignored), so the required item is present."
+ },
+ {
+  "i": 54,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold requires must_include \"16x24\". The agent answer \"Mist 16*24\" contains 16*24, which matches 16x24 aside from the separator (asterisk vs 'x'), an ignorable formatting difference. The required size dimension is present."
+ },
+ {
+  "i": 55,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold requires must_include ['16x24']. Answer 'Mist 16*24' contains 16*24, which equals 16x24 under the allowed separator difference (x vs *). The required size value is present, so CORRECT."
+ },
+ {
+  "i": 56,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['16x24'], but the agent answer is an empty string, so the required item is missing."
+ },
+ {
+  "i": 57,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "The gold reference requires must_include ['16x24'], but the agent's answer is an empty string, so the required item '16x24' is missing."
+ },
+ {
+  "i": 58,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "This is a must_include task requiring all 6 reference criticisms. The agent's answer (which is even truncated, ending mid-word at \"N'\") only loosely covers a couple of points: it mentions the card being used/needing format (partially overlapping with \"previous owners data has not been erased\" and \"I could not format the card\"). But it is MISSING most required items: \"I ordered the 16gb but I only got 14 gigs even though I formatted the card\", \"The memory card is kind of slow on games and downloads\", \"No original packaging It's used...\", \"The product is a legit sony hardware that have been owned by someone else before\", and \"The media could not be loaded\". Since multiple required items are absent, the answer is INCORRECT."
+ },
+ {
+  "i": 59,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "The gold reference is a must_include list of six required criticism sentences, but the agent answer is an empty string (''). No required items are present, so it fails the must_include rubric and an empty answer is explicitly INCORRECT."
+ },
+ {
+  "i": 60,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "The refs require a must_include list of 6 criticism sentences. The agent answer includes only the first three (\"The 39 was too small...\", \"I was very sad when the shoe rubbed up against my baby toe\", \"I had to return them because I knew in time it would tear up my feet\") and then is truncated (\"Everything w\"). It is missing three required items: \"The problem is that the strap is made of some really stiff leather and is painful to my heel\", \"The front is also uncomfortably tight\", and \"The Dansko's were similar (not as bad) and loosened up over time\". Missing required items makes it INCORRECT."
+ },
+ {
+  "i": 61,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "refs requires a must_include list of 6 criticism sentences. The agent answer is truncated (\"...Everything w\") and includes only the first 3 items (\"The 39 was too small...\", \"I was very sad when the shoe rubbed up against my baby toe\", \"I had to return them because I knew in time it would tear up my feet\"). The remaining required items are missing: \"The problem is that the strap is made of some really stiff leather and is painful to my heel\", \"The front is also uncomfortably tight\", and \"The Dansko's were similar (not as bad) and loosened up over time\". Missing required items means INCORRECT."
+ },
+ {
+  "i": 62,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold is a must_include list of 6 items. The agent's answer is truncated (\"...but now I understand why. T\") and only includes the first three (wireless connection ~40%, constantly runs out of ink, cartridge prices) plus a partial fragment. It is missing at least three required items: the \"more reasons NOT to work / error boxes saying out of paper when it switches to photo printing\" complaint, the \"Scanner is as slow as my first scanner in the mid-90's\" line, and the \"$176 / no fax component / PLUS name / migraines\" complaint. Since not every required item is present, it is INCORRECT."
+ },
+ {
+  "i": 63,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "The gold refs use a must_include list of 6 criticism sentences, so all must be present. The agent's answer is truncated after only the first ~2.5 items: it includes item 1 (wireless connection 40% of the time), item 2 (constantly runs out of ink), and a cut-off fragment of item 3 (cartridge prices ... \"but now I understand why. T\"). Items 4 (error boxes / out of paper on photo printing), 5 (scanner as slow as a mid-90's scanner), and 6 ($176 / no fax / \"PLUS\" migraines) are entirely missing. Since required items are absent, it is INCORRECT."
+ },
+ {
+  "i": 64,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['5.49', '375.19']. The answer '$5.49 - $508.37' contains the lower bound 5.49 but its upper endpoint is 508.37, not the required 375.19. The required item 375.19 is missing (wrong price-range endpoint), so it is INCORRECT."
+ },
+ {
+  "i": 65,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include of both '5.49' and '375.19' (the price range endpoints for Amazon Basics products). The agent answered '$0.01 - $28,942.99', which contains neither required value and gives a completely different, wrong price range. Both required items are missing."
+ },
+ {
+  "i": 66,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "must_include requires both 18.18 and 94.99. The answer's upper endpoint $94.99 matches, but the lower endpoint is $10.99 instead of the required 18.18, so a required item is missing. INCORRECT."
+ },
+ {
+  "i": 67,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold is must_include ['18.18','94.99']. The answer '$10.99 - $94.99' includes 94.99 but the required low endpoint 18.18 is missing (answer says 10.99 instead). A required item is absent, so INCORRECT."
+ },
+ {
+  "i": 68,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "The refs is a must_include list requiring all 12 Sony headphone product names plus the price range endpoints 18.99 and 406. The agent answer is truncated mid-word (\"Wireles\") and contains only 3 of the 12 required product names (MDRAS600BT, WH-1000XM3B bundle, and a partial WH-1000XM4). It is missing 9 required product names (e.g. SONY WH1000XM3 Silver Renewed, WH-CH710N/H, WH-CH510, WHCH710N Kratos bundle, WI-SP500, WI-SP510, WI-C300, XB950N1, H900N) and both price-range endpoints (18.99 and 406). Since required items are missing, it is INCORRECT."
+ },
+ {
+  "i": 69,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "must_include requires all 12 Sony headphone names plus the price range endpoints 18.99 and 406. The agent answer is truncated at 200 characters and contains only 3 of the 12 names (MDRAS600BT, WH-1000XM3B bundle, and a cut-off WH-1000XM4). It is missing 9 required headphone names (e.g., WH1000XM3/S Renewed, WH-CH710N/H, WH-CH510, WI-SP500, WI-SP510, WI-C300, XB950N1, H900N, WHCH710N bundle) and both price-range values (18.99 and 406). Multiple required items absent, so INCORRECT."
+ },
+ {
+  "i": 70,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "The refs is a must_include list requiring 13 specific Anker charger full names AND the two price endpoints 8.99 and 59.99. The agent answer \"$8.99–$59.99\" only contains the two prices (which match) but is missing every one of the 13 required charger full names (e.g., \"Anker USB C Charger 30W, 711 Charger...\", \"Anker PowerCore Speed 20000...\", etc.). Since required items are missing, it is INCORRECT."
+ },
+ {
+  "i": 71,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "The gold answer is a must_include list of 13 Anker charger full names plus price-range endpoints 8.99 and 59.99. The agent answer is truncated after only the first item (\"Anker 10W Max Wireless Charger, 313...No AC Adapter\") followed by an incomplete \"Anke\". It is missing 12 of the 13 required charger names (e.g. the 30W 711 Charger, 40W 521 Charger, PowerCore Speed 20000, etc.) and both price endpoints (8.99 and 59.99). Since required items are missing, it is INCORRECT."
+ },
+ {
+  "i": 72,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "must_include requires four items. The answer contains the two product names (Kids By Oral-b Stages Power Star Wars Replacement Heads and Oral-B Kids Extra Soft Replacement Brush Heads featuring STAR WARS, 2 count) but is missing BOTH required price-range endpoints, 3.745 and 6.495 — the answer contains no prices at all (it is truncated mid-listing). Missing required items means INCORRECT."
+ },
+ {
+  "i": 73,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "must_include requires four items; the answer misses most. It names a wrong product (\"Kids Toothbrush Replacement Heads ... 16 Pack\") with a wrong price ($1.19), only fragmentarily mentions \"Oral-B Kids Extra Soft Replacement Brush Heads\" without \"featuring STAR WARS, 2 count\", entirely omits the required \"Kids By Oral-b Stages Power Star Wars Replacement Heads 4 Pack\", and includes neither price-range endpoint (3.745 and 6.495)."
+ },
+ {
+  "i": 74,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "This is a must_include task requiring 9 specific product names plus price range endpoints 27.6 and 90.65. The agent's answer lists a completely different set of products (Nike Benassi Jdi Print Womens, Nike Jordan Break Mens AR6374-016, Nike Jordan Hydro 3 Retro Mens Slides, Nike Kawa Slide Big Kids) and does not contain a single one of the required gold items, nor either price-range endpoint. Nearly every required item is missing, so it is INCORRECT."
+ },
+ {
+  "i": 75,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "must_include grading: the answer is truncated at 200 chars (\"...Nike Offcourt Sl\") and is missing many required items. Present: \"Nike womens Benassi Just Do It\", \"Nike Jordan Men's Break Slide Red AR6374-602\", \"Nike Men's Benassi Solarsoft Slide Athletic Sandal (Black/White, numeric_14)\". MISSING: \"Nike Men's Air Max Camden Slide Sandal\", \"Nike Men's Benassi JDI Fanny Pack Slides\", \"Nike Victori One Mens Comfort Slide Cn9675-003...\", \"Nike Offcourt Slide Mens Bq4639-002 Size 12\" (only cut-off \"Nike Offcourt Sl\"), \"Nike Victori One Slide Mens Style : Dd9559-300\", \"Nike Men's Benassi Solarsoft Slide (Midnight Navy/Blue, numeric_8)\", and both price-range endpoints 27.6 and 90.65. Since required items are absent, it is INCORRECT."
+ },
+ {
+  "i": 76,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['0'] — the expected refund is 0. The agent answered $206.59, a different non-zero value that does not convey the required \"0\". Missing required item / wrong number, so INCORRECT."
+ },
+ {
+  "i": 77,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['0'], meaning the expected refund is 0. The agent answered $206.59, a completely different non-zero amount. This is a wrong number and does not convey the same factual content, so it is INCORRECT."
+ },
+ {
+  "i": 78,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold requires must_include [\"3053.97\"]. The agent answer \"$3,053.97\" contains 3053.97 after ignoring the currency symbol and thousands separator, which the rubric explicitly allows. All required content is present."
+ },
+ {
+  "i": 79,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold requires must_include ['3053.97']. Agent answer '$3,053.97' contains 3053.97 once the currency symbol ($) and thousands separator (,) are ignored per the rubric. The required value is present, so the answer is correct."
+ },
+ {
+  "i": 80,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "must_include requires '264.49', but the agent answered '$77.90' — a different number that does not contain the required value. Wrong refund amount, INCORRECT."
+ },
+ {
+  "i": 81,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['264.49']. The agent answered '$77.90', a completely different number that does not contain 264.49. Wrong value, so INCORRECT."
+ },
+ {
+  "i": 82,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold must_include requires \"0\". Answer is \"$0.00\", which equals 0 once currency symbols are ignored per the rubric ($0.00 equals 0). The required item is present."
+ },
+ {
+  "i": 83,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold must_include is ['0']. Answer '$0.00' equals 0 per the rubric ($0.00 equals 0, ignoring currency symbol), so the required item is present."
+ },
+ {
+  "i": 84,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "The gold must_include requires \"81.31\". The agent answered \"$83.31\", which is a different number (83.31 vs 81.31). A wrong number is INCORRECT regardless of currency formatting."
+ },
+ {
+  "i": 85,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold must_include requires \"81.31\"; the agent answered \"$83.31\" (83.31), a different number. The required value 81.31 is not present, so the answer is incorrect."
+ },
+ {
+  "i": 86,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['359.546']. The agent answered $403.18, a different number that does not match the required value 359.546 (nor its raw form). Missing required item, so INCORRECT."
+ },
+ {
+  "i": 87,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "Gold requires must_include ['359.546']. The agent answered $403.18, a different number that does not match 359.546. The task required applying a 20% discount, which the agent apparently did not compute (403.18 is not equal to 359.546, nor does 403.18*0.8=322.544 match). Missing the required value, so INCORRECT."
+ },
+ {
+  "i": 88,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Both must_include items are present. Item 1 \"Bornbridge Artificial Spiral Topiary Tree - Indoor / Outdoor Topiary Trees - Artificial Outdoor Plants (2 Pack, 4' Cypress)\" matches exactly. Item 2 gold \"Russound 5B45W 4\\\" Indoor Outdoor Speakers White\" appears as \"Russound 5B45W 4' Indoor Outdoor Speakers White\" — the only difference is 4' vs 4\\\" (a punctuation/separator difference to ignore). Comma separator between products is ignorable prose formatting."
+ },
+ {
+  "i": 89,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "must_include requires two items and both are present in the answer. Item 1 \"Bornbridge Artificial Spiral Topiary Tree - Indoor / Outdoor Topiary Trees - Artificial Outdoor Plants (2 Pack, 4' Cypress)\" matches verbatim. Item 2 \"Russound 5B45W 4\\\" Indoor Outdoor Speakers White\" appears as \"Russound 5B45W 4' Indoor Outdoor Speakers White\" — the only difference is the inch mark rendered as an apostrophe (a punctuation/separator difference that the rubric says to ignore). Both required items present, so CORRECT."
+ },
+ {
+  "i": 90,
+  "graded_correct": false,
+  "refuted": false,
+  "corrected": false,
+  "reason": "The gold must_include list has 8 names, but the agent answer omits \"N Randall\". The answer contains Lisa Lee, MH, Misba009, Amanda, Amazon Customer, Cally, and Bethany Robertson, but \"N Randall\" is missing. Since must_include requires every listed item to be present, the missing name makes this INCORRECT."
+ },
+ {
+  "i": 91,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold accepts \"65 |OR| 3\" (either value acceptable). The agent answer \"3\" matches one of the acceptable reference values."
+ },
+ {
+  "i": 92,
+  "graded_correct": true,
+  "refuted": false,
+  "corrected": true,
+  "reason": "Gold reference is must_include ['65 |OR| 3'], accepting either 65 or 3. Agent answered '3', which matches one of the accepted values exactly."
+ }
+]

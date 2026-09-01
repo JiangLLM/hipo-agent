@@ -1,0 +1,232 @@
+{
+  "django__django-15731": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-15731",
+    "model_patch": "diff --git a/django/db/models/manager.py b/django/db/models/manager.py\nindex e37e56cd17..7af8f68943 100644\n--- a/django/db/models/manager.py\n+++ b/django/db/models/manager.py\n@@ -1,4 +1,5 @@\n import copy\n+import functools\n import inspect\n from importlib import import_module\n \n@@ -84,8 +85,7 @@ class BaseManager:\n             def manager_method(self, *args, **kwargs):\n                 return getattr(self.get_queryset(), name)(*args, **kwargs)\n \n-            manager_method.__name__ = method.__name__\n-            manager_method.__doc__ = method.__doc__\n+            manager_method = functools.wraps(method)(manager_method)\n             return manager_method\n \n         new_methods = {}\n"
+  },
+  "django__django-15741": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-15741",
+    "model_patch": ""
+  },
+  "django__django-15732": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-15732",
+    "model_patch": "diff --git a/django/db/backends/base/schema.py b/django/db/backends/base/schema.py\nindex f2ca8c8df9..b3f9e7659a 100644\n--- a/django/db/backends/base/schema.py\n+++ b/django/db/backends/base/schema.py\n@@ -528,7 +528,7 @@ class BaseDatabaseSchemaEditor:\n         # Deleted uniques\n         for fields in olds.difference(news):\n             self._delete_composed_index(\n-                model, fields, {\"unique\": True}, self.sql_delete_unique\n+                model, fields, {\"unique\": True, \"primary_key\": False}, self.sql_delete_unique\n             )\n         # Created uniques\n         for field_names in news.difference(olds):\n"
+  },
+  "django__django-15695": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-15695",
+    "model_patch": "diff --git a/django/db/migrations/operations/models.py b/django/db/migrations/operations/models.py\nindex d17232e4ec..916fd5c8c9 100644\n--- a/django/db/migrations/operations/models.py\n+++ b/django/db/migrations/operations/models.py\n@@ -967,7 +967,41 @@ class RenameIndex(IndexOperation):\n \n     def database_backwards(self, app_label, schema_editor, from_state, to_state):\n         if self.old_fields:\n-            # Backward operation with unnamed index is a no-op.\n+            # For unnamed indexes, we need to rename back to the auto-generated name.\n+            model = from_state.apps.get_model(app_label, self.model_name)\n+            if not self.allow_migrate_model(schema_editor.connection.alias, model):\n+                return\n+\n+            # Find the index with the new_name in the database\n+            to_model = to_state.apps.get_model(app_label, self.model_name)\n+            columns = [\n+                to_model._meta.get_field(field).column for field in self.old_fields\n+            ]\n+            # Get the auto-generated index name from the database\n+            matching_index_name = schema_editor._constraint_names(\n+                to_model, column_names=columns, index=True\n+            )\n+            if len(matching_index_name) != 1:\n+                raise ValueError(\n+                    \"Found wrong number (%s) of indexes for %s(%s).\"\n+                    % (\n+                        len(matching_index_name),\n+                        to_model._meta.db_table,\n+                        \", \".join(columns),\n+                    )\n+                )\n+            \n+            # The index should still have the new_name, we need to rename it back\n+            # to the auto-generated name\n+            old_index = models.Index(\n+                fields=self.old_fields,\n+                name=self.new_name,\n+            )\n+            new_index = models.Index(\n+                fields=self.old_fields,\n+                name=matching_index_name[0],\n+            )\n+            schema_editor.rename_index(model, old_index, new_index)\n             return\n \n         self.new_name_lower, self.old_name_lower = (\n"
+  },
+  "django__django-15814": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-15814",
+    "model_patch": "diff --git a/django/db/models/sql/query.py b/django/db/models/sql/query.py\nindex 33cc636b22..5036335bec 100644\n--- a/django/db/models/sql/query.py\n+++ b/django/db/models/sql/query.py\n@@ -748,7 +748,7 @@ class Query(BaseExpression):\n                     cur_model = source.related_model\n                 else:\n                     cur_model = source.remote_field.model\n-                opts = cur_model._meta\n+                opts = cur_model._meta.concrete_model._meta\n                 # Even if we're \"just passing through\" this model, we must add\n                 # both the current model's pk and the related reference field\n                 # (if it's not a reverse relation) to the things we select.\n"
+  },
+  "django__django-15863": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-15863",
+    "model_patch": "diff --git a/django/template/defaultfilters.py b/django/template/defaultfilters.py\nindex 7a5b28d159..88ae555008 100644\n--- a/django/template/defaultfilters.py\n+++ b/django/template/defaultfilters.py\n@@ -151,8 +151,12 @@ def floatformat(text, arg=-1):\n             use_l10n = False\n             arg = arg[:-1] or -1\n     try:\n-        input_val = repr(text)\n-        d = Decimal(input_val)\n+        if isinstance(text, Decimal):\n+            d = text\n+            input_val = str(text)\n+        else:\n+            input_val = str(text)\n+            d = Decimal(input_val)\n     except InvalidOperation:\n         try:\n             d = Decimal(str(float(text)))\n"
+  },
+  "django__django-15851": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-15851",
+    "model_patch": "diff --git a/django/db/backends/postgresql/client.py b/django/db/backends/postgresql/client.py\nindex 4c9bd63546..3b5ddafaca 100644\n--- a/django/db/backends/postgresql/client.py\n+++ b/django/db/backends/postgresql/client.py\n@@ -32,9 +32,9 @@ class DatabaseClient(BaseDatabaseClient):\n             args += [\"-h\", host]\n         if port:\n             args += [\"-p\", str(port)]\n+        args.extend(parameters)\n         if dbname:\n             args += [dbname]\n-        args.extend(parameters)\n \n         env = {}\n         if passwd:\n"
+  },
+  "django__django-15973": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-15973",
+    "model_patch": ""
+  },
+  "django__django-15930": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-15930",
+    "model_patch": ""
+  },
+  "django__django-15957": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-15957",
+    "model_patch": ""
+  },
+  "django__django-15916": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-15916",
+    "model_patch": "diff --git a/django/forms/models.py b/django/forms/models.py\nindex 192d9fad94..ef82e716db 100644\n--- a/django/forms/models.py\n+++ b/django/forms/models.py\n@@ -272,6 +272,10 @@ class ModelFormMetaclass(DeclarativeFieldsMetaclass):\n \n         opts = new_class._meta = ModelFormOptions(getattr(new_class, \"Meta\", None))\n \n+        # Store formfield_callback in Meta for inheritance by subclasses\n+        if formfield_callback is not None and not hasattr(new_class.Meta, \"formfield_callback\"):\n+            new_class.Meta.formfield_callback = staticmethod(formfield_callback)\n+\n         # We check if a string was passed to `fields` or `exclude`,\n         # which is likely to be a mistake where the user typed ('foo') instead\n         # of ('foo',)\n@@ -636,7 +640,9 @@ def modelform_factory(\n     class_name = model.__name__ + \"Form\"\n \n     # Class attributes for the new form class.\n-    form_class_attrs = {\"Meta\": Meta, \"formfield_callback\": formfield_callback}\n+    form_class_attrs = {\"Meta\": Meta}\n+    if formfield_callback is not None:\n+        form_class_attrs[\"formfield_callback\"] = formfield_callback\n \n     if getattr(Meta, \"fields\", None) is None and getattr(Meta, \"exclude\", None) is None:\n         raise ImproperlyConfigured(\n"
+  },
+  "django__django-15987": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-15987",
+    "model_patch": "diff --git a/django/core/management/commands/loaddata.py b/django/core/management/commands/loaddata.py\nindex ac97f13161..6e4a913af7 100644\n--- a/django/core/management/commands/loaddata.py\n+++ b/django/core/management/commands/loaddata.py\n@@ -362,12 +362,15 @@ class Command(BaseCommand):\n         \"\"\"\n         dirs = []\n         fixture_dirs = settings.FIXTURE_DIRS\n-        if len(fixture_dirs) != len(set(fixture_dirs)):\n+        # Normalize all fixture dirs to strings to detect duplicates correctly,\n+        # even when mixing strings and Path instances.\n+        normalized_fixture_dirs = [os.path.realpath(d) for d in fixture_dirs]\n+        if len(normalized_fixture_dirs) != len(set(normalized_fixture_dirs)):\n             raise ImproperlyConfigured(\"settings.FIXTURE_DIRS contains duplicates.\")\n         for app_config in apps.get_app_configs():\n             app_label = app_config.label\n             app_dir = os.path.join(app_config.path, \"fixtures\")\n-            if app_dir in fixture_dirs:\n+            if app_dir in normalized_fixture_dirs:\n                 raise ImproperlyConfigured(\n                     \"'%s' is a default fixture directory for the '%s' app \"\n                     \"and cannot be listed in settings.FIXTURE_DIRS.\"\n@@ -378,9 +381,9 @@ class Command(BaseCommand):\n                 continue\n             if os.path.isdir(app_dir):\n                 dirs.append(app_dir)\n-        dirs.extend(fixture_dirs)\n+        dirs.extend(normalized_fixture_dirs)\n         dirs.append(\"\")\n-        return [os.path.realpath(d) for d in dirs]\n+        return dirs\n \n     def parse_name(self, fixture_name):\n         \"\"\"\n"
+  },
+  "django__django-16082": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16082",
+    "model_patch": "diff --git a/django/db/models/expressions.py b/django/db/models/expressions.py\nindex 5e3c7cab82..cbf4fd8296 100644\n--- a/django/db/models/expressions.py\n+++ b/django/db/models/expressions.py\n@@ -533,6 +533,7 @@ _connector_combinations = [\n             Combinable.SUB,\n             Combinable.MUL,\n             Combinable.DIV,\n+            Combinable.MOD,\n         )\n     },\n     # Bitwise operators.\n"
+  },
+  "django__django-16032": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16032",
+    "model_patch": ""
+  },
+  "django__django-16100": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16100",
+    "model_patch": ""
+  },
+  "django__django-16116": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16116",
+    "model_patch": ""
+  },
+  "django__django-16136": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16136",
+    "model_patch": "diff --git a/django/views/generic/base.py b/django/views/generic/base.py\nindex db1842e3e5..3a3afb0c73 100644\n--- a/django/views/generic/base.py\n+++ b/django/views/generic/base.py\n@@ -148,7 +148,16 @@ class View:\n             request.path,\n             extra={\"status_code\": 405, \"request\": request},\n         )\n-        return HttpResponseNotAllowed(self._allowed_methods())\n+        response = HttpResponseNotAllowed(self._allowed_methods())\n+\n+        if self.view_is_async:\n+\n+            async def func():\n+                return response\n+\n+            return func()\n+        else:\n+            return response\n \n     def options(self, request, *args, **kwargs):\n         \"\"\"Handle responding to requests for the OPTIONS HTTP verb.\"\"\"\n"
+  },
+  "django__django-16139": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16139",
+    "model_patch": "diff --git a/django/contrib/auth/forms.py b/django/contrib/auth/forms.py\nindex b3cfc6723c..f6c4b7fc2f 100644\n--- a/django/contrib/auth/forms.py\n+++ b/django/contrib/auth/forms.py\n@@ -163,7 +163,7 @@ class UserChangeForm(forms.ModelForm):\n         super().__init__(*args, **kwargs)\n         password = self.fields.get(\"password\")\n         if password:\n-            password.help_text = password.help_text.format(\"../password/\")\n+            password.help_text = password.help_text.format(f\"../../{self.instance.pk}/password/\")\n         user_permissions = self.fields.get(\"user_permissions\")\n         if user_permissions:\n             user_permissions.queryset = user_permissions.queryset.select_related(\n"
+  },
+  "django__django-16255": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16255",
+    "model_patch": "diff --git a/django/contrib/sitemaps/__init__.py b/django/contrib/sitemaps/__init__.py\nindex 27756d9d96..b40ad806ed 100644\n--- a/django/contrib/sitemaps/__init__.py\n+++ b/django/contrib/sitemaps/__init__.py\n@@ -168,7 +168,7 @@ class Sitemap:\n         if callable(self.lastmod):\n             try:\n                 return max([self.lastmod(item) for item in self.items()])\n-            except TypeError:\n+            except (TypeError, ValueError):\n                 return None\n         else:\n             return self.lastmod\n"
+  },
+  "django__django-16145": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16145",
+    "model_patch": "diff --git a/django/core/management/commands/runserver.py b/django/core/management/commands/runserver.py\nindex 3c39f57e4d..150c94eaea 100644\n--- a/django/core/management/commands/runserver.py\n+++ b/django/core/management/commands/runserver.py\n@@ -108,6 +108,9 @@ class Command(BaseCommand):\n         if not self.addr:\n             self.addr = self.default_addr_ipv6 if self.use_ipv6 else self.default_addr\n             self._raw_ipv6 = self.use_ipv6\n+        # Normalize \"0\" to \"0.0.0.0\" for IPv4\n+        if self.addr == \"0\":\n+            self.addr = \"0.0.0.0\"\n         self.run(**options)\n \n     def run(self, **options):\n"
+  },
+  "django__django-16256": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16256",
+    "model_patch": ""
+  },
+  "django__django-16315": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16315",
+    "model_patch": "diff --git a/django/db/models/sql/compiler.py b/django/db/models/sql/compiler.py\nindex 0562a71dd1..89101490ad 100644\n--- a/django/db/models/sql/compiler.py\n+++ b/django/db/models/sql/compiler.py\n@@ -1722,11 +1722,21 @@ class SQLInsertCompiler(SQLCompiler):\n \n         placeholder_rows, param_rows = self.assemble_as_sql(fields, value_rows)\n \n+        # Convert field names to database column names for conflict handling\n+        update_fields_columns = [\n+            opts.get_field(field_name).column\n+            for field_name in self.query.update_fields\n+        ]\n+        unique_fields_columns = [\n+            opts.get_field(field_name).column\n+            for field_name in self.query.unique_fields\n+        ]\n+\n         on_conflict_suffix_sql = self.connection.ops.on_conflict_suffix_sql(\n             fields,\n             self.query.on_conflict,\n-            self.query.update_fields,\n-            self.query.unique_fields,\n+            update_fields_columns,\n+            unique_fields_columns,\n         )\n         if (\n             self.returning_fields\n"
+  },
+  "django__django-16263": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16263",
+    "model_patch": ""
+  },
+  "django__django-16429": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16429",
+    "model_patch": "diff --git a/django/utils/timesince.py b/django/utils/timesince.py\nindex 701c49bab9..f582d0e4f2 100644\n--- a/django/utils/timesince.py\n+++ b/django/utils/timesince.py\n@@ -97,6 +97,7 @@ def timesince(d, now=None, reversed=False, time_strings=None, depth=2):\n             d.hour,\n             d.minute,\n             d.second,\n+            tzinfo=d.tzinfo,\n         )\n     else:\n         pivot = d\n"
+  },
+  "django__django-16333": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16333",
+    "model_patch": ""
+  },
+  "django__django-16485": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16485",
+    "model_patch": "diff --git a/django/template/defaultfilters.py b/django/template/defaultfilters.py\nindex 23c3a08c67..7ace6675d5 100644\n--- a/django/template/defaultfilters.py\n+++ b/django/template/defaultfilters.py\n@@ -183,7 +183,7 @@ def floatformat(text, arg=-1):\n     tupl = d.as_tuple()\n     units = len(tupl[1])\n     units += -tupl[2] if m else tupl[2]\n-    prec = abs(p) + units + 1\n+    prec = max(abs(p) + units + 1, 1)\n \n     # Avoid conversion to scientific notation by accessing `sign`, `digits`,\n     # and `exponent` from Decimal.as_tuple() directly.\n"
+  },
+  "django__django-16454": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16454",
+    "model_patch": ""
+  },
+  "django__django-16493": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16493",
+    "model_patch": "diff --git a/django/db/models/fields/files.py b/django/db/models/fields/files.py\nindex 7a99b12691..04b3eb3473 100644\n--- a/django/db/models/fields/files.py\n+++ b/django/db/models/fields/files.py\n@@ -295,8 +295,9 @@ class FileField(Field):\n         if kwargs.get(\"max_length\") == 100:\n             del kwargs[\"max_length\"]\n         kwargs[\"upload_to\"] = self.upload_to\n-        if self.storage is not default_storage:\n-            kwargs[\"storage\"] = getattr(self, \"_storage_callable\", self.storage)\n+        storage = getattr(self, \"_storage_callable\", self.storage)\n+        if storage is not default_storage:\n+            kwargs[\"storage\"] = storage\n         return name, path, args, kwargs\n \n     def get_internal_type(self):\n"
+  },
+  "django__django-16502": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16502",
+    "model_patch": "diff --git a/django/core/servers/basehttp.py b/django/core/servers/basehttp.py\nindex fef5532e58..d08fb77a47 100644\n--- a/django/core/servers/basehttp.py\n+++ b/django/core/servers/basehttp.py\n@@ -11,6 +11,7 @@ import logging\n import socket\n import socketserver\n import sys\n+from collections import deque\n from wsgiref import simple_server\n \n from django.core.exceptions import ImproperlyConfigured\n@@ -130,10 +131,18 @@ class ServerHandler(simple_server.ServerHandler):\n \n     def cleanup_headers(self):\n         super().cleanup_headers()\n+        if (\n+            self.environ[\"REQUEST_METHOD\"] == \"HEAD\"\n+            and \"Content-Length\" in self.headers\n+        ):\n+            del self.headers[\"Content-Length\"]\n         # HTTP/1.1 requires support for persistent connections. Send 'close' if\n         # the content length is unknown to prevent clients from reusing the\n         # connection.\n-        if \"Content-Length\" not in self.headers:\n+        if (\n+            self.environ[\"REQUEST_METHOD\"] != \"HEAD\"\n+            and \"Content-Length\" not in self.headers\n+        ):\n             self.headers[\"Connection\"] = \"close\"\n         # Persistent connections require threading server.\n         elif not isinstance(self.request_handler.server, socketserver.ThreadingMixIn):\n@@ -147,6 +156,22 @@ class ServerHandler(simple_server.ServerHandler):\n         self.get_stdin().read()\n         super().close()\n \n+    def finish_response(self):\n+        if self.environ[\"REQUEST_METHOD\"] == \"HEAD\":\n+            try:\n+                deque(self.result, maxlen=0)  # Consume iterator.\n+                # Don't call self.finish_content() as, if the headers have not\n+                # been sent and Content-Length isn't set, it'll default to \"0\"\n+                # which will prevent omission of the Content-Length header with\n+                # HEAD requests as permitted by RFC 9110 Section 9.3.2.\n+                # Instead, send the headers, if not sent yet.\n+                if not self.headers_sent:\n+                    self.send_headers()\n+            finally:\n+                self.close()\n+        else:\n+            super().finish_response()\n+\n \n class WSGIRequestHandler(simple_server.WSGIRequestHandler):\n     protocol_version = \"HTTP/1.1\"\n"
+  },
+  "django__django-16527": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16527",
+    "model_patch": "diff --git a/django/contrib/admin/templatetags/admin_modify.py b/django/contrib/admin/templatetags/admin_modify.py\nindex 9df4b7aadb..5b742af46a 100644\n--- a/django/contrib/admin/templatetags/admin_modify.py\n+++ b/django/contrib/admin/templatetags/admin_modify.py\n@@ -100,6 +100,7 @@ def submit_row(context):\n                 and context.get(\"show_delete\", True)\n             ),\n             \"show_save_as_new\": not is_popup\n+            and has_add_permission\n             and has_change_permission\n             and change\n             and save_as,\n"
+  },
+  "django__django-16569": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16569",
+    "model_patch": "diff --git a/django/forms/formsets.py b/django/forms/formsets.py\nindex 235aaf844c..02d040ee03 100644\n--- a/django/forms/formsets.py\n+++ b/django/forms/formsets.py\n@@ -490,7 +490,7 @@ class BaseFormSet(RenderableFormMixin):\n                     required=False,\n                     widget=self.get_ordering_widget(),\n                 )\n-        if self.can_delete and (self.can_delete_extra or index < initial_form_count):\n+        if self.can_delete and (self.can_delete_extra or (index is not None and index < initial_form_count)):\n             form.fields[DELETION_FIELD_NAME] = BooleanField(\n                 label=_(\"Delete\"),\n                 required=False,\n"
+  },
+  "django__django-16595": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16595",
+    "model_patch": "diff --git a/django/db/migrations/operations/fields.py b/django/db/migrations/operations/fields.py\nindex cd3aab43ad..4f3d4c7fcc 100644\n--- a/django/db/migrations/operations/fields.py\n+++ b/django/db/migrations/operations/fields.py\n@@ -251,6 +251,10 @@ class AlterField(FieldOperation):\n             operation\n         ):\n             return [operation]\n+        elif isinstance(operation, AlterField) and self.is_same_field_operation(\n+            operation\n+        ):\n+            return [operation]\n         elif (\n             isinstance(operation, RenameField)\n             and self.is_same_field_operation(operation)\n"
+  },
+  "django__django-16612": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16612",
+    "model_patch": "diff --git a/django/contrib/admin/sites.py b/django/contrib/admin/sites.py\nindex 61be31d890..96c54e44ad 100644\n--- a/django/contrib/admin/sites.py\n+++ b/django/contrib/admin/sites.py\n@@ -453,7 +453,7 @@ class AdminSite:\n                 pass\n             else:\n                 if getattr(match.func, \"should_append_slash\", True):\n-                    return HttpResponsePermanentRedirect(\"%s/\" % request.path)\n+                    return HttpResponsePermanentRedirect(request.get_full_path(force_append_slash=True))\n         raise Http404\n \n     def _build_app_dict(self, request, label=None):\n"
+  },
+  "django__django-16560": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16560",
+    "model_patch": "diff --git a/django/contrib/postgres/constraints.py b/django/contrib/postgres/constraints.py\nindex ad3a5f61f5..ebe9120411 100644\n--- a/django/contrib/postgres/constraints.py\n+++ b/django/contrib/postgres/constraints.py\n@@ -33,6 +33,7 @@ class ExclusionConstraint(BaseConstraint):\n         deferrable=None,\n         include=None,\n         violation_error_message=None,\n+        violation_error_code=None,\n     ):\n         if index_type and index_type.lower() not in {\"gist\", \"spgist\"}:\n             raise ValueError(\n@@ -60,7 +61,7 @@ class ExclusionConstraint(BaseConstraint):\n         self.condition = condition\n         self.deferrable = deferrable\n         self.include = tuple(include) if include else ()\n-        super().__init__(name=name, violation_error_message=violation_error_message)\n+        super().__init__(name=name, violation_error_message=violation_error_message, violation_error_code=violation_error_code)\n \n     def _get_expressions(self, schema_editor, query):\n         expressions = []\n@@ -150,6 +151,7 @@ class ExclusionConstraint(BaseConstraint):\n                 and self.deferrable == other.deferrable\n                 and self.include == other.include\n                 and self.violation_error_message == other.violation_error_message\n+                and self.violation_error_code == other.violation_error_code\n             )\n         return super().__eq__(other)\n \n@@ -204,9 +206,15 @@ class ExclusionConstraint(BaseConstraint):\n             queryset = queryset.exclude(pk=model_class_pk)\n         if not self.condition:\n             if queryset.exists():\n-                raise ValidationError(self.get_violation_error_message())\n+                raise ValidationError(\n+                    self.get_violation_error_message(),\n+                    code=self.violation_error_code,\n+                )\n         else:\n             if (self.condition & Exists(queryset.filter(self.condition))).check(\n                 replacement_map, using=using\n             ):\n-                raise ValidationError(self.get_violation_error_message())\n+                raise ValidationError(\n+                    self.get_violation_error_message(),\n+                    code=self.violation_error_code,\n+                )\ndiff --git a/django/db/models/constraints.py b/django/db/models/constraints.py\nindex 075ecee1be..bed4feb03a 100644\n--- a/django/db/models/constraints.py\n+++ b/django/db/models/constraints.py\n@@ -19,10 +19,11 @@ __all__ = [\"BaseConstraint\", \"CheckConstraint\", \"Deferrable\", \"UniqueConstraint\"\n class BaseConstraint:\n     default_violation_error_message = _(\"Constraint \u201c%(name)s\u201d is violated.\")\n     violation_error_message = None\n+    violation_error_code = None\n \n     # RemovedInDjango60Warning: When the deprecation ends, replace with:\n     # def __init__(self, *, name, violation_error_message=None):\n-    def __init__(self, *args, name=None, violation_error_message=None):\n+    def __init__(self, *args, name=None, violation_error_message=None, violation_error_code=None):\n         # RemovedInDjango60Warning.\n         if name is None and not args:\n             raise TypeError(\n@@ -34,6 +35,8 @@ class BaseConstraint:\n             self.violation_error_message = violation_error_message\n         else:\n             self.violation_error_message = self.default_violation_error_message\n+        if violation_error_code is not None:\n+            self.violation_error_code = violation_error_code\n         # RemovedInDjango60Warning.\n         if args:\n             warnings.warn(\n@@ -74,6 +77,8 @@ class BaseConstraint:\n             and self.violation_error_message != self.default_violation_error_message\n         ):\n             kwargs[\"violation_error_message\"] = self.violation_error_message\n+        if self.violation_error_code is not None:\n+            kwargs[\"violation_error_code\"] = self.violation_error_code\n         return (path, (), kwargs)\n \n     def clone(self):\n@@ -82,13 +87,13 @@ class BaseConstraint:\n \n \n class CheckConstraint(BaseConstraint):\n-    def __init__(self, *, check, name, violation_error_message=None):\n+    def __init__(self, *, check, name, violation_error_message=None, violation_error_code=None):\n         self.check = check\n         if not getattr(check, \"conditional\", False):\n             raise TypeError(\n                 \"CheckConstraint.check must be a Q instance or boolean expression.\"\n             )\n-        super().__init__(name=name, violation_error_message=violation_error_message)\n+        super().__init__(name=name, violation_error_message=violation_error_message, violation_error_code=violation_error_code)\n \n     def _get_check_sql(self, model, schema_editor):\n         query = Query(model=model, alias_cols=False)\n@@ -112,7 +117,10 @@ class CheckConstraint(BaseConstraint):\n         against = instance._get_field_value_map(meta=model._meta, exclude=exclude)\n         try:\n             if not Q(self.check).check(against, using=using):\n-                raise ValidationError(self.get_violation_error_message())\n+                raise ValidationError(\n+                    self.get_violation_error_message(),\n+                    code=self.violation_error_code,\n+                )\n         except FieldError:\n             pass\n \n@@ -135,6 +143,7 @@ class CheckConstraint(BaseConstraint):\n                 self.name == other.name\n                 and self.check == other.check\n                 and self.violation_error_message == other.violation_error_message\n+                and self.violation_error_code == other.violation_error_code\n             )\n         return super().__eq__(other)\n \n@@ -164,6 +173,7 @@ class UniqueConstraint(BaseConstraint):\n         include=None,\n         opclasses=(),\n         violation_error_message=None,\n+        violation_error_code=None,\n     ):\n         if not name:\n             raise ValueError(\"A unique constraint must be named.\")\n@@ -213,7 +223,7 @@ class UniqueConstraint(BaseConstraint):\n             F(expression) if isinstance(expression, str) else expression\n             for expression in expressions\n         )\n-        super().__init__(name=name, violation_error_message=violation_error_message)\n+        super().__init__(name=name, violation_error_message=violation_error_message, violation_error_code=violation_error_code)\n \n     @property\n     def contains_expressions(self):\n@@ -321,6 +331,7 @@ class UniqueConstraint(BaseConstraint):\n                 and self.opclasses == other.opclasses\n                 and self.expressions == other.expressions\n                 and self.violation_error_message == other.violation_error_message\n+                and self.violation_error_code == other.violation_error_code\n             )\n         return super().__eq__(other)\n \n@@ -385,7 +396,10 @@ class UniqueConstraint(BaseConstraint):\n         if not self.condition:\n             if queryset.exists():\n                 if self.expressions:\n-                    raise ValidationError(self.get_violation_error_message())\n+                    raise ValidationError(\n+                        self.get_violation_error_message(),\n+                        code=self.violation_error_code,\n+                    )\n                 # When fields are defined, use the unique_error_message() for\n                 # backward compatibility.\n                 for model, constraints in instance.get_constraints():\n@@ -400,6 +414,9 @@ class UniqueConstraint(BaseConstraint):\n                 if (self.condition & Exists(queryset.filter(self.condition))).check(\n                     against, using=using\n                 ):\n-                    raise ValidationError(self.get_violation_error_message())\n+                    raise ValidationError(\n+                        self.get_violation_error_message(),\n+                        code=self.violation_error_code,\n+                    )\n             except FieldError:\n                 pass\n"
+  },
+  "django__django-16642": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16642",
+    "model_patch": "diff --git a/django/http/response.py b/django/http/response.py\nindex f62dec8ce9..393330dba1 100644\n--- a/django/http/response.py\n+++ b/django/http/response.py\n@@ -610,6 +610,8 @@ class FileResponse(StreamingHttpResponse):\n                 # uncompressing files.\n                 content_type = {\n                     \"bzip2\": \"application/x-bzip\",\n+                    \"br\": \"application/x-br\",\n+                    \"compress\": \"application/x-compress\",\n                     \"gzip\": \"application/gzip\",\n                     \"xz\": \"application/x-xz\",\n                 }.get(encoding, content_type)\n"
+  },
+  "django__django-16631": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16631",
+    "model_patch": "diff --git a/django/contrib/auth/__init__.py b/django/contrib/auth/__init__.py\nindex 155330c596..d3b0deb625 100644\n--- a/django/contrib/auth/__init__.py\n+++ b/django/contrib/auth/__init__.py\n@@ -199,9 +199,13 @@ def get_user(request):\n             # Verify the session\n             if hasattr(user, \"get_session_auth_hash\"):\n                 session_hash = request.session.get(HASH_SESSION_KEY)\n-                session_hash_verified = session_hash and constant_time_compare(\n-                    session_hash, user.get_session_auth_hash()\n-                )\n+                # Use _verify_session_auth_hash if available to support fallback keys\n+                if hasattr(user, \"_verify_session_auth_hash\"):\n+                    session_hash_verified = user._verify_session_auth_hash(session_hash)\n+                else:\n+                    session_hash_verified = session_hash and constant_time_compare(\n+                        session_hash, user.get_session_auth_hash()\n+                    )\n                 if not session_hash_verified:\n                     request.session.flush()\n                     user = None\ndiff --git a/django/contrib/auth/base_user.py b/django/contrib/auth/base_user.py\nindex 5ee30bf59c..9d8ed53e27 100644\n--- a/django/contrib/auth/base_user.py\n+++ b/django/contrib/auth/base_user.py\n@@ -12,7 +12,7 @@ from django.contrib.auth.hashers import (\n     make_password,\n )\n from django.db import models\n-from django.utils.crypto import get_random_string, salted_hmac\n+from django.utils.crypto import get_random_string, constant_time_compare, salted_hmac\n from django.utils.deprecation import RemovedInDjango51Warning\n from django.utils.translation import gettext_lazy as _\n \n@@ -142,6 +142,36 @@ class AbstractBaseUser(models.Model):\n             algorithm=\"sha256\",\n         ).hexdigest()\n \n+    def _verify_session_auth_hash(self, session_hash):\n+        \"\"\"\n+        Verify that the given session hash matches the user's password.\n+        Checks against the current SECRET_KEY and all fallback keys.\n+        Returns True if the hash matches any key, False otherwise.\n+        \"\"\"\n+        if not session_hash:\n+            return False\n+        \n+        # Try current secret first\n+        if constant_time_compare(session_hash, self.get_session_auth_hash()):\n+            return True\n+        \n+        # Try fallback keys\n+        from django.conf import settings\n+        from django.utils.crypto import salted_hmac\n+        \n+        key_salt = \"django.contrib.auth.models.AbstractBaseUser.get_session_auth_hash\"\n+        for fallback_secret in settings.SECRET_KEY_FALLBACKS:\n+            fallback_hash = salted_hmac(\n+                key_salt,\n+                self.password,\n+                secret=fallback_secret,\n+                algorithm=\"sha256\",\n+            ).hexdigest()\n+            if constant_time_compare(session_hash, fallback_hash):\n+                return True\n+        \n+        return False\n+\n     @classmethod\n     def get_email_field_name(cls):\n         try:\n"
+  },
+  "django__django-16661": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16661",
+    "model_patch": "diff --git a/django/contrib/admin/options.py b/django/contrib/admin/options.py\nindex 5240b07cd6..9479649968 100644\n--- a/django/contrib/admin/options.py\n+++ b/django/contrib/admin/options.py\n@@ -464,9 +464,13 @@ class BaseModelAdmin(metaclass=forms.MediaDefiningClass):\n             # It is allowed to filter on values that would be found from local\n             # model anyways. For example, if you filter on employee__department__id,\n             # then the id value would be found already from employee__department_id.\n+            # However, if the field is a OneToOneField with primary_key=True,\n+            # we should not skip it as it's an essential part of the traversal.\n             if not prev_field or (\n                 prev_field.is_relation\n                 and field not in prev_field.path_infos[-1].target_fields\n+            ) or (\n+                isinstance(field, models.OneToOneField) and field.primary_key\n             ):\n                 relation_parts.append(part)\n             if not getattr(field, \"path_infos\", None):\n"
+  },
+  "django__django-16662": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16662",
+    "model_patch": "diff --git a/django/db/migrations/writer.py b/django/db/migrations/writer.py\nindex a59f0c8dcb..450051d3ca 100644\n--- a/django/db/migrations/writer.py\n+++ b/django/db/migrations/writer.py\n@@ -175,7 +175,7 @@ class MigrationWriter:\n \n         # Sort imports by the package / module to be imported (the part after\n         # \"from\" in \"from ... import ...\" or after \"import\" in \"import ...\").\n-        sorted_imports = sorted(imports, key=lambda i: i.split()[1])\n+        sorted_imports = sorted(imports, key=lambda i: (i.split()[0] != 'import', i.split()[1]))\n         items[\"imports\"] = \"\\n\".join(sorted_imports) + \"\\n\" if imports else \"\"\n         if migration_imports:\n             items[\"imports\"] += (\n"
+  },
+  "django__django-16667": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16667",
+    "model_patch": "diff --git a/django/forms/widgets.py b/django/forms/widgets.py\nindex 842b73e95c..f4bc74b7cd 100644\n--- a/django/forms/widgets.py\n+++ b/django/forms/widgets.py\n@@ -1157,7 +1157,7 @@ class SelectDateWidget(Widget):\n             input_format = formats.sanitize_strftime_format(input_format)\n             try:\n                 date_value = datetime.date(int(y), int(m), int(d))\n-            except ValueError:\n+            except (ValueError, OverflowError):\n                 # Return pseudo-ISO dates with zeros for any unselected values,\n                 # e.g. '2017-0-23'.\n                 return \"%s-%s-%s\" % (y or 0, m or 0, d or 0)\n"
+  },
+  "django__django-16801": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16801",
+    "model_patch": "diff --git a/django/db/models/fields/files.py b/django/db/models/fields/files.py\nindex 7f8eb128e1..3b1b1de97f 100644\n--- a/django/db/models/fields/files.py\n+++ b/django/db/models/fields/files.py\n@@ -441,7 +441,8 @@ class ImageField(FileField):\n         # after their corresponding image field don't stay cleared by\n         # Model.__init__, see bug #11196.\n         # Only run post-initialization dimension update on non-abstract models\n-        if not cls._meta.abstract:\n+        # and only if dimension fields are defined.\n+        if not cls._meta.abstract and (self.width_field or self.height_field):\n             signals.post_init.connect(self.update_dimension_fields, sender=cls)\n \n     def update_dimension_fields(self, instance, force=False, *args, **kwargs):\n"
+  },
+  "django__django-16819": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16819",
+    "model_patch": ""
+  },
+  "django__django-16877": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16877",
+    "model_patch": ""
+  },
+  "django__django-16899": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16899",
+    "model_patch": "diff --git a/django/contrib/admin/checks.py b/django/contrib/admin/checks.py\nindex c395b0bde2..bbd0f9d76f 100644\n--- a/django/contrib/admin/checks.py\n+++ b/django/contrib/admin/checks.py\n@@ -771,10 +771,11 @@ class BaseModelAdminChecks:\n             except FieldDoesNotExist:\n                 return [\n                     checks.Error(\n-                        \"The value of '%s' is not a callable, an attribute of \"\n+                        \"The value of '%s' refers to '%s', which is not a callable, an attribute of \"\n                         \"'%s', or an attribute of '%s'.\"\n                         % (\n                             label,\n+                            field_name,\n                             obj.__class__.__name__,\n                             obj.model._meta.label,\n                         ),\ndiff --git a/tests/admin_checks/tests.py b/tests/admin_checks/tests.py\nindex 4d171ed737..e26d0aedd0 100644\n--- a/tests/admin_checks/tests.py\n+++ b/tests/admin_checks/tests.py\n@@ -798,7 +798,7 @@ class SystemChecksTestCase(SimpleTestCase):\n         errors = SongAdmin(Song, AdminSite()).check()\n         expected = [\n             checks.Error(\n-                \"The value of 'readonly_fields[1]' is not a callable, an attribute \"\n+                \"The value of 'readonly_fields[1]' refers to 'nonexistent', which is not a callable, an attribute \"\n                 \"of 'SongAdmin', or an attribute of 'admin_checks.Song'.\",\n                 obj=SongAdmin,\n                 id=\"admin.E035\",\n@@ -814,7 +814,7 @@ class SystemChecksTestCase(SimpleTestCase):\n         errors = CityInline(State, AdminSite()).check()\n         expected = [\n             checks.Error(\n-                \"The value of 'readonly_fields[0]' is not a callable, an attribute \"\n+                \"The value of 'readonly_fields[0]' refers to 'i_dont_exist', which is not a callable, an attribute \"\n                 \"of 'CityInline', or an attribute of 'admin_checks.City'.\",\n                 obj=CityInline,\n                 id=\"admin.E035\",\n"
+  },
+  "django__django-16901": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16901",
+    "model_patch": ""
+  },
+  "django__django-16938": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16938",
+    "model_patch": ""
+  },
+  "django__django-16950": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "django__django-16950",
+    "model_patch": ""
+  }
+}

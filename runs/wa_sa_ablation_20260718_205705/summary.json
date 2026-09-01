@@ -1,0 +1,21 @@
+{
+  "n_tasks": 40,
+  "site": "shopping_admin",
+  "arms": [
+    "nomem",
+    "frozenmem"
+  ],
+  "nomem": {
+    "n": 40,
+    "reward_sr": 0.675,
+    "layer1_writes": 0,
+    "layer2_writes": 0
+  },
+  "frozenmem": {
+    "n": 40,
+    "reward_sr": 0.65,
+    "layer1_writes": 0,
+    "layer2_writes": 0
+  },
+  "spent_usd": 74.6282
+}

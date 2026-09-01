@@ -1,0 +1,682 @@
+[
+ {
+  "task_id": 6,
+  "kind": "WIN",
+  "etype": "must",
+  "intent": "What are the top-5 best-selling product in 2023",
+  "gold": {
+   "must_include": [
+    "Sprite Yoga Strap 6 foot",
+    "Overnight Duffle",
+    "Ida Workout Parachute Pant-29-Purple",
+    "Hawkeye Yoga Short-32-Blue",
+    "Sprite Stasis Ball 65 cm"
+   ]
+  },
+  "retrieved": [
+   {
+    "title": "Use the filterable Bestsellers report",
+    "content": "Open “REPORTS,” navigate to the Products “Bestsellers” report, set the visible “Period,” “From,” and “To” controls, then activate “Show Report.” Confirm the normalized dates remain in the filter fields and that result rows have loaded before extracting anything."
+   }
+  ],
+  "nomem_answer": "Sprite Yoga Strap 6 foot, Overnight Duffle, Ida Workout Parachute Pant-29-Purple, Sprite Stasis Ball 65 cm, Im",
+  "withmem_answer": "Sprite Yoga Strap 6 foot, Overnight Duffle, Ida Workout Parachute Pant-29-Purple, Hawkeye Yoga Short-32-Blue, ",
+  "nomem_trace": [
+   "click('339')|The dashboard’s Bestsellers widget is not explicitly filtered to ",
+   "click('431')|The Reports menu is open and the Products section contains the de",
+   "select_option('749', 'Year')|The report filter is visible. To aggregate sales for the requeste",
+   "fill('757', '01/01/2023')|The period is set to Year. I’ll enter the start of the requested ",
+   "fill('764', '12/31/2023')|The From date is set. I’ll enter the end of the 2023 date range i",
+   "click('722')|The 2023 date range and yearly period are set, but the report has",
+   "send_msg_to_user(\"Sprite Yoga Strap 6 |"
+  ],
+  "withmem_trace": [
+   "click('339')|The dashboard bestseller widget is not date-filtered, so I need t",
+   "click('431')|The Reports menu is open and the Products section contains the re",
+   "select_option('749', 'Year')|The Bestsellers report is open with the required filters. I’ll se",
+   "fill('757', '01/01/2023')|The report period is set to Year. I need to enter the start of th",
+   "fill('764', '12/31/2023')|The From date is set to 01/01/2023 and the required To field is e",
+   "click('722')|The Year period and complete 2023 date range are set, but the rep",
+   "send_msg_to_user(\"Sprite Yoga Strap 6 |"
+  ],
+  "sibling_success_trace": [
+   "click('339')|The dashboard bestseller widget is not filtered to 2022, so I nee",
+   "click('431')|The Reports menu is open and the relevant date-filterable report ",
+   "fill('757', '01/01/2022')|The Bestsellers report has required From and To fields and curren",
+   "fill('764', '12/31/2022')|The From date is set to the start of 2022. I should set the requi",
+   "click('722')|The full 2022 date range is entered, so I need to run the report ",
+   "select_option('749', 'Year')|The report is currently grouped by Day, so repeated products are ",
+   "click('722')|The Period filter is now set to Year, but the table still shows d",
+   "send_msg_to_user(\"Quest Lumaflex™ Band|"
+  ]
+ },
+ {
+  "task_id": 131,
+  "kind": "WIN",
+  "etype": "must",
+  "intent": "What's the total number of items sold in the most recent 7 orders?",
+  "gold": {
+   "must_include": [
+    "25"
+   ]
+  },
+  "retrieved": [
+   {
+    "title": "Use the status-filterable Orders Report",
+    "content": "Navigate through Reports > Sales > Orders, then set Date Used, Period, From, To, and Order Status before activating the “Show Report” button. Choose “Specified” for Order Status and select the successful status only when its visible label is confirmed—never infer an unlabeled option from its position."
+   }
+  ],
+  "nomem_answer": "19",
+  "withmem_answer": "25",
+  "nomem_trace": [
+   "click('156')|The dashboard shows only five last orders, but the task requires ",
+   "click('168')|The Sales menu is expanded and contains the Orders link, which sh",
+   "click('865')|The orders grid is currently filtered to only Complete orders and",
+   "click('756')|The filter is cleared, but the grid still lacks order number and ",
+   "click('762')|To identify the seven newest orders and open each order detail, I",
+   "click('768')|ID is now enabled. I still need Purchase Date to sort the orders ",
+   "click('4331')|Purchase Date is now visible. The grid is still sorted by Bill-to",
+   "click('1139')|The Purchase Date column is now sorted chronologically ascending,",
+   "click('4331')|The second page is loaded with Purchase Date ascending, but the n",
+   "click('756')|The grid is now correctly sorted newest-first, and the seven most",
+   "click('816')|The seven newest order IDs are confirmed. To inspect each order’s",
+   "click('4738')|The Action column is now visible, and the seven newest orders rem",
+   "click('4738')|The first View link is still present for order 000000180. The pri",
+   "click('729')|Order 000000180 contains four line items, each with Ordered quant",
+   "click('1418')|Order 000000180 has already been verified as 4 items. The next mo",
+   "click('737')|Order 000000184 has four line items, each with Ordered quantity 1",
+   "click('1435')|Orders 000000180 and 000000184 have each been verified as 4 items",
+   "click('737')|Order 000000023 has one line item with Ordered quantity 1, bringi",
+   "click('1452')|The first three newest orders have verified totals of 4, 4, and 1",
+   "click('737')|Order 000000220 has four line items, each with Ordered quantity 1",
+   "click('1469')|The grid is back after the timed-out Back action. The first four ",
+   "click('737')|Order 000000259 has four line items with Ordered quantity 1, so i",
+   "click('1486')|The first five most recent orders have verified item totals of 4,",
+   "click('737')|Order 000000047 has one line item with Ordered quantity 1, bringi",
+   "click('1503')|The first six newest orders total 18 items. The seventh and final",
+   "send_msg_to_user(\"19\")|The seventh order, 000000251, has one line item with Ordered quan"
+  ],
+  "withmem_trace": [
+   "click('156')|The dashboard shows only five recent orders, but the task require",
+   "click('168')|The Sales menu is open and the Orders link is visible. I need the",
+   "click('865')|The grid is currently filtered to Complete orders and sorted by B",
+   "click('1388')|All 308 orders are now visible without the status filter, but the",
+   "click('1388')|The Purchase Date column now shows a down arrow, but the rows run",
+   "click('1417')|The orders are now correctly sorted newest-first, and the seven m",
+   "click('738')|Order 000000299 contains five line items, each with quantity 1, s",
+   "click('1426')|I have confirmed the first order has 5 items. The sorted grid is ",
+   "click('738')|Order 000000065 has four ordered line items, each with quantity 1",
+   "click('1445')|The first two orders contribute 5 and 4 items, for a running tota",
+   "click('738')|Order 000000125 has three ordered line items, each with quantity ",
+   "click('1464')|The first three most recent orders contribute 5, 4, and 3 items, ",
+   "click('737')|Order 000000136 has four ordered line items, each with quantity 1",
+   "click('1483')|The first four most recent orders contribute 5, 4, 3, and 4 items",
+   "click('737')|Order 000000230 has two ordered line items, each with quantity 1,",
+   "click('1502')|The first five most recent orders contribute 5, 4, 3, 4, and 2 it",
+   "click('737')|Order 000000242 is open despite the timeout and has three ordered",
+   "click('1521')|The first six most recent orders total 21 items. The seventh most",
+   "send_msg_to_user(\"25\")|"
+  ],
+  "sibling_success_trace": [
+   "send_msg_to_user(\"9\")|The “Last Orders” table lists the most recent orders first. The f"
+  ]
+ },
+ {
+  "task_id": 212,
+  "kind": "WIN",
+  "etype": "must",
+  "intent": "Find the customer name and email with phone number 555-229-3326",
+  "gold": {
+   "must_include": [
+    "Veronica Costello",
+    "roni_cost@example.com"
+   ]
+  },
+  "retrieved": [
+   {
+    "title": "Audit every page and reconcile customer groups",
+    "content": "Set a manageable “per page” size, inspect every row through the final page, and carry a customer’s count across page boundaries when their group continues. Rank only after reconciling all groups, enumerate every tie at the requested rank, and report names exactly as visibly displayed—opening the order or customer detail view if the grid abbreviates them or if near-identical variants need verification."
+   }
+  ],
+  "nomem_answer": "",
+  "withmem_answer": "Veronica Costello, roni_cost@example.com",
+  "nomem_trace": [
+   "click('207')|The requested record should be in the Customers section, where I ",
+   "click('214')|The Customers menu is open and “All Customers” is the relevant pa",
+   "fill('862', '555-229-3326')|The customer grid is currently filtered by a different phone numb",
+   "click('863')|The new phone number is entered, but the active filter and result",
+   "click('867')|The keyword search returned no records, so I should use the grid’",
+   "click('879')|The keyword filter is still active and would conflict with the de",
+   "fill('954', '555-229-3326')|The filters are cleared and the dedicated Phone field is availabl",
+   "click('1274')|The phone-specific filter is filled with the requested number, bu",
+   "click('879')|The exact phone filter returned no records, likely because the st",
+   "keyboard_press('ControlOrMeta+f')|The grid contains all 70 customers on one page, and phone values ",
+   "keyboard_press('5552293326')|The browser find bar is open, and the customer grid shows phone n",
+   "keyboard_press('5')|The browser find bar should still be focused from the previous Co",
+   "keyboard_press('5')|The browser find bar remains focused and already contains the fir",
+   "keyboard_press('5')|The browser find bar contains “55”. To complete the normalized ph",
+   "keyboard_press('2')|The browser find bar should contain “555”. To continue the normal",
+   "keyboard_press('2')|The browser find bar currently contains “5552”. To complete the n",
+   "keyboard_press('9')|The browser find bar should currently contain “55522”. To complet",
+   "keyboard_press('3')|The browser find bar should contain “555229”. To complete the nor",
+   "keyboard_press('3')|The browser find bar should contain “5552293”. To complete the no",
+   "keyboard_press('2')|The browser find bar should contain “55522933”. To complete the n",
+   "keyboard_press('6')|The browser find bar should contain “555229332”. To complete the ",
+   "keyboard_press('Escape')|The full normalized phone number has been entered into the browse"
+  ],
+  "withmem_trace": [
+   "click('207')|The customer directory is under the CUSTOMERS menu; I need open i",
+   "click('214')|The CUSTOMERS submenu is open, and “All Customers” is the relevan",
+   "fill('852', '555-229-3326')|The customer grid is already open, but it is filtered by a previo",
+   "click('853')|The new phone number is entered, but the grid still reflects the ",
+   "click('1102')|The keyword search returned no records, so I should use the grid’",
+   "click('1114')|The Filters panel has a dedicated Phone field, but the active key",
+   "fill('1180', '5552293326')|The keyword filter is cleared and all 70 customers are visible. T",
+   "click('1509')|The Phone filter contains the target digits, but the grid still s",
+   "click('1102')|The dedicated phone filter is active but returned no records when",
+   "fill('1180', '555-229-3326')|The Filters panel is open with the digits-only phone filter still",
+   "click('1509')|The phone field now contains the exact hyphenated number, but the",
+   "click('1114')|The exact phone filter also returned no records, so the stored va",
+   "keyboard_press('ControlOrMeta+f')|All 70 customers are loaded on one page, but the accessibility tr",
+   "keyboard_press('5552293326')|The full one-page customer list is loaded. The browser find bar w",
+   "scroll(0, 622)|The list contains all 70 customers on one page and is sorted by n",
+   "scroll(0, 674)|The full 70-row list is sorted by name, and the visible accessibi",
+   "scroll(0, 710)|The list is sorted by name and the accessibility tree still trunc",
+   "click('1846')|The accessibility tree always truncates around Natalie because al",
+   "send_msg_to_user(\"Veronica Costello, r|"
+  ],
+  "sibling_success_trace": [
+   "click('207')|The requested record should be in the customer list, accessible f",
+   "click('214')|The Customers submenu is open, and “All Customers” is the relevan",
+   "send_msg_to_user(\"John Smith, john.smi|"
+  ]
+ },
+ {
+  "task_id": 246,
+  "kind": "WIN",
+  "etype": "exact",
+  "intent": "Show me the name of the customer who is the most unhappy with Chloe tank",
+  "gold": {
+   "exact_match": "Teofila"
+  },
+  "retrieved": [
+   {
+    "title": "Inspect the complete review set before summarizing dislikes",
+    "content": "Verify the filtered review count, traverse every page, and open each review detail if the grid abbreviates its title or text; read all visible review content rather than inferring from product attributes or marketing language. Enumerate every recurring or tied complaint theme, preserve meaningful distinctions, and report only aspects explicitly supported by the inspected reviews."
+   }
+  ],
+  "nomem_answer": "Emerald",
+  "withmem_answer": "Teofila",
+  "nomem_trace": [
+   "click('226')|I need inspect product reviews for “Chloe tank,” identify the low",
+   "click('287')|The Marketing menu is open and “All Reviews” is the relevant comp",
+   "fill('847', 'Chloe Compete Tank')|The reviews grid has a Product filter, and the exact product show",
+   "click('708')|The Product filter contains “Chloe Compete Tank,” but the grid st",
+   "click('870')|The complete filtered list contains exactly three reviews, but th",
+   "click('703')|This review is by Teofila, but the accessibility tree does not ex",
+   "tab_focus(15)|I am now on the second of the three filtered reviews, whose nickn",
+   "keyboard_press('Tab')|The rating controls are present visually as five stars but are no",
+   "click('709')|The current review is Emerald’s and its text is mildly negative, ",
+   "click('703')|Teofila is the last record because only Previous is available. I ",
+   "click('703')|I am on Emerald again; the navigation sequence confirms Teofila i",
+   "keyboard_press('Tab')|I have now inspected all three filtered reviews: Teofila, Emerald",
+   "click('705')|The selected star is not exposed in the accessibility tree. I hav",
+   "send_msg_to_user(\"Emerald\")|"
+  ],
+  "withmem_trace": [
+   "click('226')|The requested customer should be identified from product reviews,",
+   "click('287')|The Marketing menu is open, and “All Reviews” under User Content ",
+   "fill('847', 'Chloe Compete Tank')|The Product filter is available, and the product’s exact displaye",
+   "click('708')|The Product filter contains “Chloe Compete Tank,” but the grid st",
+   "click('870')|The filter returned exactly 3 reviews on one page, so the complet",
+   "click('703')|This review is by Teofila and is clearly negative, but the task r",
+   "click('703')|The second review is by Emerald and says “Could be flirtier.” The",
+   "send_msg_to_user(\"Teofila\")|"
+  ],
+  "sibling_success_trace": [
+   "click('226')|I need find all reviews for the product “Circe fleece,” identify ",
+   "click('287')|The Marketing menu is open, and “All Reviews” is the relevant pag",
+   "fill('847', 'Circe Hooded Ice Fleece')|The reviews grid has a Product filter. Filtering by the complete ",
+   "click('708')|The product filter is populated, but the grid still shows 351 rec",
+   "click('870')|The complete filtered list contains two reviews. “Bad!” is likely",
+   "click('203')|The lowest review is clearly the negative “Bad!” review by Hannah",
+   "click('210')|The Customers submenu is open and includes “All Customers.” I nee",
+   "send_msg_to_user(\"hannah.lim@gmail.com|"
+  ]
+ },
+ {
+  "task_id": 288,
+  "kind": "WIN",
+  "etype": "exact",
+  "intent": "Tell me the name of the customer who has the most cancellations in the history",
+  "gold": {
+   "exact_match": "Samantha Jones"
+  },
+  "retrieved": [
+   {
+    "title": "Audit every page and reconcile customer groups",
+    "content": "Set a manageable “per page” size, inspect every row through the final page, and carry a customer’s count across page boundaries when their group continues. Rank only after reconciling all groups, enumerate every tie at the requested rank, and report names exactly as visibly displayed—opening the order or customer detail view if the grid abbreviates them or if near-identical variants need verification."
+   }
+  ],
+  "nomem_answer": "",
+  "withmem_answer": "Samantha Jones",
+  "nomem_trace": [
+   "click('156')|The dashboard does not show cancellation history. The Sales secti",
+   "click('168')|The Sales submenu is open and “Orders” is the relevant complete o"
+  ],
+  "withmem_trace": [
+   "click('156')|I need inspect the complete order history, filter canceled orders",
+   "click('168')|The Sales submenu is open and contains the Orders link, which is ",
+   "click('853')|The Orders grid is open, but it is currently filtered to Status: ",
+   "select_option('980', 'Canceled')|The filters panel is open and the Status combobox currently shows",
+   "click('1073')|The Status field now contains Canceled, but the grid still shows ",
+   "click('1108')|The canceled filter is applied and there are 142 records across 8",
+   "click('1126')|The page-size menu offers 200, which exceeds the 142 filtered rec",
+   "click('1390')|All 142 canceled orders are now on one page, but the current date",
+   "scroll(0, 6147)|The canceled-order grid contains all 142 records on one page and ",
+   "scroll(0, 6200)|The grid is sorted by Bill-to Name and all 142 canceled orders ar",
+   "scroll(0, 6200)|The full canceled-order list is sorted by Bill-to Name, and the h",
+   "scroll(0, 6200)|The complete canceled-order set is still sorted by Bill-to Name. ",
+   "scroll(0, 6200)|The complete filtered list is sorted by Bill-to Name. Alexander T",
+   "keyboard_press('End')|The page still exposes the sorted table from the beginning and tr",
+   "click('1390')|The table remains sorted ascending and the accessibility tree sti",
+   "click('1108')|The descending customer sort exposes the previously uninspected l",
+   "send_msg_to_user(\"Samantha Jones\")|"
+  ],
+  "sibling_success_trace": [
+   "click('156')|I need inspect the full cancelled-order history, identify the cus",
+   "click('168')|The Sales menu is open and the Orders link is available; I need o",
+   "scroll(0, 6365)|The cancelled orders are grouped by Bill-to Name, and Samantha Jo",
+   "scroll(0, 6258)|The grid is sorted by Bill-to Name and contains all 142 canceled ",
+   "scroll(0, 6353)|The list is still sorted by Bill-to Name descending, and Samantha",
+   "scroll(0, 6353)|I have confirmed Samantha Jones has 9 cancellations, and the visi",
+   "scroll(0, 6353)|Samantha Jones has 9 cancellations, while all groups visible thro",
+   "scroll(0, 6353)|The full grid has 142 records on one page and is sorted by Bill-t",
+   "scroll(0, 6353)|The grid still has additional rows after John Smith, so I have no",
+   "scroll(0, 6353)|The accessibility tree now exposes rows from Veronica Costello th",
+   "keyboard_press('End')|The accessibility tree is still truncated before the end of the 1",
+   "click('1797')|The canceled-orders grid shows Samantha Jones with 9 cancellation",
+   "send_msg_to_user(\"WSH09-29-White, WSH0|"
+  ]
+ },
+ {
+  "task_id": 65,
+  "kind": "REG",
+  "etype": "must",
+  "intent": "Which customer has completed the fifth most number of orders in the entire history?",
+  "gold": {
+   "must_include": [
+    "Jane Doe"
+   ]
+  },
+  "retrieved": [
+   {
+    "title": "Choose the report that matches the constraint",
+    "content": "Open Reports → Customers → Order Count for counts without a status constraint, set the full-history From/To range, choose the coarsest suitable Show By interval, and press Refresh. This report cannot filter by order status; for status-specific questions, use Sales → Orders and clear any leftover filter chips before applying the required filters."
+   }
+  ],
+  "nomem_answer": "Ava Brown, Jane Doe, John Smith, Matt Baker",
+  "withmem_answer": "Jason Miller, Jennifer White",
+  "nomem_trace": [
+   "click('339')|The requested lifetime ranking is likely available under Reports,",
+   "click('417')|The Reports menu is open and includes the relevant Customers → Or",
+   "fill('727', '01/01/2000')|The report requires an explicit date range. To cover the entire h",
+   "fill('734', '07/20/2026')|The From date is set. I need set the To date to the current date ",
+   "click('745')|The full-history date range is entered, but the report has not ye",
+   "select_option('625', 'Year')|The prior click used a stale element ID; the current Refresh butt",
+   "click('629')|“Show By” is now set to Year, but the table still contains the st",
+   "click('156')|The customer Order Count report shown aggregates all orders and d",
+   "click('168')|The Sales menu is open and the Orders link is visible. I need ope",
+   "scroll(0, 6220)|The grid is already filtered to 153 Complete orders, shows 200 pe",
+   "scroll(0, 6244)|The page contains all 153 completed orders on one page, sorted by",
+   "scroll(0, 6280)|I have counted the visible complete-order groups, but the accessi",
+   "click('1378')|The table contains all 153 completed orders on one page, but the ",
+   "scroll(0, 6480)|The ascending name sort exposes exact contiguous counts from Adam",
+   "click('1378')|The ascending sort verifies counts through Matt Baker and begins ",
+   "scroll(0, 6500)|The descending sort now exposes exact counts for the latter alpha",
+   "click('1378')|The descending list confirms counts for the latter alphabetic cus",
+   "scroll(0, 6500)|The completed-order counts are led by Jane Smith with 11, followe",
+   "send_msg_to_user(\"Ava Brown, Jane Doe,|The full 153-row completed-orders list is visible and sorted by c"
+  ],
+  "withmem_trace": [
+   "click('156')|The question is status-specific (“completed”), so I should use Sa",
+   "click('168')|The Sales menu is open and the relevant status-specific source is",
+   "click('853')|The grid is currently unfiltered with 308 records across two page",
+   "select_option('975', 'Complete')|The Status filter is open and includes the exact option “Complete",
+   "click('1068')|The Complete status has been selected, but the grid still shows 3",
+   "scroll(0, 5841)|The filtered grid contains all 153 completed orders on one page a",
+   "scroll(0, 6032)|The completed-order list has 153 records on one page and is group",
+   "scroll(0, 12000)|The filtered list has all 153 completed orders on one page and is",
+   "click('1284')|The one-page grid’s accessibility tree is truncated before the re",
+   "click('1290')|The page-size menu is open, and selecting 20 will split the 153 a",
+   "click('1315')|Page 1 shows Adam Garcia with 8 completed orders, Alex Johnson wi",
+   "click('1315')|Page 2 accounts for Alexander Thomas 2, Ava Brown 7, Bob Johnson ",
+   "click('1315')|Page 3 completes Bob Jones at 6 total and shows Brian Smith 2, Da",
+   "click('1315')|Page 4 completes Jane Doe at 7 orders, shows Jane Smith with 11, ",
+   "click('1315')|Page 5 completes Jennifer White at 5 total and shows John Doe 3, ",
+   "click('1315')|Page 6 completes Katie Wong at 3 orders and shows Lily Potter 4, ",
+   "click('1315')|Page 7 completes Matt Baker at 7 orders, shows Michael Nguyen wit",
+   "send_msg_to_user(\"Jason Miller, Jennif|"
+  ],
+  "sibling_success_trace": [
+   "click('339')|The answer requires a historical customer order-count report, lik",
+   "click('417')|The Reports menu is open, and under Customers there is an “Order ",
+   "fill('727', '01/01/2000')|The report has no default period, so I need set a date range cove",
+   "fill('734', '07/20/2026')|The From date is set. I need complete the all-history range by se",
+   "select_option('741', 'Year')|The full historical date range is now entered. I need group by ye",
+   "click('745')|The all-history range and yearly grouping are set, but the report",
+   "click('156')|The yearly report counts orders per customer within each year, no",
+   "click('168')|The order-count report includes all order statuses, so it does no",
+   "scroll(0, 6770)|The filtered grid contains all 153 completed orders on one page a",
+   "scroll(0, -6770)|The current bottom portion confirms Jane Smith has 11 completed o",
+   "send_msg_to_user(\"Jane Smith\")|The complete filtered list contains all 153 completed orders on o"
+  ]
+ },
+ {
+  "task_id": 116,
+  "kind": "REG",
+  "etype": "must",
+  "intent": "Show me the name of the customers who have expressed dissatisfaction with tanks products?",
+  "gold": {
+   "must_include": [
+    "Alexander",
+    "Carma",
+    "Dominic",
+    "Merrie",
+    "Monroe",
+    "Scotty",
+    "Shaunte",
+    "Teofila",
+    "Valorie"
+   ]
+  },
+  "retrieved": [
+   {
+    "title": "Use the actionable reviews grid",
+    "content": "Open Marketing → All Reviews, enter the product query in the Product filter, then activate Search and confirm the grid visibly refreshes. Prefer this operational grid over a look-alike report under Reports, which may provide aggregates but lack status filtering or review-level details."
+   }
+  ],
+  "nomem_answer": "Merrie, Shaunte, Teofila, Emerald, Carma, Yan, Valorie, Monroe, Scotty, Alexander, Graham, Dominic, Trey, Edmu",
+  "withmem_answer": "",
+  "nomem_trace": [
+   "click('226')|“Expressed dissatisfaction” likely refers to customers who left l",
+   "click('287')|The Marketing menu is open and includes “All Reviews,” which is t",
+   "fill('847', 'Tank')|The current grid shows several tank-product reviews, but I must f",
+   "click('708')|The Product filter contains “Tank,” but the grid still shows 351 ",
+   "select_option('757', '50')|The filter returned 27 tank-product reviews across two pages. To ",
+   "send_msg_to_user(\"Merrie, Shaunte, Teo|"
+  ],
+  "withmem_trace": [
+   "click('226')|The task concerns customers expressing dissatisfaction through pr",
+   "click('287')|The Marketing menu is open and “All Reviews” is visible under Use",
+   "fill('847', 'Tank')|The visible grid includes multiple tank-product reviews, but the ",
+   "click('708')|The Product filter contains “Tank,” but the grid still shows 351 ",
+   "click('771')|The filter returned 27 tank-product reviews across two pages. I’v",
+   "select_option('757', '30')|Page 2 shows seven remaining reviews, but the names gathered from",
+   "click('870')|The complete filtered list is visible. To distinguish dissatisfac",
+   "click('695')|The detail confirms this dissatisfied tank-product reviewer’s nic",
+   "click('890')|The full 27-review tank list is visible, and “dissatisfaction” sh",
+   "click('695')|Shaunte’s review clearly expresses dissatisfaction (“Zero support",
+   "click('910')|The complete filtered list contains several clearly negative or m",
+   "click('695')|Teofila’s review explicitly complains that the tank is too tiny a",
+   "click('930')|The complete list reveals additional reviews that may express dis",
+   "click('695')|Emerald’s review explicitly says “Could be flirtier,” which expre",
+   "click('1010')|The complete 27-review list is visible again. Several remaining r",
+   "click('695')|Carma’s review explicitly complains that the seams bother her dur",
+   "click('1070')|The complete tank-review list is visible. Beyond the five already",
+   "click('695')|Yan explicitly says she was not satisfied with the fit and that t",
+   "click('1090')|The complete filtered list shows all 27 tank-product reviews. I h",
+   "click('695')|Valorie explicitly complains that the arm holes are too big and s",
+   "click('1150')|The full filtered grid confirms there are 27 total tank reviews. ",
+   "click('695')|Monroe explicitly says the neck opening is too small and the tank",
+   "click('1170')|The entire 27-record filtered list is visible on one page. Eight ",
+   "click('695')|Scotty explicitly says the tank retained odor even after three wa",
+   "click('1190')|The complete 27-record grid is visible. Alexander’s “Wish it was ",
+   "click('695')|Alexander explicitly says the tank is too short for his long tors",
+   "click('1210')|The full 27-record grid is visible, and the remaining reviews wit",
+   "click('695')|Graham expresses dissatisfaction with the lack of a racerback ver",
+   "click('1250')|All 27 tank reviews are visible on one page, and five remaining p",
+   "click('695')|Dominic explicitly says the cut is really bad and unflattering, s"
+  ],
+  "sibling_success_trace": [
+   "click('226')|Customer dissatisfaction is likely reflected in product reviews, ",
+   "click('287')|The Marketing menu is open and “All Reviews” is the relevant comp",
+   "fill('847', 'Olivia 1/4 Zip Light Jack|The grid has a Product filter and currently shows three Olivia re",
+   "click('708')|The Product filter is populated, but the grid still shows 351 rec",
+   "click('870')|The filter now shows the complete three-review list. The titles a",
+   "click('705')|Emma Lopez’s full review explicitly expresses dissatisfaction. Th",
+   "click('703')|This review by seam miller is clearly dissatisfied (“not impresse",
+   "click('705')|Emma Lopez is confirmed dissatisfied, and seam miller was previou",
+   "click('709')|The current page still shows seam miller, so the prior “Save and ",
+   "send_msg_to_user(\"Emma Lopez, seam mil|"
+  ]
+ },
+ {
+  "task_id": 185,
+  "kind": "REG",
+  "etype": "must",
+  "intent": "Give me the brand of the products that have 3 units left",
+  "gold": {
+   "must_include": [
+    "Eos",
+    "Minerva"
+   ]
+  },
+  "retrieved": [
+   {
+    "title": "Use the Products grid and apply an exact Quantity range",
+    "content": "Open CATALOG, select Products, clear any existing filters, then open product-filters and enter the requested quantity in both Quantity range fields before applying. Confirm the Active filters area shows identical lower and upper bounds and that the records-found count changes; a Quantity sort arrow alone is not a filter."
+   }
+  ],
+  "nomem_answer": "Eos, Minerva",
+  "withmem_answer": "",
+  "nomem_trace": [
+   "click('189')|I need inspect the complete product list, filter products by inve",
+   "click('201')|The Catalog submenu is open and contains the Products link, which",
+   "click('898')|The grid currently has an active Quantity filter of 0–0, so I nee",
+   "fill('948', '3')|The Quantity filter is open with both bounds currently set to 0. ",
+   "fill('953', '3')|The lower quantity bound is now 3, while the upper bound remains ",
+   "click('1388')|Both quantity bounds are set to 3, so the next step is to apply t",
+   "click('1741')|The exact quantity filter returned two products and the entire re",
+   "keyboard_press('ControlOrMeta+f')|The first matching product detail confirms quantity 3, but no Bra",
+   "click('895')|The detail page confirms the first matching SKU and quantity but ",
+   "click('775')|The filtered grid contains exactly two products, but only Name an",
+   "click('835')|The Columns selector has no Brand field, but it does offer Manufa",
+   "send_msg_to_user(\"Eos, Minerva\")|"
+  ],
+  "withmem_trace": [
+   "click('189')|The task requires an inventory-wide exact Quantity filter, so I s",
+   "click('201')|The CATALOG submenu is open and shows the Products link, which is",
+   "click('910')|The Products grid has an existing Quantity 0–0 filter, so I must ",
+   "click('898')|The previous filter is cleared, confirmed by 2040 records found a",
+   "fill('948', '3')|The Quantity filter is open with empty “from” and “to” fields. I ",
+   "fill('953', '3')|The lower Quantity bound is set to 3, while the upper “to” field ",
+   "click('1388')|Both Quantity bounds are set to 3, but the grid still shows the u",
+   "click('1745')|The exact 3–3 filter is confirmed and there are only two matching",
+   "click('1748')|The simple product detail confirms quantity 3 but does not show a",
+   "click('895')|The Configurations section does not expose a brand or parent link",
+   "click('1756')|The exact filter is still active and both matching rows are visib",
+   "click('895')|The second matching product is confirmed to have quantity 3, but ",
+   "click('910')|The two quantity-3 matches are child variants whose Manufacturer ",
+   "click('898')|The exact quantity filter has been cleared, so I need reapply 3–3",
+   "fill('948', '3')|The filter panel is open with both Quantity bounds empty. I need ",
+   "fill('953', '3')|The lower bound is restored to 3, and the upper bound is still em",
+   "click('1388')|Both Quantity bounds are restored to 3, but the grid still shows ",
+   "click('910')|The complete exact-quantity result set contains two variants, and",
+   "fill('1393', 'Sahara Leggings')|The prior filtered result contained two quantity-3 child variants",
+   "click('1394')|The keyword is entered but the record count remains 2040, so the ",
+   "click('1745')|The Sahara search returns the configurable parent plus all varian",
+   "new_tab()|The Sahara configurable parent also has no Manufacturer/Brand fie",
+   "tab_close()|The new tab is blank and provides no usable evidence. I should cl",
+   "click('2267')|The configurable parent page still provides no explicit Manufactu",
+   "goto('http://magento.local/sahara-legg|The SEO fields are empty and still do not identify the brand. The"
+  ],
+  "sibling_success_trace": [
+   "click('189')|I need open the full product grid, filter inventory quantity to e",
+   "click('201')|The Catalog submenu is open and shows the Products link, which wi",
+   "click('910')|The grid still has a stale Keyword: Sprite filter, so I must clea",
+   "click('898')|The keyword filter is now cleared and the grid shows all 2040 pro",
+   "fill('948', '10')|The Quantity filter has separate “from” and “to” fields. I need s",
+   "fill('953', '10')|The lower Quantity bound is set to 10. I now need set the upper b",
+   "click('1388')|Both Quantity bounds are set to 10, but the grid still shows 2040"
+  ]
+ },
+ {
+  "task_id": 195,
+  "kind": "REG",
+  "etype": "must",
+  "intent": "Get the total payment amount of the last 5 pending orders",
+  "gold": {
+   "must_include": [
+    "885.4"
+   ]
+  },
+  "retrieved": [
+   {
+    "title": "Read and sum visible Total Paid values",
+    "content": "Open every qualifying order, confirm its “Order Status,” and scroll within the Information view until the labeled “Total Paid” row and full currency value are visible in the page observation. Record each displayed value, ensure every selected order is represented exactly once, and calculate the result only from those observed values—never from narration, assumptions, or a near-identical total field."
+   }
+  ],
+  "nomem_answer": "$885.40",
+  "withmem_answer": "$0.00",
+  "nomem_trace": [
+   "click('156')|I need open the Sales section and navigate to the complete orders",
+   "click('168')|The Sales submenu is open and contains the Orders link, which is ",
+   "click('853')|The order grid is already sorted from newest to oldest by Purchas",
+   "select_option('975', 'Pending')|The Filters panel is open and the Status dropdown includes “Pendi",
+   "click('1068')|The Status filter is set to Pending, but the grid still shows mix",
+   "send_msg_to_user(\"$885.40\")|The filtered grid shows all 10 pending orders sorted newest first"
+  ],
+  "withmem_trace": [
+   "click('156')|I need open the Sales menu and navigate to the orders grid, then ",
+   "click('168')|The Sales submenu is open, and the relevant destination is the Or",
+   "click('1407')|The grid is sorted by Purchase Date descending. The five most rec",
+   "click('738')|Order 000000299 is confirmed Pending and its Total Paid is $0.00.",
+   "click('1426')|The grid confirms the remaining four identified pending orders. O",
+   "click('738')|Order 000000065 is confirmed Pending and its labeled Total Paid v",
+   "click('1730')|The two newest pending orders inspected so far, 000000299 and 000",
+   "click('738')|Order 000000308 is confirmed Pending and its labeled Total Paid v",
+   "click('1749')|The first three most recent pending orders—000000299, 000000065, ",
+   "click('738')|Order 000000307 is confirmed Pending and its labeled Total Paid v",
+   "click('1768')|The fifth most recent pending order is 000000306. The previous fo",
+   "send_msg_to_user(\"$0.00\")|The fifth pending order, 000000306, is confirmed Pending and show"
+  ],
+  "sibling_success_trace": [
+   "click('156')|I need open the Sales orders grid, then identify the latest four ",
+   "click('168')|The Sales submenu is open and the relevant destination is Orders.",
+   "click('853')|The grid is currently filtered to Pending. I need change the stat",
+   "select_option('980', 'Canceled')|The Filters panel is open and the Status dropdown currently shows",
+   "click('1073')|The Status dropdown is now set to Canceled, but the grid still sh",
+   "click('853')|The canceled grid is sorted newest-first by Purchase Date, so the",
+   "select_option('980', 'Complete')|The filter panel is open with Status set to Canceled. I recorded ",
+   "click('1073')|The Complete status is selected in the filter, but the grid still",
+   "send_msg_to_user(\"$194.25\")|The latest four completed orders total $430.20 ($93.40 + $89.00 +"
+  ]
+ },
+ {
+  "task_id": 196,
+  "kind": "REG",
+  "etype": "must",
+  "intent": "Compare the payment difference of the last 4 cancelled orders and completed orders",
+  "gold": {
+   "must_include": [
+    "194.25"
+   ]
+  },
+  "retrieved": [
+   {
+    "title": "Verify Total Paid in each order detail",
+    "content": "Open each qualifying row with its “View” link, confirm “Order Status” in the “Information” view, then scroll to the totals section and capture the complete value beside the exact “Total Paid” label. Keep visible evidence for every selected order and sum only those displayed values; do not substitute “Grand Total,” “Total Due,” or infer an unpaid amount from Pending status."
+   }
+  ],
+  "nomem_answer": "$194.25",
+  "withmem_answer": "$0.00",
+  "nomem_trace": [
+   "click('156')|I need open the Sales orders grid, then identify the latest four ",
+   "click('168')|The Sales submenu is open and the relevant destination is Orders.",
+   "click('853')|The grid is currently filtered to Pending. I need change the stat",
+   "select_option('980', 'Canceled')|The Filters panel is open and the Status dropdown currently shows",
+   "click('1073')|The Status dropdown is now set to Canceled, but the grid still sh",
+   "click('853')|The canceled grid is sorted newest-first by Purchase Date, so the",
+   "select_option('980', 'Complete')|The filter panel is open with Status set to Canceled. I recorded ",
+   "click('1073')|The Complete status is selected in the filter, but the grid still",
+   "send_msg_to_user(\"$194.25\")|The latest four completed orders total $430.20 ($93.40 + $89.00 +"
+  ],
+  "withmem_trace": [
+   "click('156')|I need inspect the Orders grid, identify the last four orders for",
+   "click('168')|The Sales menu is open and the relevant Orders link is visible. I",
+   "click('1464')|The grid is sorted by Purchase Date descending. The four most rec",
+   "click('737')|Order 000000136 is confirmed Canceled with Total Paid $0.00. I ne",
+   "click('1502')|The sorted grid confirms the remaining target orders: canceled 00",
+   "click('737')|Order 000000242 is confirmed Canceled with Total Paid $0.00, so t",
+   "click('1521')|The next unverified target is canceled order 000000025. I need op",
+   "click('737')|Order 000000025 is confirmed Canceled with Total Paid $0.00. The ",
+   "click('1578')|The remaining unverified canceled order is 000000118. I need open",
+   "click('737')|Order 000000118 is confirmed Canceled with Total Paid $0.00, so a",
+   "click('1483')|The four canceled orders are verified at $0.00 each. The next tar",
+   "click('737')|Order 000000230 is confirmed Complete with Total Paid $0.00. I ne",
+   "click('1540')|The next unverified completed order is 000000256. I need open its",
+   "click('737')|Order 000000256 is confirmed Complete with Total Paid $0.00. The ",
+   "click('1559')|The remaining completed orders are 000000009 and 000000113. I nee",
+   "click('737')|Order 000000009 is confirmed Complete with Total Paid $0.00. The ",
+   "click('1597')|The only remaining target is completed order 000000113, whose Vie",
+   "send_msg_to_user(\"$0.00\")|The four most recent canceled orders each have Total Paid of $0.0"
+  ],
+  "sibling_success_trace": [
+   "click('156')|I need open the Sales section and navigate to the complete orders",
+   "click('168')|The Sales submenu is open and contains the Orders link, which is ",
+   "click('853')|The order grid is already sorted from newest to oldest by Purchas",
+   "select_option('975', 'Pending')|The Filters panel is open and the Status dropdown includes “Pendi",
+   "click('1068')|The Status filter is set to Pending, but the grid still shows mix",
+   "send_msg_to_user(\"$885.40\")|The filtered grid shows all 10 pending orders sorted newest first"
+  ]
+ },
+ {
+  "task_id": 197,
+  "kind": "REG",
+  "etype": "must",
+  "intent": "Get the total payment amount of the last 5 non-cancelled orders",
+  "gold": {
+   "must_include": [
+    "778.2"
+   ]
+  },
+  "retrieved": [
+   {
+    "title": "Verify Total Paid in each order detail",
+    "content": "Open each qualifying row with its “View” link, confirm “Order Status” in the “Information” view, then scroll to the totals section and capture the complete value beside the exact “Total Paid” label. Keep visible evidence for every selected order and sum only those displayed values; do not substitute “Grand Total,” “Total Due,” or infer an unpaid amount from Pending status."
+   }
+  ],
+  "nomem_answer": "$778.20",
+  "withmem_answer": "$0.00",
+  "nomem_trace": [
+   "click('156')|I need open the Sales orders grid, filter out cancelled orders, s",
+   "click('168')|The Sales menu is expanded and the Orders link is visible. I need",
+   "click('853')|The grid is incorrectly filtered to only “Complete,” while the ta",
+   "click('862')|The status filter supports only equality, so I cannot directly se",
+   "send_msg_to_user(\"$778.20\")|The grid is sorted newest-first by Purchase Date. The five latest"
+  ],
+  "withmem_trace": [
+   "click('156')|I need open the Sales menu and navigate to the complete orders gr",
+   "click('168')|The Sales submenu is open and the Orders link is visible. I need ",
+   "click('1407')|The grid is sorted newest-first by Purchase Date. The last five n",
+   "click('738')|Order 000000299 is confirmed non-cancelled (Pending) and its exac",
+   "click('1426')|The orders grid is restored. The five latest non-cancelled orders",
+   "go_back()|Order 000000065 is confirmed Pending with exact Total Paid $0.00.",
+   "click('1445')|The grid confirms the next qualifying order is 000000125, with st",
+   "go_back()|Order 000000125 is Processing and its exact Total Paid is $0.00, ",
+   "click('1483')|The first three qualifying orders are verified with Total Paid $0",
+   "go_back()|Order 000000230 is confirmed Complete and its exact Total Paid is",
+   "click('1540')|The fifth latest non-cancelled order is 000000256. The prior four",
+   "send_msg_to_user(\"$0.00\")|"
+  ],
+  "sibling_success_trace": [
+   "click('156')|I need open the Sales section and navigate to the complete orders",
+   "click('168')|The Sales submenu is open and contains the Orders link, which is ",
+   "click('853')|The order grid is already sorted from newest to oldest by Purchas",
+   "select_option('975', 'Pending')|The Filters panel is open and the Status dropdown includes “Pendi",
+   "click('1068')|The Status filter is set to Pending, but the grid still shows mix",
+   "send_msg_to_user(\"$885.40\")|The filtered grid shows all 10 pending orders sorted newest first"
+  ]
+ }
+]

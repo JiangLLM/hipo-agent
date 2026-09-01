@@ -1,0 +1,152 @@
+{
+  "sphinx-doc__sphinx-10323": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-10323",
+    "model_patch": "diff --git a/sphinx/directives/code.py b/sphinx/directives/code.py\nindex dc44ed314..9437fe9a5 100644\n--- a/sphinx/directives/code.py\n+++ b/sphinx/directives/code.py\n@@ -224,9 +224,9 @@ class LiteralIncludeReader:\n                        self.start_filter,\n                        self.end_filter,\n                        self.lines_filter,\n+                       self.dedent_filter,\n                        self.prepend_filter,\n-                       self.append_filter,\n-                       self.dedent_filter]\n+                       self.append_filter]\n             lines = self.read_file(self.filename, location=location)\n             for func in filters:\n                 lines = func(lines, location=location)\n"
+  },
+  "sphinx-doc__sphinx-10435": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-10435",
+    "model_patch": "diff --git a/sphinx/writers/latex.py b/sphinx/writers/latex.py\nindex e0c7d56f8..54fd65098 100644\n--- a/sphinx/writers/latex.py\n+++ b/sphinx/writers/latex.py\n@@ -1710,11 +1710,11 @@ class LaTeXTranslator(SphinxTranslator):\n         # TODO: Use nowrap option once LaTeX formatter supports it\n         # https://github.com/pygments/pygments/pull/1343\n         hlcode = hlcode.replace(r'\\begin{Verbatim}[commandchars=\\\\\\{\\}]',\n-                                r'\\sphinxcode{\\sphinxupquote{')\n+                                r'\\sphinxcode{\\sphinxupquote{%')\n         # get consistent trailer\n-        hlcode = hlcode.rstrip()[:-14]  # strip \\end{Verbatim}\n+        hlcode = hlcode.rstrip()[:-15]  # strip \\end{Verbatim}\n         self.body.append(hlcode)\n-        self.body.append('}}')\n+        self.body.append('%' + CR + '}}')\n         raise nodes.SkipNode\n \n     def depart_literal(self, node: Element) -> None:\n"
+  },
+  "sphinx-doc__sphinx-10449": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-10449",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-10466": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-10466",
+    "model_patch": "diff --git a/sphinx/builders/gettext.py b/sphinx/builders/gettext.py\nindex e8bc547b7..a908b1dfb 100644\n--- a/sphinx/builders/gettext.py\n+++ b/sphinx/builders/gettext.py\n@@ -57,8 +57,15 @@ class Catalog:\n \n     def __iter__(self) -> Generator[Message, None, None]:\n         for message in self.messages:\n-            positions = [(source, line) for source, line, uuid in self.metadata[message]]\n-            uuids = [uuid for source, line, uuid in self.metadata[message]]\n+            # Deduplicate locations while preserving order\n+            seen_locations = OrderedDict()\n+            uuids = []\n+            for source, line, uuid in self.metadata[message]:\n+                location = (source, line)\n+                if location not in seen_locations:\n+                    seen_locations[location] = True\n+                uuids.append(uuid)\n+            positions = list(seen_locations.keys())\n             yield Message(message, positions, uuids)\n \n \n"
+  },
+  "sphinx-doc__sphinx-10614": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-10614",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-10673": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-10673",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-11445": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-11445",
+    "model_patch": "diff --git a/sphinx/util/rst.py b/sphinx/util/rst.py\nindex 7a1538325..dc0d30be6 100644\n--- a/sphinx/util/rst.py\n+++ b/sphinx/util/rst.py\n@@ -25,7 +25,7 @@ except ImportError:\n \n logger = logging.getLogger(__name__)\n \n-docinfo_re = re.compile(':\\\\w+:.*?')\n+docinfo_re = re.compile(r':\\w+:(?![\\w`])')\n symbols_re = re.compile(r'([!-\\-/:-@\\[-`{-~])')  # symbols without dot(0x2e)\n SECTIONING_CHARS = ['=', '-', '~']\n \n"
+  },
+  "sphinx-doc__sphinx-11510": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-11510",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-7440": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-7440",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-7454": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-7454",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-7462": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-7462",
+    "model_patch": "diff --git a/sphinx/domains/python.py b/sphinx/domains/python.py\nindex 3ca730e30..def73145e 100644\n--- a/sphinx/domains/python.py\n+++ b/sphinx/domains/python.py\n@@ -100,7 +100,8 @@ def _parse_annotation(annotation: str) -> List[Node]:\n             for elem in node.elts:\n                 result.extend(unparse(elem))\n                 result.append(addnodes.desc_sig_punctuation('', ', '))\n-            result.pop()\n+            if node.elts:\n+                result.pop()\n             result.append(addnodes.desc_sig_punctuation('', ']'))\n             return result\n         elif isinstance(node, ast.Module):\n@@ -118,7 +119,8 @@ def _parse_annotation(annotation: str) -> List[Node]:\n             for elem in node.elts:\n                 result.extend(unparse(elem))\n                 result.append(addnodes.desc_sig_punctuation('', ', '))\n-            result.pop()\n+            if node.elts:\n+                result.pop()\n             return result\n         else:\n             raise SyntaxError  # unsupported syntax\n"
+  },
+  "sphinx-doc__sphinx-7590": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-7590",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-7748": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-7748",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-7757": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-7757",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-7889": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-7889",
+    "model_patch": "diff --git a/sphinx/ext/autodoc/mock.py b/sphinx/ext/autodoc/mock.py\nindex 98a3a3a96..91d24392b 100644\n--- a/sphinx/ext/autodoc/mock.py\n+++ b/sphinx/ext/autodoc/mock.py\n@@ -68,12 +68,23 @@ class _MockObject:\n         return self.__display_name__\n \n \n+def _name_to_str(name: Any) -> str:\n+    \"\"\"Convert a name to a string.\n+\n+    Handles typing constructs like TypeVar that may be passed as the name.\n+    \"\"\"\n+    if isinstance(name, str):\n+        return name\n+    return getattr(name, '__name__', str(name))\n+\n+\n def _make_subclass(name: str, module: str, superclass: Any = _MockObject,\n                    attributes: Any = None) -> Any:\n-    attrs = {'__module__': module, '__display_name__': module + '.' + name}\n+    name_str = _name_to_str(name)\n+    attrs = {'__module__': module, '__display_name__': module + '.' + name_str}\n     attrs.update(attributes or {})\n \n-    return type(name, (superclass,), attrs)\n+    return type(name_str, (superclass,), attrs)\n \n \n class _MockModule(ModuleType):\n"
+  },
+  "sphinx-doc__sphinx-7910": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-7910",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-7985": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-7985",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-8035": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-8035",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-8056": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-8056",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-8120": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-8120",
+    "model_patch": "diff --git a/sphinx/application.py b/sphinx/application.py\nindex 385b74d8a..95d1848ae 100644\n--- a/sphinx/application.py\n+++ b/sphinx/application.py\n@@ -293,7 +293,7 @@ class Sphinx:\n                 if catalog.domain == 'sphinx' and catalog.is_outdated():\n                     catalog.write_mo(self.config.language)\n \n-            locale_dirs = [None, path.join(package_dir, 'locale')] + list(repo.locale_dirs)\n+            locale_dirs = list(repo.locale_dirs) + [None, path.join(package_dir, 'locale')]\n             self.translator, has_translation = locale.init(locale_dirs, self.config.language)\n             if has_translation or self.config.language == 'en':\n                 # \"en\" never needs to be translated\n"
+  },
+  "sphinx-doc__sphinx-8265": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-8265",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-8269": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-8269",
+    "model_patch": "diff --git a/sphinx/builders/linkcheck.py b/sphinx/builders/linkcheck.py\nindex 9b54afc7c..1083e82ec 100644\n--- a/sphinx/builders/linkcheck.py\n+++ b/sphinx/builders/linkcheck.py\n@@ -166,6 +166,7 @@ class CheckExternalLinksBuilder(Builder):\n                     # Read the whole document and see if #anchor exists\n                     response = requests.get(req_url, stream=True, config=self.app.config,\n                                             auth=auth_info, **kwargs)\n+                    response.raise_for_status()\n                     found = check_anchor(response, unquote(anchor))\n \n                     if not found:\n"
+  },
+  "sphinx-doc__sphinx-8459": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-8459",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-8475": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-8475",
+    "model_patch": "diff --git a/sphinx/builders/linkcheck.py b/sphinx/builders/linkcheck.py\nindex 1dc0337c3..4104fe658 100644\n--- a/sphinx/builders/linkcheck.py\n+++ b/sphinx/builders/linkcheck.py\n@@ -20,7 +20,7 @@ from urllib.parse import unquote, urlparse\n \n from docutils import nodes\n from docutils.nodes import Node\n-from requests.exceptions import HTTPError\n+from requests.exceptions import HTTPError, TooManyRedirects\n \n from sphinx.application import Sphinx\n from sphinx.builders import Builder\n@@ -172,7 +172,7 @@ class CheckExternalLinksBuilder(Builder):\n                                                  config=self.app.config, auth=auth_info,\n                                                  **kwargs)\n                         response.raise_for_status()\n-                    except HTTPError:\n+                    except (HTTPError, TooManyRedirects):\n                         # retry with GET request if that fails, some servers\n                         # don't like HEAD requests.\n                         response = requests.get(req_url, stream=True, config=self.app.config,\n"
+  },
+  "sphinx-doc__sphinx-8548": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-8548",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-8551": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-8551",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-8593": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-8593",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-8595": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-8595",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-8621": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-8621",
+    "model_patch": "diff --git a/sphinx/builders/html/transforms.py b/sphinx/builders/html/transforms.py\nindex c91da57e9..455e438b6 100644\n--- a/sphinx/builders/html/transforms.py\n+++ b/sphinx/builders/html/transforms.py\n@@ -47,16 +47,28 @@ class KeyboardTransform(SphinxPostTransform):\n                 continue\n \n             node.pop()\n-            while parts:\n-                key = parts.pop(0)\n-                node += nodes.literal('', key, classes=[\"kbd\"])\n-\n-                try:\n-                    # key separator (ex. -, +, ^)\n-                    sep = parts.pop(0)\n-                    node += nodes.Text(sep)\n-                except IndexError:\n-                    pass\n+            \n+            # Process parts and separators\n+            i = 0\n+            while i < len(parts):\n+                if i % 2 == 0:  # Keystroke part\n+                    key = parts[i]\n+                    if key:  # Only add non-empty keys\n+                        node += nodes.literal('', key, classes=[\"kbd\"])\n+                else:  # Separator part (at odd indices)\n+                    separator = parts[i]\n+                    # Check if this separator has empty parts on both sides\n+                    prev_empty = (i < 1 or not parts[i - 1])\n+                    next_empty = (i + 1 >= len(parts) or not parts[i + 1])\n+                    \n+                    if prev_empty and next_empty:\n+                        # Separator is standalone (no actual keys on either side)\n+                        # Treat it as a keystroke, not a separator\n+                        node += nodes.literal('', separator, classes=[\"kbd\"])\n+                    else:\n+                        # Valid separator between keys\n+                        node += nodes.Text(separator)\n+                i += 1\n \n \n def setup(app: Sphinx) -> Dict[str, Any]:\n"
+  },
+  "sphinx-doc__sphinx-8638": {
+    "model_name_or_path": "hippo-withmem",
+    "instance_id": "sphinx-doc__sphinx-8638",
+    "model_patch": ""
+  }
+}

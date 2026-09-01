@@ -1,0 +1,72 @@
+{
+  "sphinx-doc__sphinx-8721": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-8721",
+    "model_patch": "diff --git a/sphinx/ext/viewcode.py b/sphinx/ext/viewcode.py\nindex a7d52a91c..060604e25 100644\n--- a/sphinx/ext/viewcode.py\n+++ b/sphinx/ext/viewcode.py\n@@ -182,6 +182,8 @@ def collect_pages(app: Sphinx) -> Generator[Tuple[str, Dict[str, Any], str], Non\n     env = app.builder.env\n     if not hasattr(env, '_viewcode_modules'):\n         return\n+    if app.builder.name.startswith(\"epub\") and not env.config.viewcode_enable_epub:\n+        return\n     highlighter = app.builder.highlighter  # type: ignore\n     urito = app.builder.get_relative_uri\n \n"
+  },
+  "sphinx-doc__sphinx-9229": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9229",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9230": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9230",
+    "model_patch": "diff --git a/sphinx/ext/napoleon/docstring.py b/sphinx/ext/napoleon/docstring.py\nindex d8cb75a5f..4cc0922a0 100644\n--- a/sphinx/ext/napoleon/docstring.py\n+++ b/sphinx/ext/napoleon/docstring.py\n@@ -266,8 +266,18 @@ class GoogleDocstring:\n         if parse_type:\n             match = _google_typed_arg_regex.match(before)\n             if match:\n-                _name = match.group(1).strip()\n-                _type = match.group(2)\n+                # Check if there's text after the matched parentheses\n+                matched_text = match.group(0)\n+                remainder = before[len(matched_text):].strip()\n+                if remainder:\n+                    # Text after the closing paren - it's the parameter name\n+                    # The matched part is the type\n+                    _name = remainder\n+                    _type = matched_text\n+                else:\n+                    # No text after - use the match groups as before\n+                    _name = match.group(1).strip()\n+                    _type = match.group(2)\n \n         _name = self._escape_args_and_kwargs(_name)\n \n"
+  },
+  "sphinx-doc__sphinx-9258": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9258",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9367": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9367",
+    "model_patch": "diff --git a/sphinx/pycode/ast.py b/sphinx/pycode/ast.py\nindex f541ec0a9..5cd964bd1 100644\n--- a/sphinx/pycode/ast.py\n+++ b/sphinx/pycode/ast.py\n@@ -214,7 +214,12 @@ class _UnparseVisitor(ast.NodeVisitor):\n \n     def visit_Tuple(self, node: ast.Tuple) -> str:\n         if node.elts:\n-            return \"(\" + \", \".join(self.visit(e) for e in node.elts) + \")\"\n+            elts_str = \", \".join(self.visit(e) for e in node.elts)\n+            # Add trailing comma for single-element tuples\n+            if len(node.elts) == 1:\n+                return \"(\" + elts_str + \",)\"\n+            else:\n+                return \"(\" + elts_str + \")\"\n         else:\n             return \"()\"\n \n"
+  },
+  "sphinx-doc__sphinx-9281": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9281",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9320": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9320",
+    "model_patch": "diff --git a/sphinx/cmd/quickstart.py b/sphinx/cmd/quickstart.py\nindex a40a21073..e9b53fa72 100644\n--- a/sphinx/cmd/quickstart.py\n+++ b/sphinx/cmd/quickstart.py\n@@ -95,6 +95,16 @@ def is_path(x: str) -> str:\n     return x\n \n \n+def is_path_or_empty(x: str) -> str:\n+    \"\"\"Validator that allows empty string (for exiting) or a valid path.\"\"\"\n+    if not x:\n+        return x\n+    x = path.expanduser(x)\n+    if not path.isdir(x):\n+        raise ValidationError(__(\"Please enter a valid path name.\"))\n+    return x\n+\n+\n def allow_empty(x: str) -> str:\n     return x\n \n@@ -223,7 +233,7 @@ def ask_user(d: Dict) -> None:\n         print(__('sphinx-quickstart will not overwrite existing Sphinx projects.'))\n         print()\n         d['path'] = do_prompt(__('Please enter a new root path (or just Enter to exit)'),\n-                              '', is_path)\n+                              '', is_path_or_empty)\n         if not d['path']:\n             sys.exit(1)\n \n"
+  },
+  "sphinx-doc__sphinx-9461": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9461",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9591": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9591",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9658": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9658",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9602": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9602",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9673": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9673",
+    "model_patch": "diff --git a/sphinx/ext/autodoc/typehints.py b/sphinx/ext/autodoc/typehints.py\nindex af4b47bb0..364199945 100644\n--- a/sphinx/ext/autodoc/typehints.py\n+++ b/sphinx/ext/autodoc/typehints.py\n@@ -101,6 +101,8 @@ def modify_field_list(node: nodes.field_list, annotations: Dict[str, str]) -> No\n             name = ' '.join(parts[1:])\n             arg = arguments.setdefault(name, {})\n             arg['type'] = True\n+        elif parts[0] in ('return', 'returns'):\n+            arguments['return'] = {'param': True}\n         elif parts[0] == 'rtype':\n             arguments['return'] = {'type': True}\n \n@@ -149,7 +151,7 @@ def augment_descriptions_with_types(\n         elif parts[0] == 'type':\n             name = ' '.join(parts[1:])\n             has_type.add(name)\n-        elif parts[0] == 'return':\n+        elif parts[0] in ('return', 'returns'):\n             has_description.add('return')\n         elif parts[0] == 'rtype':\n             has_type.add('return')\n"
+  },
+  "sphinx-doc__sphinx-9698": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9698",
+    "model_patch": "diff --git a/sphinx/domains/python.py b/sphinx/domains/python.py\nindex cd02eaad5..8f3dd383f 100644\n--- a/sphinx/domains/python.py\n+++ b/sphinx/domains/python.py\n@@ -788,6 +788,11 @@ class PyMethod(PyObject):\n             if modname and self.env.config.add_module_names:\n                 clsname = '.'.join([modname, clsname])\n         except ValueError:\n+            if 'property' in self.options:\n+                if modname:\n+                    return _('%s (in module %s)') % (name, modname)\n+                else:\n+                    return name\n             if modname:\n                 return _('%s() (in module %s)') % (name, modname)\n             else:\n@@ -796,7 +801,7 @@ class PyMethod(PyObject):\n         if 'classmethod' in self.options:\n             return _('%s() (%s class method)') % (methname, clsname)\n         elif 'property' in self.options:\n-            return _('%s() (%s property)') % (methname, clsname)\n+            return _('%s (%s property)') % (methname, clsname)\n         elif 'staticmethod' in self.options:\n             return _('%s() (%s static method)') % (methname, clsname)\n         else:\n"
+  },
+  "sphinx-doc__sphinx-9711": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9711",
+    "model_patch": "diff --git a/sphinx/application.py b/sphinx/application.py\nindex 4a75a83fe..c96676b23 100644\n--- a/sphinx/application.py\n+++ b/sphinx/application.py\n@@ -25,6 +25,7 @@ from docutils.nodes import Element, TextElement\n from docutils.parsers import Parser\n from docutils.parsers.rst import Directive, roles\n from docutils.transforms import Transform\n+from packaging.version import Version\n from pygments.lexer import Lexer\n \n import sphinx\n@@ -223,7 +224,7 @@ class Sphinx:\n         self._init_i18n()\n \n         # check the Sphinx version if requested\n-        if self.config.needs_sphinx and self.config.needs_sphinx > sphinx.__display_version__:\n+        if self.config.needs_sphinx and Version(self.config.needs_sphinx) > Version(sphinx.__display_version__):\n             raise VersionRequirementError(\n                 __('This project needs at least Sphinx v%s and therefore cannot '\n                    'be built with this version.') % self.config.needs_sphinx)\ndiff --git a/sphinx/extension.py b/sphinx/extension.py\nindex 7ec6c8518..b3883426b 100644\n--- a/sphinx/extension.py\n+++ b/sphinx/extension.py\n@@ -10,6 +10,8 @@\n \n from typing import TYPE_CHECKING, Any, Dict\n \n+from packaging.version import Version\n+\n from sphinx.config import Config\n from sphinx.errors import VersionRequirementError\n from sphinx.locale import __\n@@ -51,7 +53,13 @@ def verify_needs_extensions(app: \"Sphinx\", config: Config) -> None:\n                               'but it is not loaded.'), extname)\n             continue\n \n-        if extension.version == 'unknown version' or reqversion > extension.version:\n+        if extension.version == 'unknown version':\n+            raise VersionRequirementError(__('This project needs the extension %s at least in '\n+                                             'version %s and therefore cannot be built with '\n+                                             'the loaded version (%s).') %\n+                                          (extname, reqversion, extension.version))\n+\n+        if Version(reqversion) > Version(extension.version):\n             raise VersionRequirementError(__('This project needs the extension %s at least in '\n                                              'version %s and therefore cannot be built with '\n                                              'the loaded version (%s).') %\n"
+  }
+}

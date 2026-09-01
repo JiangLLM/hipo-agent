@@ -1,0 +1,343 @@
+[
+ {
+  "site": "reddit",
+  "task_id": 66,
+  "kind": "WIN",
+  "intent": "Among the top 10 post in \"books\" forum, show me the post URLs that recommand a single book",
+  "gold": {
+   "must_include": [
+    "http://www.reddit.com/f/books/59396/apple-books-has-a-free-audiobook-of-a-christmas-carol",
+    "http://www.reddit.com/f/books/17445/i-just-finished-reading-the-hobbit-to-my-6-year-old-daughter"
+   ]
+  },
+  "retrieved": [
+   {
+    "title": "Navigate from newest forum post to full comment history",
+    "desc": "Use when a task identifies a user through the latest post in a forum and then asks about all of that user’s comments; not when the user or post is already specified directly.",
+    "content": "Open the forum, change the visible sort control from “Hot” to “New,” and use the author of the first submission. On the profile, select “Comments” rather than “Overview,” which mixes submissions and comments, then follow every “More” link until a page has no further “More” control."
+   }
+  ],
+  "nomem_answer": "http://10.44.12.29:9999/59396",
+  "withmem_answer": "http://10.44.12.29:9999/17445, http://10.44.12.29:9999/59396",
+  "nomem_trace": [
+   "click('42') | I need open the forums directory and navigate to the “books” forum, th",
+   "click('544') | The “books — books” forum is visible in the forum list. I’ll open it a",
+   "click('453') | The page shows more than ten posts, but the requested set is the first",
+   "go_back() | I need return to the books forum list, record all first ten posts in r",
+   "click('453') | The top 10 are the first ten articles through “Apple Books has a free ",
+   "noop() | ",
+   "go_back() | I have verified the first candidate’s content and submission ID. I nee",
+   "click('490') | The first ten Hot posts end at “Apple Books has a free audiobook of A ",
+   "send_msg_to_user(\"http://10.44.12.29:999 | "
+  ],
+  "withmem_trace": [
+   "click('42') | I need open the books forum and inspect its top 10 posts, including fu",
+   "click('544') | The “books — books” forum is visible in the forum list, so I should op",
+   "click('128') | “Top 10 posts” most likely requires changing the forum’s sort from Hot",
+   "click('141') | The sort menu is open and includes “Top”; I need select it before iden",
+   "click('146') | Top is currently limited to the past 24 hours and shows no posts. To g",
+   "click('161') | The time-range menu is open and “All time” is available. Selecting it ",
+   "click('433') | Of the first 10 ranked posts, the clear single-book recommendations ar",
+   "go_back() | The Hobbit post is verified as discussing and recommending a single bo",
+   "click('470') | The first 10 posts end with “What Is It That Makes Used Bookstores So ",
+   "go_back() | The A Christmas Carol post is verified as recommending one book, and i",
+   "click('433') | The ranked top 10 are fully visible, and the two qualifying posts are ",
+   "send_msg_to_user(\"http://10.44.12.29:999 | "
+  ]
+ },
+ {
+  "site": "gitlab",
+  "task_id": 136,
+  "kind": "WIN",
+  "intent": "How many commits did Steven Woodson make to a11y-webring.club on 2/6/2023?",
+  "gold": {
+   "must_include": [
+    "5"
+   ]
+  },
+  "retrieved": [
+   {
+    "title": "Open the repository’s commit history",
+    "desc": "Use this when a GitLab task asks about individual commits by date or author; do not rely on the project’s total commit count, Contributors page, activity feed, or other aggregate reports.",
+    "content": "From the project, expand “Repository” and select “Commits,” then choose the relevant branch and use the available date navigation or filters. Continue through pagination or “Load more” until the entire requested date range is visible; aggregate pages cannot establish which specific commits qualify."
+   }
+  ],
+  "nomem_answer": "3",
+  "withmem_answer": "5",
+  "nomem_trace": [
+   "click('357') | I need to open the a11y-webring.club project, then inspect its commit ",
+   "click('686') | The project page has a “235 Commits” link, which should open the compl",
+   "send_msg_to_user(\"3\") | "
+  ],
+  "withmem_trace": [
+   "click('468') | The target project “Byte Blaze / a11y-webring.club” is visible in the ",
+   "click('686') | The project page shows a “235 Commits” link, which opens the repositor",
+   "send_msg_to_user(\"5\") | "
+  ]
+ },
+ {
+  "site": "gitlab",
+  "task_id": 309,
+  "kind": "WIN",
+  "intent": "Tell me who has made the most contributions, in terms of number of commits, to the thoughtbot/administrate project",
+  "gold": {
+   "exact_match": "Grayson Wright"
+  },
+  "retrieved": [
+   {
+    "title": "Use the instance’s commit history and valid filters",
+    "desc": "Use when counting commits by author within a date range in a GitLab project; do not substitute the Contributors report, which aggregates activity and may not support the required date/status filtering.",
+    "content": "Open Repository → Commits (or the project’s visible “Commits” link), select the correct branch, and use the visible “Author” control only if its autocomplete produces a selectable account—typed text or Enter alone does not apply the filter. If the UI truncates results, query the same GitLab instance’s repository commits API with the project path URL-encoded, branch, date bounds, and pagination; do not switch to the public GitLab host unless the project actually lives there."
+   }
+  ],
+  "nomem_answer": "",
+  "withmem_answer": "Grayson Wright",
+  "nomem_trace": [
+   "fill('130', 'thoughtbot/administrate') | The GitLab dashboard has a global “Search GitLab” textbox, which is th",
+   "keyboard_press('Enter') | The search suggestions show one available result for “thoughtbot/admin",
+   "goto('https://github.com/thoughtbot/admi | GitLab has no matching project, so I should open the known repository’"
+  ],
+  "withmem_trace": [
+   "fill('130', 'thoughtbot/administrate') | The target project is not in the visible project list. The global “Sea",
+   "click('911') | The search autocomplete shows one actionable result for “thoughtbot/ad",
+   "fill('227', 'administrate') | The exact namespace search returned no projects, likely because projec",
+   "click('231') | The search field now contains “administrate,” but the results still re",
+   "click('320') | The search results show exactly one matching project, “thoughtbot, inc",
+   "click('291') | To identify the top contributor by commit count, I need the project’s ",
+   "click('311') | The Repository submenu is open and includes a dedicated “Contributors”",
+   "send_msg_to_user(\"Grayson Wright\") | "
+  ]
+ },
+ {
+  "site": "gitlab",
+  "task_id": 304,
+  "kind": "REG",
+  "intent": "How many commits did Eric make between Feb 2023 and May 2023?",
+  "gold": {
+   "must_include": [
+    "14"
+   ]
+  },
+  "retrieved": [
+   {
+    "title": "Count every visibly matching commit",
+    "desc": "Use after the commit list has reached the requested date, especially when multiple authors, pagination, or abbreviated identities are involved; not for merely confirming that the commits page exists.",
+    "content": "Enumerate every commit whose displayed date and author exactly match the requested criteria, continuing through all rows and any next page or load-more control for that date. Open a commit detail when an author name is abbreviated, distinguish near-identical identities, and sum the per-author counts only from entries visibly verified on GitLab."
+   }
+  ],
+  "nomem_answer": "14",
+  "withmem_answer": "",
+  "nomem_trace": [
+   "click('474') | The project sidebar has an Analytics section, which is the most likely",
+   "click('480') | Value Stream Analytics shows only overall commits, not per contributor",
+   "scroll(0, 667) | The repository analytics page shows overall commit statistics, and con",
+   "scroll(0, 697) | The visible section contains overall commit charts but no contributor ",
+   "scroll(0, 724) | The page still shows aggregate commit charts through commits by hour, ",
+   "click('288') | This analytics page ends with aggregate charts and has no contributor ",
+   "click('317') | The Repository submenu is open and includes a Contributors page, which",
+   "click('301') | The contributor page confirms Eric Bailey appears under two email iden",
+   "click('800') | The current list starts at March 14 and includes unrelated authors, so",
+   "send_msg_to_user(\"14\") | The visible commit history covers the repository’s latest commits thro"
+  ],
+  "withmem_trace": [
+   "click('687') | The project page has a direct “2,320 Commits” link, which is the appro",
+   "scroll(0, -1449) | The visible portion verifies 14 Eric Bailey commits from February 1 th",
+   "scroll(0, -1518) | The current list confirms the 14 Eric Bailey commits already counted f",
+   "scroll(0, -1518) | The page currently spans March 14 back into 2022, so February is fully",
+   "scroll(0, -1520) | February 1 through March 13 is fully verified at 14 Eric Bailey commit",
+   "scroll(0, -1518) | The range through February 1 and March 13 has been fully bounded, with",
+   "keyboard_press('Home') | The commit DOM currently begins at March 14, so newer March-through-Ma",
+   "goto('https://gitlab.com/api/v4/projects | The current commit list is bounded only through March 14 and repeated "
+  ]
+ },
+ {
+  "site": "gitlab",
+  "task_id": 784,
+  "kind": "REG",
+  "intent": "Tell me the email address of the contributor who has the most commits to branch main",
+  "gold": {
+   "must_include": [
+    "secupwn@users.noreply.github.com"
+   ]
+  },
+  "retrieved": [
+   {
+    "title": "Use the dedicated Contributors report",
+    "desc": "When locating contributor commit rankings for a repository; not when aggregate repository activity or delivery metrics are requested.",
+    "content": "From Projects, use “Explore” and its “Filter by name” field if the project is not in “Yours,” open the exact namespace/project match, then expand “Repository” and select “Contributors.” Do not substitute “Analytics” or “Repository Analytics,” which can show aggregate author statistics without the contributor ranking."
+   }
+  ],
+  "nomem_answer": "secupwn@users.noreply.github.com",
+  "withmem_answer": "",
+  "nomem_trace": [
+   "click('421') | The project navigation includes an Analytics section, which is the mos",
+   "click('427') | The current Value Stream page does not show contributor commit totals.",
+   "click('542') | The commit statistics section is currently filtered to the development",
+   "fill('552', 'main') | The branch picker is open and “main” is not among the currently listed",
+   "noop(1500) | The branch search has been entered, but the result list still shows th",
+   "keyboard_press('Enter') | The search query is present, but the picker has not applied it and sti",
+   "click('542') | Pressing Enter did not change the selected branch, so I should reopen ",
+   "click('694') | The complete branch list is visible and contains no branch literally n",
+   "scroll(0, 1051) | The master branch statistics are loaded, but the contributor table is ",
+   "scroll(0, 1050) | The contributor table is still below the visible commit charts, so I n",
+   "scroll(0, 1034) | The contributor rows are not yet visible; the current viewport ends at",
+   "scroll(0, 1100) | The page still ends at the final commit chart, and no contributor rank",
+   "click('282') | The analytics page contains only aggregate commit charts and no contri",
+   "click('311') | The Repository submenu now exposes a dedicated “Contributors” page, wh",
+   "send_msg_to_user(\"secupwn@users.noreply. | "
+  ],
+  "withmem_trace": [
+   "click('291') | The task asks for the top contributor on branch main and their email. ",
+   "click('311') | The Repository submenu is expanded and contains the dedicated Contribu",
+   "click('494') | The contributors report is currently filtered to branch “development,”",
+   "fill('504', 'main') | The branch picker is open with its searchbox focused. “main” is not in",
+   "noop(1000) | The branch picker search contains “main,” but the only visible result ",
+   "click('298') | The branch picker’s filtered results show no “main” branch, only “deve",
+   "fill('504', 'main') | The Branches page shows several stale branches, including “master,” bu",
+   "click('506') | The branch filter contains “main,” but the stale branch list has not u",
+   "click('499') | The current “Overview” branch tab may not represent the complete branc",
+   "fill('504', 'main') | The “All” tab is now active and shows the complete branch category, bu",
+   "click('506') | The complete “All” branch list is selected and the filter contains “ma",
+   "click('302') | The complete “All” branches search confirms no listed branch named “ma",
+   "click('494') | The contributors report is loaded for development, and the task specif",
+   "fill('504', 'main') | The open branch picker shows all currently loaded branches and no “mai",
+   "report_infeasible('The project has no br | The exact “main” search still yields only “development,” and the compl"
+  ]
+ },
+ {
+  "site": "gitlab",
+  "task_id": 787,
+  "kind": "REG",
+  "intent": "Tell me the number of followers of the contributor who has the most commits to branch main",
+  "gold": {
+   "must_include": [
+    "0"
+   ]
+  },
+  "retrieved": [
+   {
+    "title": "Use the dedicated Contributors report",
+    "desc": "When locating contributor commit rankings for a repository; not when aggregate repository activity or delivery metrics are requested.",
+    "content": "From Projects, use “Explore” and its “Filter by name” field if the project is not in “Yours,” open the exact namespace/project match, then expand “Repository” and select “Contributors.” Do not substitute “Analytics” or “Repository Analytics,” which can show aggregate author statistics without the contributor ranking."
+   }
+  ],
+  "nomem_answer": "0",
+  "withmem_answer": "",
+  "nomem_trace": [
+   "click('494') | The page currently shows contributors for branch master, while the tas",
+   "fill('504', 'main') | The branch selector is open and only “master” is currently listed. I s",
+   "click('298') | Searching the branch selector for “main” returns only “master,” so I n",
+   "click('302') | The complete branches page shows only one branch, “master,” marked def",
+   "click('477') | The contributors list is sorted by commit count and shows Henning Leut",
+   "send_msg_to_user(\"0\") | "
+  ],
+  "withmem_trace": []
+ },
+ {
+  "site": "shopping",
+  "task_id": 126,
+  "kind": "REG",
+  "intent": "What is the price range of Canon photo printer in the One Stop Market?",
+  "gold": {
+   "must_include": [
+    "2.56",
+    "649.99"
+   ]
+  },
+  "retrieved": [
+   {
+    "title": "Verify both visible price endpoints",
+    "desc": "Use when asked for a price range or extrema from a product result set; do not answer from an uninspected heading, assumed sort order, or unrelated endpoint products.",
+    "content": "After sorting by price, inspect every qualifying product needed to establish the lowest and highest displayed current prices, using the sort-direction control or final results page for the opposite endpoint. Confirm each endpoint is visibly attached to the intended product variant, open the product detail page if the grid truncates its name or price, and include all tied qualifying rows in the verification rather than guessing unseen values."
+   }
+  ],
+  "nomem_answer": "$2.56 - $649.99",
+  "withmem_answer": "$49.54 - $649.99",
+  "nomem_trace": [
+   "fill('272', 'Canon photo printer') | I need search for Canon photo printer products, then inspect all resul",
+   "click('277') | The search query is entered but results have not yet been submitted; t",
+   "click('277') | The general search returned 6,444 broad OR-matched results, including ",
+   "fill('1372', 'Canon photo printer') | The Advanced Search form allows restricting the query to Product Name,",
+   "click('1404') | The Product Name field contains “Canon photo printer,” and the Advance",
+   "click('1367') | The exact product-name phrase returned no items, so I need broaden the",
+   "fill('1372', 'Canon') | The Advanced Search form is visible again with the prior exact phrase ",
+   "click('1404') | The Product Name field now contains “Canon.” I should submit this broa",
+   "click('1381') | The broader Canon search succeeded and returned 456 items, too many un",
+   "fill('1372', 'photo printer') | The Advanced Search form still has “Canon” in Product Name because the",
+   "click('1404') | The Product Name field is now set to “photo printer.” I should submit ",
+   "select_option('1808', '36') | There are 33 matching products across three pages, and page 1 already ",
+   "send_msg_to_user(\"$2.56 - $649.99\") | "
+  ],
+  "withmem_trace": [
+   "fill('332', 'Canon photo printer') | I need search the catalog for Canon photo printer, then inspect the co",
+   "click('337') | The search query is entered and an exact autocomplete suggestion is vi",
+   "select_option('1447', 'Price') | The current results include many accessories and unrelated matches, so",
+   "fill('333', '\"Canon photo printer\"') | The current search is matching thousands of unrelated products, so its",
+   "click('336') | The attempted exact-phrase edit was appended to the existing autocompl",
+   "fill('1432', 'Canon photo printer') | Advanced Search provides a Product Name field, which can restrict matc",
+   "click('1464') | The Product Name field is filled with the intended query, so I should ",
+   "click('1427') | The exact Product Name phrase returns no items, so I need broaden the ",
+   "fill('1432', 'Canon') | The advanced search uses exact or all-term matching in Product Name, s",
+   "click('1464') | The Product Name field now contains “Canon”; I should run the advanced",
+   "click('1441') | Searching only Product Name for Canon produces 456 items, so I should ",
+   "fill('1442', 'photo printer') | The advanced search form retains Product Name “Canon” and offers a Des",
+   "click('1464') | The advanced criteria now combine Product Name “Canon” with Descriptio",
+   "send_msg_to_user(\"$49.54 - $649.99\") | All 11 results are visible on one page. Restricting to actual Canon ph"
+  ]
+ },
+ {
+  "site": "shopping",
+  "task_id": 385,
+  "kind": "REG",
+  "intent": "List the customer names who thinks EYZUTAK phone cases are of good looking",
+  "gold": {
+   "must_include": [
+    "Lisa Lee",
+    "MH",
+    "Misba009",
+    "Amanda",
+    "N Randall",
+    "Amazon Customer",
+    "Cally",
+    "Bethany Robertson"
+   ]
+  },
+  "retrieved": [
+   {
+    "title": "Open the product’s Reviews tab",
+    "desc": "Use on shopping product-detail pages when the task asks about customer feedback; do not infer reviews from the product overview, rating summary, or description.",
+    "content": "Verify the exact product and variant from the page heading, then scroll to and activate the tab labeled “Reviews.” Confirm that review bodies actually become visible after the click, and use any pagination, expansion, or “read more” controls until every review has been inspected."
+   }
+  ],
+  "nomem_answer": "Lisa Lee, MH, Misba009, Amanda, N Randall, Amazon Customer, Cally, Bethany Robertson",
+  "withmem_answer": "Lisa Lee, MH, Misba009, Amanda, Amazon Customer, Cally, Bethany Robertson",
+  "nomem_trace": [
+   "fill('272', 'EYZUTAK') | The product is not visible on the current page, so I need to search th",
+   "click('1919') | The autocomplete menu shows an exact “EYZUTAK phone cases” option, whi",
+   "click('1419') | The exact EYZUTAK product is the first result and shows 12 reviews. I ",
+   "click('1763') | The product page confirms there are 12 reviews, but their contents are",
+   "click('2016') | Page 1 contains 10 of the 12 reviews and several reviewers praising th",
+   "click('2250') | Page 2 has only Bethany Robertson describing the case as “really class",
+   "click('2513') | Although the history says page 2 was checked, the current page’s 10-re",
+   "click('2608') | The current page is definitively page 2 and shows the final two review",
+   "send_msg_to_user(\"Lisa Lee, MH, Misba009 | I have inspected the complete paginated review set. The reviewers who "
+  ],
+  "withmem_trace": [
+   "fill('332', 'EYZUTAK phone cases') | The page has a search field, and the task asks about reviews for EYZUT",
+   "click('337') | The exact query is entered and the autocomplete suggestion is visible,",
+   "click('1479') | The exact EYZUTAK product appears first and has 12 reviews. I need ins",
+   "click('1823') | The exact EYZUTAK product and its “Reviews (12)” tab are visible. I ne",
+   "click('2076') | Page 1 shows 10 of 12 reviews and includes pagination. To satisfy the ",
+   "click('2310') | Page 2 contains two reviews: Bethany Robertson calls the case “really ",
+   "click('2573') | I have inspected the 10 visible reviews, but the task requires checkin",
+   "click('2668') | Page 2 confirms Bethany Robertson describes the case as “really classy",
+   "click('2931') | Although the history claims page 2 was inspected, the current page 1 i",
+   "click('3026') | Page 2 is now definitively verified: Bethany Robertson describes it as",
+   "click('3289') | Page 1 shows ten reviews, but the product has twelve total. I need ver",
+   "click('3384') | Page 2 is confirmed and identifies Bethany Robertson as describing the",
+   "click('3647') | Page 1 has ten reviews. Positive appearance comments are from Lisa Lee",
+   "click('3742') | Page 2 confirms Bethany Robertson. The prior page-1 note is truncated ",
+   "send_msg_to_user(\"Lisa Lee, MH, Misba009 | "
+  ]
+ }
+]

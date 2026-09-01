@@ -1,0 +1,1 @@
+{"django/forms/boundfield.py": [{"anchor": "BoundWidget.id_for_label", "note": "BoundWidget.id_for_label should use the 'id' from self.data['attrs'] (which is set by ChoiceWidget.options with the proper auto_id format) instead of reconstructing it from name and index, ensuring custom auto_id formats are respected for subwidgets."}]}

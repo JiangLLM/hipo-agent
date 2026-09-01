@@ -1,0 +1,14 @@
+{
+  "n_tasks": 25,
+  "site": "reddit",
+  "arms": [
+    "nomem"
+  ],
+  "nomem": {
+    "n": 25,
+    "reward_sr": 0.68,
+    "layer1_writes": 0,
+    "layer2_writes": 0
+  },
+  "spent_usd": 0.3036
+}

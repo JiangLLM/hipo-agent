@@ -1,0 +1,72 @@
+{
+  "sphinx-doc__sphinx-9230": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9230",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9229": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9229",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9258": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9258",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-8721": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-8721",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9367": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9367",
+    "model_patch": "diff --git a/sphinx/pycode/ast.py b/sphinx/pycode/ast.py\nindex f541ec0a9..90aac5cfa 100644\n--- a/sphinx/pycode/ast.py\n+++ b/sphinx/pycode/ast.py\n@@ -214,7 +214,11 @@ class _UnparseVisitor(ast.NodeVisitor):\n \n     def visit_Tuple(self, node: ast.Tuple) -> str:\n         if node.elts:\n-            return \"(\" + \", \".join(self.visit(e) for e in node.elts) + \")\"\n+            elts_str = \", \".join(self.visit(e) for e in node.elts)\n+            # Add trailing comma for single-element tuples\n+            if len(node.elts) == 1:\n+                elts_str += \",\"\n+            return \"(\" + elts_str + \")\"\n         else:\n             return \"()\"\n \n"
+  },
+  "sphinx-doc__sphinx-9281": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9281",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9320": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9320",
+    "model_patch": "diff --git a/sphinx/cmd/quickstart.py b/sphinx/cmd/quickstart.py\nindex a40a21073..6056f56f9 100644\n--- a/sphinx/cmd/quickstart.py\n+++ b/sphinx/cmd/quickstart.py\n@@ -94,6 +94,15 @@ def is_path(x: str) -> str:\n         raise ValidationError(__(\"Please enter a valid path name.\"))\n     return x\n \n+def allow_empty_or_path(x: str) -> str:\n+    x = path.expanduser(x)\n+    if not x:\n+        # Empty string is allowed (user wants to exit)\n+        return x\n+    if not path.isdir(x):\n+        raise ValidationError(__(\"Please enter a valid path name.\"))\n+    return x\n+\n \n def allow_empty(x: str) -> str:\n     return x\n@@ -223,7 +232,7 @@ def ask_user(d: Dict) -> None:\n         print(__('sphinx-quickstart will not overwrite existing Sphinx projects.'))\n         print()\n         d['path'] = do_prompt(__('Please enter a new root path (or just Enter to exit)'),\n-                              '', is_path)\n+                              '', allow_empty_or_path)\n         if not d['path']:\n             sys.exit(1)\n \n"
+  },
+  "sphinx-doc__sphinx-9591": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9591",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9461": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9461",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9602": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9602",
+    "model_patch": "diff --git a/sphinx/domains/python.py b/sphinx/domains/python.py\nindex 9875a9f4b..26d9a6168 100644\n--- a/sphinx/domains/python.py\n+++ b/sphinx/domains/python.py\n@@ -54,6 +54,12 @@ py_sig_re = re.compile(\n           ''', re.VERBOSE)\n \n \n+\n+class _literal_value(nodes.Text):\n+    \"\"\"Text node for literal values that should not be converted to xref.\"\"\"\n+    pass\n+\n+\n pairindextypes = {\n     'module':    _('module'),\n     'keyword':   _('keyword'),\n@@ -109,7 +115,19 @@ def type_to_xref(text: str, env: BuildEnvironment = None) -> addnodes.pending_xr\n \n def _parse_annotation(annotation: str, env: BuildEnvironment = None) -> List[Node]:\n     \"\"\"Parse type annotation.\"\"\"\n-    def unparse(node: ast.AST) -> List[Node]:\n+    def _is_literal_subscript(node: ast.AST) -> bool:\n+        \"\"\"Check if the node is a Subscript with a Literal value.\"\"\"\n+        if not isinstance(node, ast.Subscript):\n+            return False\n+        value = node.value\n+        # Check for Literal or typing.Literal\n+        if isinstance(value, ast.Name):\n+            return value.id == 'Literal'\n+        elif isinstance(value, ast.Attribute):\n+            return value.attr == 'Literal'\n+        return False\n+\n+    def unparse(node: ast.AST, in_literal: bool = False) -> List[Node]:\n         if isinstance(node, ast.Attribute):\n             return [nodes.Text(\"%s.%s\" % (unparse(node.value)[0], node.attr))]\n         elif isinstance(node, ast.BinOp):\n@@ -123,11 +141,15 @@ def _parse_annotation(annotation: str, env: BuildEnvironment = None) -> List[Nod\n             if node.value is Ellipsis:\n                 return [addnodes.desc_sig_punctuation('', \"...\")]\n             else:\n-                return [nodes.Text(node.value)]\n+                # Use _literal_value for constants inside Literal subscripts\n+                if in_literal:\n+                    return [_literal_value(node.value)]\n+                else:\n+                    return [nodes.Text(node.value)]\n         elif isinstance(node, ast.Expr):\n-            return unparse(node.value)\n+            return unparse(node.value, in_literal)\n         elif isinstance(node, ast.Index):\n-            return unparse(node.value)\n+            return unparse(node.value, in_literal)\n         elif isinstance(node, ast.List):\n             result = [addnodes.desc_sig_punctuation('', '[')]\n             if node.elts:\n@@ -135,26 +157,28 @@ def _parse_annotation(annotation: str, env: BuildEnvironment = None) -> List[Nod\n                 # last element of result if the for-loop was run at least\n                 # once\n                 for elem in node.elts:\n-                    result.extend(unparse(elem))\n+                    result.extend(unparse(elem, in_literal))\n                     result.append(addnodes.desc_sig_punctuation('', ', '))\n                 result.pop()\n             result.append(addnodes.desc_sig_punctuation('', ']'))\n             return result\n         elif isinstance(node, ast.Module):\n-            return sum((unparse(e) for e in node.body), [])\n+            return sum((unparse(e, in_literal) for e in node.body), [])\n         elif isinstance(node, ast.Name):\n             return [nodes.Text(node.id)]\n         elif isinstance(node, ast.Subscript):\n             result = unparse(node.value)\n             result.append(addnodes.desc_sig_punctuation('', '['))\n-            result.extend(unparse(node.slice))\n+            # Check if this is a Literal subscript\n+            is_literal = _is_literal_subscript(node)\n+            result.extend(unparse(node.slice, is_literal))\n             result.append(addnodes.desc_sig_punctuation('', ']'))\n             return result\n         elif isinstance(node, ast.Tuple):\n             if node.elts:\n                 result = []\n                 for elem in node.elts:\n-                    result.extend(unparse(elem))\n+                    result.extend(unparse(elem, in_literal))\n                     result.append(addnodes.desc_sig_punctuation('', ', '))\n                 result.pop()\n             else:\n@@ -179,7 +203,7 @@ def _parse_annotation(annotation: str, env: BuildEnvironment = None) -> List[Nod\n         tree = ast_parse(annotation)\n         result = unparse(tree)\n         for i, node in enumerate(result):\n-            if isinstance(node, nodes.Text) and node.strip():\n+            if isinstance(node, nodes.Text) and not isinstance(node, _literal_value) and node.strip():\n                 result[i] = type_to_xref(str(node), env)\n         return result\n     except SyntaxError:\n"
+  },
+  "sphinx-doc__sphinx-9658": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9658",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9673": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9673",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9698": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9698",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9711": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9711",
+    "model_patch": "diff --git a/sphinx/extension.py b/sphinx/extension.py\nindex 7ec6c8518..eb63ebbfd 100644\n--- a/sphinx/extension.py\n+++ b/sphinx/extension.py\n@@ -10,6 +10,8 @@\n \n from typing import TYPE_CHECKING, Any, Dict\n \n+from packaging.version import Version\n+\n from sphinx.config import Config\n from sphinx.errors import VersionRequirementError\n from sphinx.locale import __\n@@ -51,7 +53,7 @@ def verify_needs_extensions(app: \"Sphinx\", config: Config) -> None:\n                               'but it is not loaded.'), extname)\n             continue\n \n-        if extension.version == 'unknown version' or reqversion > extension.version:\n+        if extension.version == 'unknown version' or Version(reqversion) > Version(extension.version):\n             raise VersionRequirementError(__('This project needs the extension %s at least in '\n                                              'version %s and therefore cannot be built with '\n                                              'the loaded version (%s).') %\n"
+  }
+}

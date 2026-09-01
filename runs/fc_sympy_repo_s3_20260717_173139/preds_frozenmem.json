@@ -1,0 +1,177 @@
+{
+  "sympy__sympy-18763": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-18763",
+    "model_patch": ""
+  },
+  "sympy__sympy-19040": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-19040",
+    "model_patch": ""
+  },
+  "sympy__sympy-18698": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-18698",
+    "model_patch": ""
+  },
+  "sympy__sympy-18211": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-18211",
+    "model_patch": ""
+  },
+  "sympy__sympy-19637": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-19637",
+    "model_patch": "diff --git a/sympy/core/sympify.py b/sympy/core/sympify.py\nindex a3f1ce2851..4266773dff 100644\n--- a/sympy/core/sympify.py\n+++ b/sympy/core/sympify.py\n@@ -513,7 +513,7 @@ def kernS(s):\n             while kern in s:\n                 kern += choice(string.ascii_letters + string.digits)\n             s = s.replace(' ', kern)\n-        hit = kern in s\n+            hit = kern in s\n \n     for i in range(2):\n         try:\n"
+  },
+  "sympy__sympy-19346": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-19346",
+    "model_patch": "diff --git a/sympy/printing/repr.py b/sympy/printing/repr.py\nindex c936a692c0..55e643e2ba 100644\n--- a/sympy/printing/repr.py\n+++ b/sympy/printing/repr.py\n@@ -250,6 +250,24 @@ def _print_tuple(self, expr):\n         else:\n             return \"(%s)\" % self.reprify(expr, \", \")\n \n+    def _print_set(self, expr):\n+        if not expr:\n+            return \"set()\"\n+        items = self.reprify(expr, \", \")\n+        return \"{%s}\" % items\n+\n+    def _print_frozenset(self, expr):\n+        if not expr:\n+            return \"frozenset()\"\n+        items = self.reprify(expr, \", \")\n+        return \"frozenset({%s})\" % items\n+\n+    def _print_dict(self, expr):\n+        items = []\n+        for key in expr.keys():\n+            items.append(\"%s: %s\" % (self._print(key), self._print(expr[key])))\n+        return \"{%s}\" % \", \".join(items)\n+\n     def _print_WildFunction(self, expr):\n         return \"%s('%s')\" % (expr.__class__.__name__, expr.name)\n \n"
+  },
+  "sympy__sympy-19954": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-19954",
+    "model_patch": "diff --git a/sympy/combinatorics/perm_groups.py b/sympy/combinatorics/perm_groups.py\nindex de94ddabb4..932184d60c 100644\n--- a/sympy/combinatorics/perm_groups.py\n+++ b/sympy/combinatorics/perm_groups.py\n@@ -2195,16 +2195,19 @@ def _number_blocks(blocks):\n                 # respect to the already discovere ones\n                 minimal = True\n                 to_remove = []\n+                remove_indices = []\n                 for i, r in enumerate(rep_blocks):\n                     if len(r) > len(rep) and rep.issubset(r):\n                         # i-th block system is not minimal\n-                        del num_blocks[i], blocks[i]\n                         to_remove.append(rep_blocks[i])\n+                        remove_indices.append(i)\n                     elif len(r) < len(rep) and r.issubset(rep):\n                         # the system being checked is not minimal\n                         minimal = False\n                         break\n-                # remove non-minimal representative blocks\n+                # remove non-minimal representative blocks (in reverse order to avoid index shifts)\n+                for i in reversed(remove_indices):\n+                    del num_blocks[i], blocks[i]\n                 rep_blocks = [r for r in rep_blocks if r not in to_remove]\n \n                 if minimal and num_block not in num_blocks:\n"
+  },
+  "sympy__sympy-19495": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-19495",
+    "model_patch": ""
+  },
+  "sympy__sympy-20154": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-20154",
+    "model_patch": "diff --git a/sympy/utilities/iterables.py b/sympy/utilities/iterables.py\nindex dd36dea304..4e31b283f1 100644\n--- a/sympy/utilities/iterables.py\n+++ b/sympy/utilities/iterables.py\n@@ -1738,19 +1738,16 @@ def partitions(n, m=None, k=None, size=False):\n     {2: 1, 4: 1}\n     {3: 2}\n \n-    Note that the _same_ dictionary object is returned each time.\n-    This is for speed:  generating each partition goes quickly,\n-    taking constant time, independent of n.\n+    Note that the dictionary returned is a new instance for each\n+    partition. It is safe to collect the partitions in a list.\n \n     >>> [p for p in partitions(6, k=2)]\n-    [{1: 6}, {1: 6}, {1: 6}, {1: 6}]\n+    [{2: 3}, {1: 2, 2: 2}, {1: 4, 2: 1}, {1: 6}]\n \n-    If you want to build a list of the returned dictionaries then\n-    make a copy of them:\n+    When ``size`` is True, a tuple is returned with the sum of\n+    the multiplicities (size) and the partition:\n \n-    >>> [p.copy() for p in partitions(6, k=2)]  # doctest: +SKIP\n-    [{2: 3}, {1: 2, 2: 2}, {1: 4, 2: 1}, {1: 6}]\n-    >>> [(M, p.copy()) for M, p in partitions(6, k=2, size=True)]  # doctest: +SKIP\n+    >>> [(M, p) for M, p in partitions(6, k=2, size=True)]  # doctest: +SKIP\n     [(3, {2: 3}), (4, {1: 2, 2: 2}), (5, {1: 4, 2: 1}), (6, {1: 6})]\n \n     References\n@@ -1802,9 +1799,9 @@ def partitions(n, m=None, k=None, size=False):\n         keys.append(r)\n     room = m - q - bool(r)\n     if size:\n-        yield sum(ms.values()), ms\n+        yield sum(ms.values()), ms.copy()\n     else:\n-        yield ms\n+        yield ms.copy()\n \n     while keys != [1]:\n         # Reuse any 1's.\n@@ -1842,9 +1839,9 @@ def partitions(n, m=None, k=None, size=False):\n             break\n         room -= need\n         if size:\n-            yield sum(ms.values()), ms\n+            yield sum(ms.values()), ms.copy()\n         else:\n-            yield ms\n+            yield ms.copy()\n \n \n def ordered_partitions(n, m=None, sort=True):\n"
+  },
+  "sympy__sympy-19783": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-19783",
+    "model_patch": ""
+  },
+  "sympy__sympy-20590": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-20590",
+    "model_patch": "diff --git a/sympy/core/_print_helpers.py b/sympy/core/_print_helpers.py\nindex 96d7e72676..f7875b9eec 100644\n--- a/sympy/core/_print_helpers.py\n+++ b/sympy/core/_print_helpers.py\n@@ -17,6 +17,8 @@ class Printable:\n     This also adds support for LaTeX printing in jupyter notebooks.\n     \"\"\"\n \n+    __slots__ = ()\n+\n     # Note, we always use the default ordering (lex) in __str__ and __repr__,\n     # regardless of the global setting. See issue 5487.\n     def __str__(self):\n"
+  },
+  "sympy__sympy-20428": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-20428",
+    "model_patch": ""
+  },
+  "sympy__sympy-20801": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-20801",
+    "model_patch": ""
+  },
+  "sympy__sympy-20438": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-20438",
+    "model_patch": ""
+  },
+  "sympy__sympy-20916": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-20916",
+    "model_patch": ""
+  },
+  "sympy__sympy-21379": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-21379",
+    "model_patch": "diff --git a/sympy/functions/elementary/hyperbolic.py b/sympy/functions/elementary/hyperbolic.py\nindex 860989f7c1..668d35e144 100644\n--- a/sympy/functions/elementary/hyperbolic.py\n+++ b/sympy/functions/elementary/hyperbolic.py\n@@ -248,6 +248,12 @@ def _eval_is_real(self):\n         # if `im` is of the form n*pi\n         # else, check if it is a number\n         re, im = arg.as_real_imag()\n+        \n+        # If im contains Piecewise, we cannot determine if it's a multiple of pi\n+        from sympy.functions.elementary.piecewise import Piecewise\n+        if im.has(Piecewise):\n+            return None\n+        \n         return (im%pi).is_zero\n \n     def _eval_is_extended_real(self):\n@@ -437,6 +443,12 @@ def _eval_is_real(self):\n         # the imaginary part can be an expression like n*pi\n         # if not, check if the imaginary part is a number\n         re, im = arg.as_real_imag()\n+        \n+        # If im contains Piecewise, we cannot determine if it's a multiple of pi\n+        from sympy.functions.elementary.piecewise import Piecewise\n+        if im.has(Piecewise):\n+            return None\n+        \n         return (im%pi).is_zero\n \n     def _eval_is_positive(self):\n@@ -448,6 +460,13 @@ def _eval_is_positive(self):\n         z = self.args[0]\n \n         x, y = z.as_real_imag()\n+        \n+        # If x or y contain Piecewise, we cannot determine positivity\n+        # as operations like modulo may fail on Piecewise expressions\n+        from sympy.functions.elementary.piecewise import Piecewise\n+        if x.has(Piecewise) or y.has(Piecewise):\n+            return None\n+        \n         ymod = y % (2*pi)\n \n         yzero = ymod.is_zero\n@@ -475,6 +494,13 @@ def _eval_is_nonnegative(self):\n         z = self.args[0]\n \n         x, y = z.as_real_imag()\n+        \n+        # If x or y contain Piecewise, we cannot determine non-negativity\n+        # as operations like modulo may fail on Piecewise expressions\n+        from sympy.functions.elementary.piecewise import Piecewise\n+        if x.has(Piecewise) or y.has(Piecewise):\n+            return None\n+        \n         ymod = y % (2*pi)\n \n         yzero = ymod.is_zero\n@@ -656,6 +682,11 @@ def _eval_is_real(self):\n             return True\n \n         re, im = arg.as_real_imag()\n+        \n+        # If re or im contains Piecewise, we cannot determine realness\n+        from sympy.functions.elementary.piecewise import Piecewise\n+        if re.has(Piecewise) or im.has(Piecewise):\n+            return None\n \n         # if denom = 0, tanh(arg) = zoo\n         if re == 0 and im % pi == pi/2:\n"
+  },
+  "sympy__sympy-21596": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-21596",
+    "model_patch": ""
+  },
+  "sympy__sympy-21847": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-21847",
+    "model_patch": "diff --git a/sympy/polys/monomials.py b/sympy/polys/monomials.py\nindex 0e84403307..7b6a43d171 100644\n--- a/sympy/polys/monomials.py\n+++ b/sympy/polys/monomials.py\n@@ -127,7 +127,8 @@ def itermonomials(variables, max_degrees, min_degrees=None):\n                 for variable in item:\n                     if variable != 1:\n                         powers[variable] += 1\n-                if max(powers.values()) >= min_degree:\n+                total_degree = sum(powers[v] for v in variables if v != 1)\n+                if min_degree <= total_degree <= max_degree:\n                     monomials_list_comm.append(Mul(*item))\n             yield from set(monomials_list_comm)\n         else:\n@@ -139,7 +140,8 @@ def itermonomials(variables, max_degrees, min_degrees=None):\n                 for variable in item:\n                     if variable != 1:\n                         powers[variable] += 1\n-                if max(powers.values()) >= min_degree:\n+                total_degree = sum(powers[v] for v in variables if v != 1)\n+                if min_degree <= total_degree <= max_degree:\n                     monomials_list_non_comm.append(Mul(*item))\n             yield from set(monomials_list_non_comm)\n     else:\n"
+  },
+  "sympy__sympy-21930": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-21930",
+    "model_patch": ""
+  },
+  "sympy__sympy-22080": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-22080",
+    "model_patch": ""
+  },
+  "sympy__sympy-21612": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-21612",
+    "model_patch": ""
+  },
+  "sympy__sympy-22456": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-22456",
+    "model_patch": ""
+  },
+  "sympy__sympy-22714": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-22714",
+    "model_patch": "diff --git a/sympy/geometry/point.py b/sympy/geometry/point.py\nindex 73c20334d0..9813ee5755 100644\n--- a/sympy/geometry/point.py\n+++ b/sympy/geometry/point.py\n@@ -27,7 +27,6 @@\n from sympy.simplify import nsimplify, simplify\n from sympy.geometry.exceptions import GeometryError\n from sympy.functions.elementary.miscellaneous import sqrt\n-from sympy.functions.elementary.complexes import im\n from sympy.functions.elementary.trigonometric import cos, sin\n from sympy.matrices import Matrix\n from sympy.matrices.expressions import Transpose\n@@ -152,7 +151,7 @@ def __new__(cls, *args, **kwargs):\n                         'warn' or 'ignore'.'''))\n         if any(coords[dim:]):\n             raise ValueError('Nonzero coordinates cannot be removed.')\n-        if any(a.is_number and im(a) for a in coords):\n+        if any(a.is_number and not a.is_real for a in coords):\n             raise ValueError('Imaginary coordinates are not permitted.')\n         if not all(isinstance(a, Expr) for a in coords):\n             raise TypeError('Coordinates must be valid SymPy expressions.')\n"
+  },
+  "sympy__sympy-22914": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-22914",
+    "model_patch": ""
+  },
+  "sympy__sympy-23262": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-23262",
+    "model_patch": "diff --git a/sympy/utilities/lambdify.py b/sympy/utilities/lambdify.py\nindex da67263b19..a0dd8cfbe1 100644\n--- a/sympy/utilities/lambdify.py\n+++ b/sympy/utilities/lambdify.py\n@@ -961,7 +961,11 @@ def _recursive_to_string(doprint, arg):\n             left, right = \"()\"\n         else:\n             raise NotImplementedError(\"unhandled type: %s, %s\" % (type(arg), arg))\n-        return left +', '.join(_recursive_to_string(doprint, e) for e in arg) + right\n+        elements = ', '.join(_recursive_to_string(doprint, e) for e in arg)\n+        # Add trailing comma for single-element tuples\n+        if isinstance(arg, tuple) and len(arg) == 1:\n+            elements += ','\n+        return left + elements + right\n     elif isinstance(arg, str):\n         return arg\n     else:\n"
+  },
+  "sympy__sympy-23534": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-23534",
+    "model_patch": "diff --git a/sympy/core/symbol.py b/sympy/core/symbol.py\nindex f4a555c13f..2aca8bab27 100644\n--- a/sympy/core/symbol.py\n+++ b/sympy/core/symbol.py\n@@ -791,7 +791,7 @@ def literal(s):\n         return tuple(result)\n     else:\n         for name in names:\n-            result.append(symbols(name, **args))\n+            result.append(symbols(name, cls=cls, **args))\n \n         return type(names)(result)\n \n"
+  },
+  "sympy__sympy-23824": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-23824",
+    "model_patch": "diff --git a/sympy/physics/hep/gamma_matrices.py b/sympy/physics/hep/gamma_matrices.py\nindex 23284e4a92..bf43facfb1 100644\n--- a/sympy/physics/hep/gamma_matrices.py\n+++ b/sympy/physics/hep/gamma_matrices.py\n@@ -694,7 +694,7 @@ def kahane_simplify(expression):\n \n     # If `first_dum_pos` is not zero, it means that there are trailing free gamma\n     # matrices in front of `expression`, so multiply by them:\n-    for i in range(0, first_dum_pos):\n+    for i in range(first_dum_pos - 1, -1, -1):\n         [ri.insert(0, free_pos[i]) for ri in resulting_indices]\n \n     resulting_expr = S.Zero\n"
+  },
+  "sympy__sympy-23950": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-23950",
+    "model_patch": "diff --git a/sympy/sets/contains.py b/sympy/sets/contains.py\nindex b2d4268d12..f7f3ef54ad 100644\n--- a/sympy/sets/contains.py\n+++ b/sympy/sets/contains.py\n@@ -45,4 +45,19 @@ def binary_symbols(self):\n             isinstance(i, (Eq, Ne))])\n \n     def as_set(self):\n-        raise NotImplementedError()\n+        \"\"\"\n+        Rewrite a Contains ``x in S`` as a set.\n+\n+        Returns the set ``S`` with the understanding that the condition\n+        ``Contains(x, S)`` is true exactly when ``x`` is in the set ``S``.\n+\n+        Examples\n+        ========\n+\n+        >>> from sympy import Symbol, Contains, Reals\n+        >>> x = Symbol('x')\n+        >>> Contains(x, Reals).as_set()\n+        Reals\n+\n+        \"\"\"\n+        return self.args[1]\n"
+  },
+  "sympy__sympy-24213": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-24213",
+    "model_patch": "diff --git a/sympy/physics/units/unitsystem.py b/sympy/physics/units/unitsystem.py\nindex a436880c4b..5705c821c2 100644\n--- a/sympy/physics/units/unitsystem.py\n+++ b/sympy/physics/units/unitsystem.py\n@@ -175,7 +175,7 @@ def _collect_factor_and_dimension(self, expr):\n             for addend in expr.args[1:]:\n                 addend_factor, addend_dim = \\\n                     self._collect_factor_and_dimension(addend)\n-                if dim != addend_dim:\n+                if not self.get_dimension_system().equivalent_dims(dim, addend_dim):\n                     raise ValueError(\n                         'Dimension of \"{}\" is {}, '\n                         'but it should be {}'.format(\n"
+  },
+  "sympy__sympy-24066": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-24066",
+    "model_patch": ""
+  },
+  "sympy__sympy-23413": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-23413",
+    "model_patch": ""
+  },
+  "sympy__sympy-24539": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-24539",
+    "model_patch": "diff --git a/sympy/polys/rings.py b/sympy/polys/rings.py\nindex 12bd2fc920..4f81743552 100644\n--- a/sympy/polys/rings.py\n+++ b/sympy/polys/rings.py\n@@ -616,8 +616,9 @@ def set_ring(self, new_ring):\n             return new_ring.from_dict(self, self.ring.domain)\n \n     def as_expr(self, *symbols):\n-        if symbols and len(symbols) != self.ring.ngens:\n-            raise ValueError(\"not enough symbols, expected %s got %s\" % (self.ring.ngens, len(symbols)))\n+        if symbols:\n+            if len(symbols) != self.ring.ngens:\n+                raise ValueError(\"not enough symbols, expected %s got %s\" % (self.ring.ngens, len(symbols)))\n         else:\n             symbols = self.ring.symbols\n \n"
+  },
+  "sympy__sympy-24562": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-24562",
+    "model_patch": "diff --git a/sympy/core/numbers.py b/sympy/core/numbers.py\nindex 52f7ea45ad..117788a537 100644\n--- a/sympy/core/numbers.py\n+++ b/sympy/core/numbers.py\n@@ -1627,6 +1627,8 @@ def __new__(cls, p, q=None, gcd=None):\n \n         if not isinstance(p, SYMPY_INTS):\n             p = Rational(p)\n+            if not isinstance(q, SYMPY_INTS):\n+                q = Rational(q)\n             q *= p.q\n             p = p.p\n         else:\n"
+  },
+  "sympy__sympy-24443": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-24443",
+    "model_patch": "diff --git a/sympy/combinatorics/homomorphisms.py b/sympy/combinatorics/homomorphisms.py\nindex bb7bdf32ba..ef05ea2d6e 100644\n--- a/sympy/combinatorics/homomorphisms.py\n+++ b/sympy/combinatorics/homomorphisms.py\n@@ -313,6 +313,9 @@ def _check_homomorphism(domain, codomain, images):\n     else:\n         gens = domain.presentation().generators\n         rels = domain.presentation().relators\n+        # For PermutationGroups, remap images dict keys from domain generators to presentation generators\n+        if isinstance(domain, PermutationGroup):\n+            images = dict(zip(gens, [images[g] for g in domain.generators if g in images]))\n     identity = codomain.identity\n \n     def _image(r):\n@@ -333,10 +336,7 @@ def _image(r):\n             # both indices\n             while i < len(r):\n                 power = r_arr[j][1]\n-                if isinstance(domain, PermutationGroup) and r[i] in gens:\n-                    s = domain.generators[gens.index(r[i])]\n-                else:\n-                    s = r[i]\n+                s = r[i]\n                 if s in images:\n                     w = w*images[s]**power\n                 elif s**-1 in images:\n"
+  },
+  "sympy__sympy-24661": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-24661",
+    "model_patch": ""
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "n_tasks": 2,
+  "site": "shopping_admin",
+  "arms": [
+    "nomem"
+  ],
+  "nomem": {
+    "n": 2,
+    "reward_sr": 0.5,
+    "layer1_writes": 0,
+    "layer2_writes": 0
+  },
+  "spent_usd": 0.2963
+}

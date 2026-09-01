@@ -1,0 +1,72 @@
+{
+  "sphinx-doc__sphinx-9258": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9258",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9229": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9229",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-8721": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-8721",
+    "model_patch": "diff --git a/sphinx/ext/viewcode.py b/sphinx/ext/viewcode.py\nindex a7d52a91c..060604e25 100644\n--- a/sphinx/ext/viewcode.py\n+++ b/sphinx/ext/viewcode.py\n@@ -182,6 +182,8 @@ def collect_pages(app: Sphinx) -> Generator[Tuple[str, Dict[str, Any], str], Non\n     env = app.builder.env\n     if not hasattr(env, '_viewcode_modules'):\n         return\n+    if app.builder.name.startswith(\"epub\") and not env.config.viewcode_enable_epub:\n+        return\n     highlighter = app.builder.highlighter  # type: ignore\n     urito = app.builder.get_relative_uri\n \n"
+  },
+  "sphinx-doc__sphinx-9230": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9230",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9367": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9367",
+    "model_patch": "diff --git a/sphinx/pycode/ast.py b/sphinx/pycode/ast.py\nindex f541ec0a9..9f93e1df0 100644\n--- a/sphinx/pycode/ast.py\n+++ b/sphinx/pycode/ast.py\n@@ -214,7 +214,11 @@ class _UnparseVisitor(ast.NodeVisitor):\n \n     def visit_Tuple(self, node: ast.Tuple) -> str:\n         if node.elts:\n-            return \"(\" + \", \".join(self.visit(e) for e in node.elts) + \")\"\n+            elts_str = \", \".join(self.visit(e) for e in node.elts)\n+            if len(node.elts) == 1:\n+                return \"(\" + elts_str + \",)\"\n+            else:\n+                return \"(\" + elts_str + \")\"\n         else:\n             return \"()\"\n \n"
+  },
+  "sphinx-doc__sphinx-9281": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9281",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9461": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9461",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9591": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9591",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9320": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9320",
+    "model_patch": "diff --git a/sphinx/cmd/quickstart.py b/sphinx/cmd/quickstart.py\nindex a40a21073..d1d8cff06 100644\n--- a/sphinx/cmd/quickstart.py\n+++ b/sphinx/cmd/quickstart.py\n@@ -95,6 +95,15 @@ def is_path(x: str) -> str:\n     return x\n \n \n+def is_path_or_empty(x: str) -> str:\n+    if not x:\n+        return x\n+    x = path.expanduser(x)\n+    if not path.isdir(x):\n+        raise ValidationError(__(\"Please enter a valid path name.\"))\n+    return x\n+\n+\n def allow_empty(x: str) -> str:\n     return x\n \n@@ -223,7 +232,7 @@ def ask_user(d: Dict) -> None:\n         print(__('sphinx-quickstart will not overwrite existing Sphinx projects.'))\n         print()\n         d['path'] = do_prompt(__('Please enter a new root path (or just Enter to exit)'),\n-                              '', is_path)\n+                              '', is_path_or_empty)\n         if not d['path']:\n             sys.exit(1)\n \n"
+  },
+  "sphinx-doc__sphinx-9602": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9602",
+    "model_patch": "diff --git a/sphinx/domains/python.py b/sphinx/domains/python.py\nindex 9875a9f4b..3dd84241e 100644\n--- a/sphinx/domains/python.py\n+++ b/sphinx/domains/python.py\n@@ -44,6 +44,11 @@ from sphinx.util.typing import OptionSpec, TextlikeNode\n logger = logging.getLogger(__name__)\n \n \n+class _literal_marker(nodes.Text):\n+    \"\"\"Marker class for literal values that should not be converted to xrefs.\"\"\"\n+    pass\n+\n+\n # REs for Python signatures\n py_sig_re = re.compile(\n     r'''^ ([\\w.]*\\.)?            # class name(s)\n@@ -122,8 +127,10 @@ def _parse_annotation(annotation: str, env: BuildEnvironment = None) -> List[Nod\n         elif isinstance(node, ast.Constant):  # type: ignore\n             if node.value is Ellipsis:\n                 return [addnodes.desc_sig_punctuation('', \"...\")]\n+            elif node.value is None:\n+                return [nodes.Text('None')]\n             else:\n-                return [nodes.Text(node.value)]\n+                return [_literal_marker(node.value)]\n         elif isinstance(node, ast.Expr):\n             return unparse(node.value)\n         elif isinstance(node, ast.Index):\n@@ -167,7 +174,10 @@ def _parse_annotation(annotation: str, env: BuildEnvironment = None) -> List[Nod\n                 if isinstance(node, ast.Ellipsis):\n                     return [addnodes.desc_sig_punctuation('', \"...\")]\n                 elif isinstance(node, ast.NameConstant):\n-                    return [nodes.Text(node.value)]\n+                    if node.value is None:\n+                        return [nodes.Text('None')]\n+                    else:\n+                        return [_literal_marker(node.value)]\n \n             raise SyntaxError  # unsupported syntax\n \n@@ -179,7 +189,7 @@ def _parse_annotation(annotation: str, env: BuildEnvironment = None) -> List[Nod\n         tree = ast_parse(annotation)\n         result = unparse(tree)\n         for i, node in enumerate(result):\n-            if isinstance(node, nodes.Text) and node.strip():\n+            if isinstance(node, nodes.Text) and not isinstance(node, _literal_marker) and node.strip():\n                 result[i] = type_to_xref(str(node), env)\n         return result\n     except SyntaxError:\n"
+  },
+  "sphinx-doc__sphinx-9658": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9658",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9698": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9698",
+    "model_patch": "diff --git a/sphinx/domains/python.py b/sphinx/domains/python.py\nindex cd02eaad5..1a3bd60c7 100644\n--- a/sphinx/domains/python.py\n+++ b/sphinx/domains/python.py\n@@ -796,7 +796,7 @@ class PyMethod(PyObject):\n         if 'classmethod' in self.options:\n             return _('%s() (%s class method)') % (methname, clsname)\n         elif 'property' in self.options:\n-            return _('%s() (%s property)') % (methname, clsname)\n+            return _('%s (%s property)') % (methname, clsname)\n         elif 'staticmethod' in self.options:\n             return _('%s() (%s static method)') % (methname, clsname)\n         else:\ndiff --git a/tests/test_domain_py.py b/tests/test_domain_py.py\nindex 682ea76e1..5ba63d0e3 100644\n--- a/tests/test_domain_py.py\n+++ b/tests/test_domain_py.py\n@@ -756,7 +756,7 @@ def test_pymethod_options(app):\n \n     # :property:\n     assert_node(doctree[1][1][8], addnodes.index,\n-                entries=[('single', 'meth5() (Class property)', 'Class.meth5', '', None)])\n+                entries=[('single', 'meth5 (Class property)', 'Class.meth5', '', None)])\n     assert_node(doctree[1][1][9], ([desc_signature, ([desc_annotation, (\"property\", desc_sig_space)],\n                                                      [desc_name, \"meth5\"])],\n                                    [desc_content, ()]))\n"
+  },
+  "sphinx-doc__sphinx-9673": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9673",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9711": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9711",
+    "model_patch": "diff --git a/sphinx/extension.py b/sphinx/extension.py\nindex 7ec6c8518..450527ef6 100644\n--- a/sphinx/extension.py\n+++ b/sphinx/extension.py\n@@ -10,6 +10,8 @@\n \n from typing import TYPE_CHECKING, Any, Dict\n \n+from packaging.version import InvalidVersion, Version\n+\n from sphinx.config import Config\n from sphinx.errors import VersionRequirementError\n from sphinx.locale import __\n@@ -51,12 +53,24 @@ def verify_needs_extensions(app: \"Sphinx\", config: Config) -> None:\n                               'but it is not loaded.'), extname)\n             continue\n \n-        if extension.version == 'unknown version' or reqversion > extension.version:\n+        if extension.version == 'unknown version':\n             raise VersionRequirementError(__('This project needs the extension %s at least in '\n                                              'version %s and therefore cannot be built with '\n                                              'the loaded version (%s).') %\n                                           (extname, reqversion, extension.version))\n \n+        try:\n+            if Version(reqversion) > Version(extension.version):\n+                raise VersionRequirementError(__('This project needs the extension %s at least in '\n+                                                 'version %s and therefore cannot be built with '\n+                                                 'the loaded version (%s).') %\n+                                              (extname, reqversion, extension.version))\n+        except InvalidVersion as exc:\n+            raise VersionRequirementError(__('This project needs the extension %s at least in '\n+                                             'version %s and therefore cannot be built with '\n+                                             'the loaded version (%s).') %\n+                                          (extname, reqversion, extension.version)) from exc\n+\n \n def setup(app: \"Sphinx\") -> Dict[str, Any]:\n     app.connect('config-inited', verify_needs_extensions, priority=800)\n"
+  }
+}

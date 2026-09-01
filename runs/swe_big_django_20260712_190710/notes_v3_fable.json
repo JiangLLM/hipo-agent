@@ -1,0 +1,1404 @@
+{
+ "django/db/models/query.py": [
+  {
+   "anchor": "QuerySet._combinator_query",
+   "note": "Clones the queryset via _chain(), then calls clone.query.clear_ordering(True) and clear_limits() before setting clone.query.combined_queries = (self.query,) + other queries \u2014 so any order_by()/slicing applied before union()/intersection()/difference() is silently discarded on the combined query, though it persists on the stored component queries."
+  },
+  {
+   "anchor": "QuerySet.union",
+   "note": "If self is an EmptyQuerySet, union() filters out all EmptyQuerySet arguments and delegates to the first nonempty queryset's _combinator_query('union', ...), returning self only if every argument is empty."
+  },
+  {
+   "anchor": "prefetch machinery",
+   "note": "There is no dedicated prefetch module in django/db; prefetch_related logic is spread across django/db/models/query.py, django/db/models/fields/related_descriptors.py, and django/contrib/contenttypes/fields.py (for GFK/GenericRelation support)."
+  },
+  {
+   "anchor": "QuerySet._combinator_query",
+   "note": "_combinator_query stores direct references to the original Query objects in clone.query.combined_queries, so unless they are cloned, the source querysets share state with the combined query and can be corrupted by in-place mutation during compilation."
+  },
+  {
+   "anchor": "QuerySet._batched_insert",
+   "note": "Historically computed batch_size as `batch_size or max(ops.bulk_batch_size(fields, objs), 1)`, so a user-supplied batch_size silently overrode the backend's maximum from ops.bulk_batch_size instead of being capped with min() as bulk_update does."
+  },
+  {
+   "anchor": "QuerySet.bulk_update",
+   "note": "Caps the caller's batch_size against the backend limit via `min(batch_size, max_batch_size) if batch_size else max_batch_size` where max_batch_size = max(ops.bulk_batch_size(['pk','pk']+fields, objs), 1)."
+  },
+  {
+   "anchor": "QuerySet._batched_insert",
+   "note": "Raises NotSupportedError up front when ignore_conflicts is requested but connections[self.db].features.supports_ignore_conflicts is False."
+  },
+  {
+   "anchor": "QuerySet.bulk_create",
+   "note": "bulk_create delegates all batching to _batched_insert (called at two sites, for objs with and without PKs), so batch_size clamping behavior lives in _batched_insert, not bulk_create itself."
+  }
+ ],
+ "django/db/models/aggregates.py": [
+  {
+   "anchor": "Aggregate.as_sql",
+   "note": "Aggregate's template is '%(function)s(%(distinct)s%(expressions)s)' with no separator between the distinct placeholder and expressions, so as_sql must set extra_context['distinct'] to 'DISTINCT ' (with a trailing space) or the keyword concatenates directly onto the expression SQL."
+  },
+  {
+   "anchor": "Aggregate.as_sql",
+   "note": "Count('*', distinct=True) compiles to 'COUNT(DISTINCT *)', which SQLite rejects with a syntax error near '*' \u2014 a backend limitation rather than a Django SQL-generation spacing problem."
+  },
+  {
+   "anchor": "Aggregate",
+   "note": "Distinct support is opt-in per subclass via the class attribute `allow_distinct`; Aggregate.__init__ raises TypeError if distinct=True is passed to a subclass where allow_distinct is False (e.g. Min/Max reject it while Count accepts it)."
+  },
+  {
+   "anchor": "Aggregate.as_sql",
+   "note": "as_sql fills a 'distinct' key in the template substitutions dict (empty string when distinct is off), so custom aggregate templates can reference %(distinct)s."
+  }
+ ],
+ "django/db/models/expressions.py": [
+  {
+   "anchor": "Case",
+   "note": "Case.template is 'CASE %(cases)s ELSE %(default)s END' with no leading whitespace, so any wrapping SQL (e.g. an aggregate function) must supply its own separator before the compiled Case expression."
+  },
+  {
+   "anchor": "SimpleCol",
+   "note": "SimpleCol is a table-name-free variant of Col (renders just the quoted column name) that exists specifically so check constraints don't emit table-qualified column references, which are a syntax error there."
+  },
+  {
+   "anchor": "BaseExpression",
+   "note": "BaseExpression.copy() is just a shallow copy.copy(self), and the base set_source_expressions asserts the passed list is empty (subclasses override it to actually store source expressions)."
+  },
+  {
+   "anchor": "OuterRef.resolve_expression",
+   "note": "OuterRef.resolve_expression() unconditionally returns ResolvedOuterRef(self.name) regardless of which query resolves it, and ResolvedOuterRef.as_sql() raises ValueError \u2014 it must be re-resolved by an enclosing query (e.g. via Subquery/Exists) before SQL compilation."
+  },
+  {
+   "anchor": "ResolvedOuterRef",
+   "note": "ResolvedOuterRef subclasses F and is referenced nowhere else in django/ (no special handling in the SQL compiler or backends), so its correct translation to a Col depends entirely on the outer query's normal F-resolution path."
+  },
+  {
+   "anchor": "Expression.get_group_by_cols",
+   "note": "The base Expression.get_group_by_cols returns [self] whenever the expression contains no aggregate, so any subclass that doesn't override it (or delegate) will put itself verbatim into the GROUP BY clause even if it wraps a constant."
+  },
+  {
+   "anchor": "ExpressionWrapper.get_group_by_cols",
+   "note": "ExpressionWrapper must delegate get_group_by_cols to its inner self.expression (matching its other delegating methods); without this override the base implementation returns the wrapper itself, causing wrapped constants like Value() to leak into GROUP BY."
+  },
+  {
+   "anchor": "Value.get_group_by_cols",
+   "note": "Value.get_group_by_cols returns an empty list, which is the mechanism by which literal constants are kept out of GROUP BY clauses."
+  }
+ ],
+ "django/core/files/storage.py": [
+  {
+   "anchor": "FileSystemStorage._save",
+   "note": "os.chmod is only called after the file is written, and only when file_permissions_mode is not None; a None mode means the file keeps whatever permissions the write/rename operation produced."
+  },
+  {
+   "anchor": "FileSystemStorage.file_permissions_mode",
+   "note": "file_permissions_mode is a cached property resolved via _value_or_setting(self._file_permissions_mode, settings.FILE_UPLOAD_PERMISSIONS), so a constructor argument takes precedence over the setting."
+  },
+  {
+   "anchor": "FileSystemStorage._clear_cached_properties",
+   "note": "FileSystemStorage reacts to setting changes by popping specific cached_property values from self.__dict__ keyed on setting name (e.g. FILE_UPLOAD_PERMISSIONS clears file_permissions_mode), so overridden settings are picked up live on the module-level default_storage instance."
+  }
+ ],
+ "tests/test_utils/tests.py": [
+  {
+   "anchor": "OverrideSettingsTests.test_override_file_upload_permissions",
+   "note": "This test hard-asserts default_storage.file_permissions_mode equals the global-settings default value before any override, so changing FILE_UPLOAD_PERMISSIONS in global_settings.py breaks it."
+  }
+ ],
+ "django/db/backends/postgresql/client.py": [
+  {
+   "anchor": "DatabaseClient.runshell_db",
+   "note": "runshell_db is a classmethod taking a conn_params dict; it sets the SIGINT handler to SIG_IGN before invoking the subprocess and restores the original handler in a finally block so Ctrl-C is handled by psql rather than killing the Python parent."
+  },
+  {
+   "anchor": "DatabaseClient.runshell_db",
+   "note": "The database name is always appended to the psql args (defaulting to '' when absent from conn_params), so an empty conn_params dict yields args ['psql', ''] rather than omitting the positional argument."
+  },
+  {
+   "anchor": "DatabaseClient.runshell_db",
+   "note": "The password is passed to psql via a PGPASSWORD entry added to a copied os.environ dict handed to subprocess.run(check=True); PGPASSWORD is only set when conn_params contains a password."
+  },
+  {
+   "anchor": "DatabaseClient",
+   "note": "Tests for this client live in tests/dbshell/test_postgresql.py (calling DatabaseClient.runshell_db directly), not under tests/backends/postgresql/."
+  },
+  {
+   "anchor": "DatabaseClient.runshell_db",
+   "note": "Passes the password (and SSL options like PGSSLMODE/PGSSLROOTCERT/PGSSLCERT/PGSSLKEY) to psql via environment variables in the env dict given to subprocess.run, not as command-line flags \u2014 only host/port/user/dbname become CLI args."
+  },
+  {
+   "anchor": "DatabaseClient.runshell_db",
+   "note": "Sets SIGINT to SIG_IGN before invoking subprocess.run (so Ctrl-C reaches psql instead of killing Django) and restores the original SIGINT handler afterward, which tests explicitly assert."
+  }
+ ],
+ "django/contrib/contenttypes/management/__init__.py": [
+  {
+   "anchor": "RenameContentType._rename",
+   "note": "Fetching a ContentType via ContentType.objects.db_manager(db).get_by_natural_key() does NOT make a later .save() write to that db \u2014 save() must be given using=db explicitly or it hits the default database."
+  },
+  {
+   "anchor": "RenameContentType._rename",
+   "note": "The target database alias comes from schema_editor.connection.alias, and the method returns early (doing nothing) if router.allow_migrate_model(db, ContentType) is False or if the old ContentType does not exist."
+  },
+  {
+   "anchor": "create_contenttypes",
+   "note": "Bulk-creates missing ContentType rows with ContentType.objects.using(using).bulk_create(cts), so it already routes correctly to the migration's database alias."
+  }
+ ],
+ "django/contrib/admin/options.py": [
+  {
+   "anchor": "ModelAdmin.get_inline_instances",
+   "note": "Instantiates each inline class with (self.model, self.admin_site) and skips permission filtering (has_view_or_change checks) entirely when the request argument is falsy/None."
+  },
+  {
+   "anchor": "ModelAdmin.inlines",
+   "note": "The `inlines` class attribute is consumed in only one place in options.py \u2014 the loop inside get_inline_instances (now routed through the get_inlines(request, obj) hook) \u2014 so overriding get_inlines fully controls which inline classes get instantiated."
+  },
+  {
+   "anchor": "ModelAdmin",
+   "note": "Class layout in options.py: BaseModelAdmin (metaclass=forms.MediaDefiningClass) at ~line 99, ModelAdmin at ~line 538, and InlineModelAdmin at ~line 1960, with get_inline_instances called from ModelAdmin view code around line 787."
+  },
+  {
+   "anchor": "InlineModelAdmin.has_add_permission",
+   "note": "For auto-created M2M through models, InlineModelAdmin's has_add/change/delete_permission originally delegated to has_view_permission, meaning a user with only view permission on the related model could add/change/delete inline rows; the fix resolves the related model's opts (via a _get_related_model helper reading _meta of the auto-created intermediary) and checks the corresponding add/change/delete permission on that related model instead."
+  },
+  {
+   "anchor": "BaseModelAdmin.has_view_or_change_permission",
+   "note": "has_view_or_change_permission returns has_view_permission OR has_change_permission, so any check routed through it (e.g. InlineModelAdmin.get_queryset emptying the queryset) passes for users with only change permission and no explicit view permission."
+  },
+  {
+   "anchor": "ModelAdmin (inline formset rendering, ~line 1465)",
+   "note": "When building InlineAdminFormSet contexts, each inline's has_add_permission/has_change_permission/has_delete_permission/has_view_permission is evaluated per-inline against the parent obj and passed into the formset helper, so overriding these methods on InlineModelAdmin directly controls the rendered editability of that inline."
+  },
+  {
+   "anchor": "BaseModelAdmin.formfield_for_manytomany",
+   "note": "Returns None (no form field rendered) when the M2M field's through model is not auto_created, before any widget/queryset logic runs."
+  },
+  {
+   "anchor": "BaseModelAdmin.formfield_for_foreignkey",
+   "note": "Only assigns autocomplete/raw_id/radio widgets when 'widget' is absent from kwargs, so a caller-supplied widget kwarg is respected; formfield_for_manytomany historically lacked this 'widget' not in kwargs guard and silently overwrote user-provided widgets."
+  }
+ ],
+ "django/template/engine.py": [
+  {
+   "anchor": "Engine.render_to_string",
+   "note": "When given a plain dict (or None), render_to_string wraps it in Context() without forwarding the engine's autoescape setting, so Engine(autoescape=False) is silently ignored unless the Context is built with autoescape=self.autoescape."
+  },
+  {
+   "anchor": "Engine.render_to_string",
+   "note": "If the caller passes an actual Context instance, render_to_string renders it as-is, so the Context's own autoescape/use_l10n/use_tz values take precedence over the Engine's settings."
+  },
+  {
+   "anchor": "Engine.get_default",
+   "note": "Instantiating Template() directly goes through Engine.get_default(), which triggers full engine/app-registry initialization (get_installed_libraries iterates app configs); constructing a plain Engine() and using engine.from_string() avoids the app registry requirement."
+  }
+ ],
+ "django/template/context.py": [
+  {
+   "anchor": "Context.__init__",
+   "note": "Context (line ~135, subclass of BaseContext) accepts autoescape=True, use_l10n=None, use_tz=None keyword args and stores them as instance attributes consumed at render time."
+  }
+ ],
+ "django/http/response.py": [
+  {
+   "anchor": "HttpResponseBase.make_bytes",
+   "note": "make_bytes only special-cases bytes and str; any other type silently falls through to str(value).encode(self.charset), so unrecognized binary-like types get their repr encoded as the body instead of raising an error."
+  },
+  {
+   "anchor": "HttpResponseBase.make_bytes",
+   "note": "make_bytes is the single choke point for body byte conversion: the HttpResponse.content setter (both for iterables, where chunks are joined with b''.join, and single values), HttpResponse.write() (which appends to self._container), and StreamingHttpResponse.streaming_content (which maps it over self._iterator) all route through it."
+  },
+  {
+   "anchor": "HttpResponse.content",
+   "note": "The content setter treats iterable, non-bytes/non-str values as a sequence of chunks and joins them via make_bytes, so per-chunk type handling in make_bytes determines what iterable element types are supported."
+  },
+  {
+   "anchor": "HttpResponseBase.delete_cookie",
+   "note": "delete_cookie() deletes by delegating to set_cookie() with max_age=0 and expires='Thu, 01 Jan 1970 00:00:00 GMT', so any cookie attribute not explicitly passed through (e.g. samesite, httponly) is silently dropped from the expiring Set-Cookie header."
+  },
+  {
+   "anchor": "HttpResponseBase.delete_cookie",
+   "note": "delete_cookie() forces secure=True when the cookie name starts with '__Secure-' or '__Host-', because most browsers ignore Set-Cookie for those prefixes without the secure flag."
+  },
+  {
+   "anchor": "HttpResponseBase.set_cookie",
+   "note": "set_cookie() raises ValueError if samesite is truthy and samesite.lower() is not one of 'lax', 'none', or 'strict' (case-insensitive), while samesite=None/falsy simply leaves the attribute unset."
+  }
+ ],
+ "django/db/migrations/loader.py": [
+  {
+   "anchor": "MigrationLoader.load_disk",
+   "note": "After importing an app's migrations module, load_disk checks `getattr(module, '__file__', None) is None` and adds the app to unmigrated_apps, which classifies any namespace package (which lacks __file__ but has a __path__ of type _NamespacePath) as unmigrated even if it contains valid migration files."
+  },
+  {
+   "anchor": "MigrationLoader.load_disk",
+   "note": "Migration file discovery uses pkgutil.iter_modules() on the package (which relies on __path__, not __file__), so the __file__ attribute is not actually needed to enumerate migrations."
+  },
+  {
+   "anchor": "MigrationLoader.load_disk",
+   "note": "On ImportError, the app is silently added to unmigrated_apps only if (explicit and self.ignore_no_migrations) or the error message contains both 'No module named' and MIGRATIONS_MODULE_NAME; otherwise the ImportError is re-raised."
+  },
+  {
+   "anchor": "MigrationLoader.load_disk",
+   "note": "load_disk silently classifies an app as unmigrated (adds to self.unmigrated_apps and continues) when the migrations module's __file__ is None, using that as a heuristic for PEP 420 namespace packages \u2014 which incorrectly excludes regular packages in frozen environments where __file__ is unset."
+  },
+  {
+   "anchor": "MigrationLoader.load_disk",
+   "note": "Regular packages have __path__ as a plain list while PEP 420 namespace packages have __path__ of type _frozen_importlib_external._NamespacePath, so isinstance(module.__path__, list) reliably distinguishes them even when __file__ is None."
+  },
+  {
+   "anchor": "MigrationLoader.load_disk",
+   "note": "After the namespace check, load_disk separately skips modules that aren't packages at all (e.g. a migrations.py file), also adding the app to unmigrated_apps rather than raising."
+  }
+ ],
+ "tests/migrations/test_loader.py": [
+  {
+   "anchor": "LoaderTests.test_load_empty_dir",
+   "note": "This test asserts that an app whose migrations directory lacks __init__.py ends up in unmigrated_apps, so removing/relaxing the namespace-package (__file__) check in loader.py without distinguishing regular vs namespace packages breaks it."
+  }
+ ],
+ "django/forms/models.py": [
+  {
+   "anchor": "model_to_dict",
+   "note": "model_to_dict iterates chain(opts.concrete_fields, opts.private_fields, opts.many_to_many) and silently skips any field where getattr(f, 'editable', False) is falsy, then filters by the `fields` and `exclude` args before storing f.value_from_object(instance)."
+  },
+  {
+   "anchor": "model_to_dict",
+   "note": "The `fields` filter must use `fields is not None` (an empty list means 'no fields') while the `exclude` filter deliberately uses truthiness (`if exclude and f.name in exclude`), so an empty exclude list behaves the same as None."
+  },
+  {
+   "anchor": "BaseModelForm._save_m2m",
+   "note": "_save_m2m iterates chain(opts.many_to_many, opts.private_fields) \u2014 private_fields are included for historical reasons because GenericRelation used to be a fake m2m field \u2014 and duplicates model_to_dict's exact fields/exclude filtering lines, so the two sites must be kept in sync."
+  },
+  {
+   "anchor": "BaseModelForm._save_m2m",
+   "note": "_save_m2m silently skips any field that lacks a save_form_data attribute rather than raising, so unsupported field types are dropped from saving."
+  },
+  {
+   "anchor": "ModelChoiceField.__deepcopy__",
+   "note": "ModelChoiceField.__deepcopy__ delegates to Field.__deepcopy__ via super() (so it inherits that method's shallow-copy semantics) and then reassigns result.queryset from the original queryset to force a new ModelChoiceIterator."
+  },
+  {
+   "anchor": "apply_limit_choices_to_to_formfield",
+   "note": "This function applies a field's limit_choices_to to the formfield's queryset via complex_filter(), which performs a SQL join and can return duplicate choice rows when limit_choices_to spans a multi-valued relation; the session's fix replaces this with an Exists() subquery to avoid duplicates without needing distinct()."
+  },
+  {
+   "anchor": "ModelChoiceField",
+   "note": "ModelChoiceField is defined in django/forms/models.py (not forms/fields.py) and, per its own comment, subclasses ChoiceField 'for purity' without actually using any of ChoiceField's implementation (it overrides to_python/validate instead of using ChoiceField's choice checking)."
+  },
+  {
+   "anchor": "ModelChoiceField.to_python",
+   "note": "ModelChoiceField.to_python raises the 'invalid_choice' ValidationError itself (catching ValueError/TypeError/DoesNotExist from queryset.get), and historically did not pass params={'value': value}, unlike ChoiceField and ModelMultipleChoiceField whose 'invalid_choice' messages interpolate %(value)s."
+  }
+ ],
+ "django/db/models/deletion.py": [
+  {
+   "anchor": "Collector.delete",
+   "note": "Collector.delete() has a fast-delete shortcut for a single instance (guarded by can_fast_delete) that runs the SQL delete inside transaction.mark_for_rollback_on_error() and returns early, bypassing all later post-delete bookkeeping in the method."
+  },
+  {
+   "anchor": "Collector.delete",
+   "note": "PK clearing on deleted instances happens only in the tail of Collector.delete(), which iterates self.data setting each instance's model._meta.pk.attname to None, so any early return must clear the PK itself."
+  },
+  {
+   "anchor": "Collector.delete",
+   "note": "At the start of Collector.delete(), each model's instance collection in self.data is sorted by pk, and field updates collected in self.field_updates are applied to in-memory instances via setattr after the deletes."
+  },
+  {
+   "anchor": "Collector.delete",
+   "note": "Before executing anything, Collector.delete() sorts each model's instances by pk (self.data[model] = sorted(instances, key=attrgetter('pk'))) and calls self.sort() to order models so databases without deferrable constraints delete in a safe order."
+  },
+  {
+   "anchor": "Collector.delete",
+   "note": "Collector.fast_deletes is a list of QuerySets each executed as its own DELETE; querysets targeting the same model can be combined with the | operator, which produces a single DELETE whose WHERE clause OR-joins the individual IN conditions."
+  },
+  {
+   "anchor": "Collector.collect",
+   "note": "Collector.collect only records an entry in self.dependencies (keyed by source._meta.concrete_model) when source is not None AND the relation is not nullable, swapping source/model first if reverse_dependency=True."
+  },
+  {
+   "anchor": "Collector.fast_deletes",
+   "note": "Cascade-collected related objects are added to fast_deletes in pk batches (IN lists of a few hundred pks each), so fast_deletes routinely contains multiple querysets for the same model that differ only in which pk chunk they cover."
+  },
+  {
+   "anchor": "Collector.add",
+   "note": "Collector.add performs a truthiness check `if not objs:` on the passed queryset, which invokes QuerySet.__bool__ and therefore executes the full SELECT and caches results before any deletion happens."
+  }
+ ],
+ "django/utils/numberformat.py": [
+  {
+   "anchor": "format",
+   "note": "For Decimal inputs, format() switches to scientific notation ('{:.Ne}' style) whenever abs(exponent) + len(digits) from number.as_tuple() exceeds 200 \u2014 an arbitrary cutoff chosen to avoid high memory use in '{:f}'.format(); this triggers even for tiny values like 1e-200 that would round to zero at any decimal_pos."
+  },
+  {
+   "anchor": "format",
+   "note": "format() reads settings.USE_L10N and settings.USE_THOUSAND_SEPARATOR on every call to compute use_grouping, so calling it without configured Django settings raises ImproperlyConfigured immediately."
+  },
+  {
+   "anchor": "format",
+   "note": "The output sign is extracted from the string produced by '{:f}'.format(number), so if you replace a tiny negative Decimal with Decimal('0') the '-' sign is lost; substituting Decimal('-0') preserves it since '{:f}'.format(Decimal('-0')) yields '-0' even though Decimal('-0') == Decimal('0')."
+  }
+ ],
+ "django/contrib/contenttypes/fields.py": [
+  {
+   "anchor": "GenericForeignKey.get_prefetch_queryset",
+   "note": "Because a single GFK queryset can point at multiple models, get_prefetch_queryset builds a per-object `gfk_key(obj)` callable that returns None when the content-type id attribute is None, and otherwise resolves the model class via get_content_type(id=ct_id, using=obj._state.db).model_class() to produce a (fk, model_class) pair used for matching prefetched rows."
+  }
+ ],
+ "tests/prefetch_related/tests.py": [
+  {
+   "anchor": "GenericRelationTests",
+   "note": "The GFK prefetch tests (test_prefetch_GFK, test_prefetch_GFK_nonint_pk, test_traverse_GFK, test_nullable_GFK, test_charfield_GFK) live in the GenericRelationTests class, not PrefetchRelatedTests."
+  }
+ ],
+ "django/db/backends/mysql/client.py": [
+  {
+   "anchor": "DatabaseClient",
+   "note": "Unlike the PostgreSQL client's env-var approach, the MySQL client passes TLS/SSL options as command-line arguments (--ssl-ca, --ssl-cert, --ssl-key) built from the OPTIONS ssl dict."
+  }
+ ],
+ "django/core/management/commands/dbshell.py": [
+  {
+   "anchor": "Command.handle",
+   "note": "dbshell contains no backend logic itself; it just delegates to the per-backend connection.client, so shell argument construction lives in each backend's client.py."
+  }
+ ],
+ "django/db/models/sql/query.py": [
+  {
+   "anchor": "Query.split_exclude",
+   "note": "split_exclude builds the inner subquery as a fresh Query(self.model), which does NOT inherit the outer query's _filtered_relations, so FilteredRelation annotation names raise FieldError inside exclude()/~Q lookups unless the filtered relations are explicitly copied onto the inner query."
+  },
+  {
+   "anchor": "Query.split_exclude",
+   "note": "Before generating the inner query, split_exclude rewrites a resolved F() right-hand side into (filter_lhs, OuterRef(filter_rhs.name)) so the value can be referenced from the subquery."
+  },
+  {
+   "anchor": "Query._add_q",
+   "note": "_add_q accepts a simple_col flag controlling whether lookups resolve to SimpleCol vs Col, but its recursive call for nested Node children did not pass simple_col through, so nested Q objects (e.g. OR-of-AND groups) silently fell back to table-qualified Col SQL."
+  },
+  {
+   "anchor": "Query.clone",
+   "note": "Query.clone() shallow-copies attributes and (before the fix) did not deep-clone the combined_queries tuple, so cloned combined queries still shared the same underlying subquery Query objects, causing values()/values_list() column changes to leak between chained clones."
+  },
+  {
+   "anchor": "get_order_dir",
+   "note": "get_order_dir assumes its 'field' argument is a string (it indexes field[0] to check for a '-' prefix), so passing an expression object like OrderBy or Lower raises TypeError: object does not support indexing."
+  },
+  {
+   "anchor": "Query.split_exclude",
+   "note": "split_exclude() builds a brand-new Query for the NOT IN subquery, and any ResolvedOuterRef inside the excluded filter gets resolved against that inner subquery's aliases instead of the true outer query, producing SQL that references the subquery's own table alias (verified: filter() vs exclude() with the same OuterRef lookup generated different, incorrect column references)."
+  },
+  {
+   "anchor": "Query.resolve_lookup_value",
+   "note": "resolve_lookup_value() (around line 1048) calls value.resolve_expression(self, reuse=can_reuse, allow_joins=allow_joins) on any lookup value with a resolve_expression attribute, so OuterRef/expression values are always bound to whichever Query instance is processing the filter at that moment."
+  },
+  {
+   "anchor": "Query.resolve_lookup_value",
+   "note": "When given a list or tuple, this method resolves each item that has resolve_expression and rebuilds the container \u2014 it originally coerced everything to tuple, which breaks lookups on field types (e.g. pickled fields) whose exact-match semantics depend on the input type; the container must be rebuilt with type(value)(...) to preserve list vs tuple."
+  }
+ ],
+ "django/utils/html.py": [
+  {
+   "anchor": "escape",
+   "note": "escape() is decorated with @keep_lazy(str, SafeString), coerces its argument via str(text), and returns mark_safe(...) \u2014 it unconditionally escapes even already-safe/escaped input (double-escaping risk; conditional_escape() is the alternative)."
+  },
+  {
+   "anchor": "escape",
+   "note": "Django's translate-table implementation escapes single quotes as &#39; while stdlib html.escape() produces &#x27; \u2014 the two entities are functionally equivalent in browsers but produce different literal output strings."
+  }
+ ],
+ "tests/utils_tests/test_html.py": [
+  {
+   "anchor": "TestUtilsHtml.test_escape",
+   "note": "test_escape asserts exact entity literals (e.g. the single-quote entity) across multiple substitution patterns via subTest, so any change to the escape entity representation breaks these assertions even when behavior is HTML-equivalent."
+  }
+ ],
+ "django/core/management/base.py": [
+  {
+   "anchor": "BaseCommand.base_stealth_options",
+   "note": "base_stealth_options = ('skip_checks', 'stderr', 'stdout') are accepted only programmatically (via call_command kwargs); they are never added to the argparse parser, so they don't appear in cmd_options when a command runs from the command line via run_from_argv()."
+  },
+  {
+   "anchor": "BaseCommand.execute",
+   "note": "execute() runs system checks only when `self.requires_system_checks and not options.get('skip_checks')`, so an absent skip_checks key (the CLI case) means checks run."
+  },
+  {
+   "anchor": "DjangoHelpFormatter",
+   "note": "DjangoHelpFormatter.show_last is a hardcoded set of base option strings ('--version', '--verbosity', '--traceback', '--settings', '--pythonpath', ...) that forces those options to display after command-specific ones in help output, so new base options must be added there too."
+  },
+  {
+   "anchor": "OutputWrapper",
+   "note": "OutputWrapper subclasses io.TextIOBase, so unless it defines its own flush(), calling flush() hits TextIOBase's no-op implementation and never reaches the wrapped stream's flush \u2014 attribute delegation to self._out does not cover methods TextIOBase already defines."
+  },
+  {
+   "anchor": "OutputWrapper.style_func",
+   "note": "The style_func property setter silently replaces the given style function with an identity lambda whenever the wrapped stream's isatty() is falsy, so styling is never applied when writing to StringIO or piped output."
+  },
+  {
+   "anchor": "OutputWrapper.write",
+   "note": "write() automatically appends self.ending (default newline) to the message unless the message already ends with it, and applies style_func (falling back to the instance's style_func) before writing to the wrapped stream."
+  },
+  {
+   "anchor": "CommandParser.__init__",
+   "note": "Accepts only missing_args_message and called_from_command_line as its own keywords and forwards all other **kwargs (including prog) to ArgumentParser.__init__; it exists to avoid SystemExit when commands are invoked programmatically."
+  },
+  {
+   "anchor": "BaseCommand.create_parser",
+   "note": "Constructs its CommandParser with prog='%s %s' % (os.path.basename(prog_name), subcommand), so per-command help output already reflects the caller-supplied prog_name."
+  }
+ ],
+ "django/core/management/__init__.py": [
+  {
+   "anchor": "call_command",
+   "note": "call_command validates keyword options against the union of parser dest parameters, stealth_options/base_stealth_options, and an opt_mapping built from parser._actions option strings, so moving an option between stealth and parser changes which kwargs are accepted and how they're mapped."
+  },
+  {
+   "anchor": "call_command",
+   "note": "call_command only forwards a kwarg to parser.parse_args() when the individual action has required=True, formatting it as '{}={}'.format(min(opt.option_strings), value); actions inside a required mutually exclusive group have required=False on the action itself (required lives on the group object), so they are silently skipped unless group membership is checked separately."
+  },
+  {
+   "anchor": "call_command",
+   "note": "After parsing, call_command merges kwargs over the parsed namespace via defaults = dict(defaults._get_kwargs(), **arg_options), so kwarg values always override whatever parse_args produced and bypass argparse type conversion."
+  },
+  {
+   "anchor": "call_command",
+   "note": "call_command raises TypeError for any kwarg whose name is not in the union of {action.dest for all parser actions}, the command's base_stealth_options + stealth_options, and the option-string-to-dest mapping."
+  },
+  {
+   "anchor": "call_command",
+   "note": "Parser actions are collected by a get_actions helper that recurses into _SubParsersAction choices, so subparser options are included in parser_actions and the valid-options check."
+  },
+  {
+   "anchor": "ManagementUtility.__init__",
+   "note": "Computes self.prog_name via os.path.basename(self.argv[0]) and rewrites it to 'python -m django' when the basename is '__main__.py'."
+  },
+  {
+   "anchor": "ManagementUtility.execute",
+   "note": "Builds a preliminary CommandParser to preprocess --settings and --pythonpath before subcommand dispatch; unless prog=self.prog_name is passed explicitly, argparse defaults prog to sys.argv[0], which can diverge from the argv passed into ManagementUtility."
+  }
+ ],
+ "django/db/models/constraints.py": [
+  {
+   "anchor": "CheckConstraint",
+   "note": "CheckConstraint generates its SQL by building a Query against the model and calling build_where with simple_col=True, so the entire check expression depends on that flag propagating through every nested Q node."
+  },
+  {
+   "anchor": "UniqueConstraint.__init__",
+   "note": "UniqueConstraint.__init__ requires a non-empty fields sequence (raises ValueError otherwise) and requires condition to be either None or a Q instance; the covered fields are stored on the constraint's `fields` attribute."
+  }
+ ],
+ "django/contrib/admin/filters.py": [
+  {
+   "anchor": "RelatedFieldListFilter.field_choices",
+   "note": "Obtains ordering only from the related model's registered ModelAdmin via model_admin.admin_site._registry.get(field.remote_field.model) + related_admin.get_ordering(request), defaulting to an empty tuple when the related model isn't registered, and passes it to field.get_choices(include_blank=False, ordering=ordering)."
+  },
+  {
+   "anchor": "RelatedOnlyFieldListFilter.field_choices",
+   "note": "Restricts choices by calling field.get_choices with limit_choices_to={'pk__in': pk_qs} where pk_qs comes from model_admin.get_queryset(request).distinct().values_list('%s__pk' % self.field_path, flat=True); it overrides the parent method so ordering must be passed explicitly or it is lost."
+  }
+ ],
+ "django/db/models/fields/__init__.py": [
+  {
+   "anchor": "Field.get_choices",
+   "note": "get_choices(include_blank=True, blank_choice=BLANK_CHOICE_DASH, limit_choices_to=None, ordering=()) accepts an ordering parameter, but if the field has explicit self.choices set it returns those choices directly and the ordering/limit_choices_to arguments are ignored."
+  },
+  {
+   "anchor": "Field.contribute_to_class",
+   "note": "For fields with choices, contribute_to_class installs get_<name>_display on the model class via setattr with partialmethod(cls._get_FIELD_display, field=self), and (pre-fix) did this unconditionally, silently clobbering any get_<name>_display method the user defined on the model body."
+  },
+  {
+   "anchor": "Field.contribute_to_class",
+   "note": "contribute_to_class only sets the field's descriptor (descriptor_class) on the model when getattr(cls, self.attname, None) is falsy, to avoid overriding classmethods sharing the field name \u2014 a side effect is such fields can't be deferred and there's no check for it."
+  },
+  {
+   "anchor": "Field.get_prep_value",
+   "note": "Only unwraps Promise instances (via value._proxy____cast()); SimpleLazyObject subclasses LazyObject, not Promise, so lazy wrappers pass through get_prep_value unresolved."
+  },
+  {
+   "anchor": "IntegerField.get_prep_value",
+   "note": "IntegerField and FloatField call int()/float() on the value after super().get_prep_value() and re-raise TypeError/ValueError as \"Field '%s' expected a number but got %r\", so any object that isn't coercible to a number (e.g. an unresolved lazy wrapper) crashes here."
+  },
+  {
+   "anchor": "DecimalField.to_python",
+   "note": "decimal.Decimal(value) raises TypeError (not decimal.InvalidOperation) for unsupported types like dict/list/set, so the except clause here must catch both to convert them into ValidationError."
+  },
+  {
+   "anchor": "DecimalField.to_python",
+   "note": "Float values take a separate code path via self.context.create_decimal_from_float(value) (using the field's decimal context built from max_digits) rather than the generic decimal.Decimal(value) call."
+  },
+  {
+   "anchor": "Field.__eq__",
+   "note": "Field.__eq__, __lt__, and __hash__ originally compared only creation_counter, and fields inherited from an abstract base into different concrete models share the same creation_counter, so such fields compared equal, hashed identically, and collapsed to one element in a set."
+  }
+ ],
+ "django/db/models/fields/related.py": [
+  {
+   "anchor": "module",
+   "note": "get_choices is not defined in related.py; the implementations live in django/db/models/fields/__init__.py (Field) and django/db/models/fields/reverse_related.py (ForeignObjectRel)."
+  },
+  {
+   "anchor": "ForeignKey.validate",
+   "note": "ForeignKey.validate() returns early with no checks at all when remote_field.parent_link is True or when the value is None."
+  },
+  {
+   "anchor": "ForeignKey.validate",
+   "note": "ForeignKey.validate() verifies the related row exists by running a manager query on the remote model routed via router.db_for_read(self.remote_field.model, instance=model_instance), so whichever manager is used determines which rows count as 'existing' (it was changed from _default_manager to _base_manager so custom default-manager filtering doesn't cause false 'does not exist' validation errors)."
+  },
+  {
+   "anchor": "ForeignObject.deconstruct",
+   "note": "When remote_field.model is a string, deconstruct() sets kwargs['to'] by lowercasing the ENTIRE reference string (self.remote_field.model.lower()), which also lowercases the app_label portion of 'app_label.ModelName' references, breaking apps with mixed-case labels."
+  }
+ ],
+ "django/contrib/auth/backends.py": [
+  {
+   "anchor": "ModelBackend.authenticate",
+   "note": "If the `username` kwarg is None, it falls back to `kwargs.get(UserModel.USERNAME_FIELD)`, so custom user models can pass credentials keyed by their USERNAME_FIELD instead of 'username'."
+  },
+  {
+   "anchor": "ModelBackend.authenticate",
+   "note": "Returns None early (before any DB query or password hashing) when username or password is None, so credentials intended for other backends incur zero database queries."
+  },
+  {
+   "anchor": "ModelBackend.authenticate",
+   "note": "User lookup goes through `UserModel._default_manager.get_by_natural_key(username)`, which resolves to a query filtered on the model's USERNAME_FIELD column."
+  }
+ ],
+ "django/urls/resolvers.py": [
+  {
+   "anchor": "RegexPattern.match",
+   "note": "Builds kwargs from match.groupdict(), which includes unmatched optional named regex groups as None values; the fix is to filter out None entries so absent optional groups aren't passed downstream (e.g., to reverse())."
+  },
+  {
+   "anchor": "RegexPattern.match",
+   "note": "Positional args are only populated when there are no named groups at all (`args = () if kwargs else match.groups()`), so any named group makes non-named groups get ignored."
+  }
+ ],
+ "django/urls/base.py": [
+  {
+   "anchor": "translate_url",
+   "note": "translate_url resolves the path then re-reverses with the match's kwargs, so None-valued kwargs from unmatched optional regex groups get interpolated literally as 'None' into the translated URL."
+  }
+ ],
+ "django/db/models/sql/compiler.py": [
+  {
+   "anchor": "SQLCompiler.get_combinator_sql",
+   "note": "When the outer query has values_select but a combined subquery does not, get_combinator_sql sets the subquery's select/values_select in place, mutating the subquery Query objects rather than working on copies."
+  },
+  {
+   "anchor": "SQLCompiler.find_ordering_name",
+   "note": "When the ordering name resolves to a relation, find_ordering_name recursively calls itself on each item of the related model's Meta.ordering assuming they are strings, so expression items in a related model's Meta.ordering crash in get_order_dir."
+  },
+  {
+   "anchor": "SQLCompiler.get_order_by",
+   "note": "get_order_by detects expression ordering items via hasattr(field, 'resolve_expression'), wraps Value instances in Cast(field, field.output_field) to resolve output_field, and converts non-OrderBy expressions with field.asc() \u2014 this expression handling is absent in find_ordering_name."
+  },
+  {
+   "anchor": "SQLDeleteCompiler.single_alias",
+   "note": "single_alias counts entries in query.alias_map with alias_refcount > 0, so an unfiltered queryset delete (where the base table was never added to alias_map) evaluates as not-single-alias and falls back to the subquery form 'DELETE FROM t WHERE id IN (SELECT id FROM t)'; calling self.query.get_initial_alias() first registers the base table and restores the plain 'DELETE FROM t'."
+  },
+  {
+   "anchor": "SQLDeleteCompiler._as_sql",
+   "note": "_as_sql emits 'DELETE FROM <query.base_table>' plus the compiled query.where, and is only used on the fast single-alias path; multi-alias deletes go through a pk__in subquery instead."
+  },
+  {
+   "anchor": "SQLCompiler.get_group_by",
+   "note": "get_group_by builds the GROUP BY clause by calling get_group_by_cols() on each select and order_by expression, so an expression's GROUP BY participation is entirely controlled by what that method returns (empty list means excluded)."
+  },
+  {
+   "anchor": "SQLCompiler.find_ordering_name",
+   "note": "When the resolved field is a relation and the related model has Meta.ordering, this method recursively substitutes that model's default ordering, which can silently add a LEFT OUTER JOIN to the related table and even flip the ordering direction (e.g. a '-pk' default ordering makes an ASC request emit DESC SQL)."
+  },
+  {
+   "anchor": "SQLCompiler.find_ordering_name",
+   "note": "The only guard against the default-ordering substitution is comparing the field's attname to the ordering name; comparing against the full 'a__b__c' lookup string instead of the last path piece makes '<rel>__<fk>_id' style names fail the check and wrongly expand the related model's Meta.ordering."
+  }
+ ],
+ "django/core/mail/message.py": [
+  {
+   "anchor": "EmailMessage.message",
+   "note": "message() only auto-generates a Message-ID via make_msgid(domain=DNS_NAME) when 'message-id' is absent from the (lowercased) extra header names, so a caller-supplied Message-ID header suppresses the generated one."
+  },
+  {
+   "anchor": "sanitize_address",
+   "note": "sanitize_address handles non-ASCII parts asymmetrically: a non-ASCII localpart is MIME-encoded with Header(localpart, encoding).encode(), while a non-ASCII domain is converted to punycode via domain.encode('idna').decode('ascii') before building the Address."
+  }
+ ],
+ "django/core/mail/utils.py": [
+  {
+   "anchor": "CachedDnsName",
+   "note": "CachedDnsName lazily calls socket.getfqdn() on first access and caches the result in self._fqdn (deliberately deferred because getfqdn() can take seconds and slow server restarts); str(DNS_NAME) delegates to get_fqdn(), so the raw OS hostname (possibly non-ASCII) flows into anything that stringifies DNS_NAME."
+  }
+ ],
+ "django/contrib/admin/checks.py": [
+  {
+   "anchor": "ModelAdminChecks._check_list_display_item",
+   "note": "_check_list_display_item is defined on ModelAdminChecks (called via chain.from_iterable in _check_list_display), not on BaseModelAdminChecks, so instantiating the base checks class and calling it raises AttributeError."
+  },
+  {
+   "anchor": "ModelAdminChecks._check_list_display_item",
+   "note": "Using hasattr(obj.model, item) to detect model attributes is unreliable because a field descriptor can raise AttributeError on class access (returning False for real fields); the robust pattern is to try model._meta.get_field(item) and fall back to getattr(obj.model, item), catching FieldDoesNotExist/AttributeError."
+  },
+  {
+   "anchor": "ModelAdminChecks._check_list_display_item",
+   "note": "Validation order is: callable(item) passes, then hasattr(obj, item) (attribute on the ModelAdmin) passes, then model-level resolution; a ManyToManyField resolved from the model yields admin.E109 and an item unresolvable anywhere yields admin.E108."
+  },
+  {
+   "anchor": "ModelAdminChecks._check_list_display_item",
+   "note": "The hasattr(obj, item) short-circuit means model properties, classmethods, staticmethods, and regular methods reachable via getattr on the model class all pass without E108/E109 field-type checks."
+  }
+ ],
+ "django/db/backends/sqlite3/operations.py": [
+  {
+   "anchor": "DatabaseOperations.check_expression_support",
+   "note": "check_expression_support accesses expr.output_field, so compiling an aggregate wrapping an unresolved F() expression (outside a query context) raises AttributeError: 'F' object has no attribute 'output_field'."
+  },
+  {
+   "anchor": "DatabaseOperations.get_db_converters",
+   "note": "Converters are dispatched by expression.output_field.get_internal_type(); DurationField had no branch here, so duration expression results fell through to the base converter unmodified."
+  },
+  {
+   "anchor": "DatabaseOperations.convert_durationfield_value",
+   "note": "On SQLite, plain DurationField column reads yield integer microseconds, but duration expressions (e.g. F(field) + timedelta) yield a string, so the two cases need different conversion handling."
+  },
+  {
+   "anchor": "DatabaseOperations.get_decimalfield_converter",
+   "note": "SQLite converts DecimalField results in Python via a converter that uses decimal.Context(prec=15).create_decimal_from_float and quantizes to the field's decimal_places, so correct decimal values do not depend on the SQL-level CAST AS NUMERIC."
+  },
+  {
+   "anchor": "DatabaseOperations.quote_name",
+   "note": "quote_name simply wraps the name in double quotes, and returns the name unchanged if it already starts and ends with a double quote (so quoting twice is safe)."
+  },
+  {
+   "anchor": "DatabaseOperations.get_db_converters",
+   "note": "Selects converters by calling expression.output_field.get_internal_type(), so anything passed as 'expression' must expose an output_field attribute."
+  }
+ ],
+ "django/contrib/admindocs/utils.py": [
+  {
+   "anchor": "replace_named_groups",
+   "note": "Finds the end of each named group by walking characters after '(?P<name>' and counting unmatched parentheses (with prev_char tracking to handle nested groups like '(?P<a>(x|y))'), then string-replaces the full group text with '<name>'; the balance check must occur inside the loop iteration (recording end+idx+1 to include the closing paren) or a group terminating at the end of the pattern is silently left unreplaced."
+  },
+  {
+   "anchor": "replace_named_groups",
+   "note": "The module defines replace_named_groups and replace_unnamed_groups (there is no simplify_regexp function here); named_group_matcher only matches the '(?P<name>' prefix, so group boundaries are computed manually rather than by regex."
+  },
+  {
+   "anchor": "trim_docstring",
+   "note": "The common-indent calculation must exclude the first line (using lines[1:] with min(..., default=0)); if the first line is included, a docstring starting with text at column 0 forces indent=0 and leaves other lines' indentation intact, which later makes docutils fail in parse_rst."
+  },
+  {
+   "anchor": "trim_docstring",
+   "note": "trim_docstring returns '' for None/whitespace-only input, expands tabs to spaces, and never dedents anything if any non-first line has zero leading whitespace since the minimum indent is then 0."
+  },
+  {
+   "anchor": "parse_rst",
+   "note": "parse_rst calls reverse('django-admindocs-docroot') to build link_base, so it cannot be called without configured Django settings and a URLconf containing the admindocs URLs."
+  }
+ ],
+ "django/contrib/admindocs/views.py": [
+  {
+   "anchor": "simplify_regex",
+   "note": "simplify_regex delegates to utils.replace_named_groups first and then replace_unnamed_groups, so any group left unreplaced by those helpers leaks raw regex syntax into admindocs URL displays."
+  },
+  {
+   "anchor": "model docstring rendering",
+   "note": "Model verbose docstrings flow through utils.trim_docstring before utils.parse_rst, so indentation bugs in trim_docstring surface as docutils errors when rendering admindocs pages."
+  }
+ ],
+ "django/db/migrations/autodetector.py": [
+  {
+   "anchor": "MigrationAutodetector.add_operation",
+   "note": "add_operation stores dependencies on the operation as `operation._auto_deps`, a list of 4-tuples (app_label, model_name, field_name, created/deleted bool), which is what inter-migration dependency resolution later consumes."
+  },
+  {
+   "anchor": "MigrationAutodetector.generate_altered_fields",
+   "note": "generate_altered_fields historically emitted AlterField operations without calling _get_dependencies_for_foreign_key, so changing a plain field to a ForeignKey produced no dependency on the target model; the fix is to compute FK dependencies from the new field when it has a remote_field.model."
+  },
+  {
+   "anchor": "MigrationAutodetector.generate_altered_fields",
+   "note": "generate_altered_fields compares old/new fields via deep_deconstruct and only emits AlterField when both fields are m2m or neither is (both_m2m or neither_m2m); otherwise it falls back to RemoveField+AddField."
+  },
+  {
+   "anchor": "MigrationAutodetector._get_dependencies_for_foreign_key",
+   "note": "_get_dependencies_for_foreign_key special-cases swappable targets: if the field has a swappable_setting it emits a dependency with app_label '__setting__' and the setting name as the object name instead of the real model."
+  }
+ ],
+ "django/forms/fields.py": [
+  {
+   "anchor": "CharField.widget_attrs",
+   "note": "CharField.widget_attrs() adds the 'maxlength' HTML attribute (as str(self.max_length)) only when max_length is not None and the widget is not hidden, and it is invoked during field construction \u2014 so assigning field.max_length after the field is instantiated does NOT update the widget's rendered maxlength attribute."
+  },
+  {
+   "anchor": "Field.__deepcopy__",
+   "note": "Field.__deepcopy__ starts from copy.copy(self) (a shallow copy) and then only explicitly deep-copies self.widget and slice-copies self.validators, so any other mutable attribute (e.g. a dict like error_messages) stays shared between the original and the copy unless explicitly deep-copied here."
+  },
+  {
+   "anchor": "Field.__init__",
+   "note": "Field.__init__ builds self.error_messages by merging 'default_error_messages' dicts from the class MRO in reversed order and then updating with the error_messages kwarg, so each field instance gets its own merged dict at construction time."
+  },
+  {
+   "anchor": "JSONField.prepare_value",
+   "note": "forms.JSONField.prepare_value json.dumps the value using the field's configured encoder, but passes InvalidJSONInput instances through unchanged so the user's raw invalid input string is preserved for redisplay."
+  },
+  {
+   "anchor": "Field.bound_data",
+   "note": "When self.disabled is True, bound_data returns initial and ignores submitted data entirely, and Field.has_changed also short-circuits to return False for disabled fields."
+  }
+ ],
+ "django/contrib/auth/forms.py": [
+  {
+   "anchor": "AuthenticationForm.__init__",
+   "note": "AuthenticationForm.__init__ sets self.fields['username'].max_length dynamically from UserModel._meta.get_field(UserModel.USERNAME_FIELD).max_length (falling back to 254 when the model field has no max_length, e.g. integer username fields), which requires separately setting the widget's attrs['maxlength'] for it to render in HTML."
+  },
+  {
+   "anchor": "AuthenticationForm.username",
+   "note": "The username field is declared as a plain forms.CharField without max_length (removed in the commit that made max_length come from the user model), so the maxlength widget attr is never added via the normal CharField constructor path."
+  },
+  {
+   "anchor": "ReadOnlyPasswordHashField.__init__",
+   "note": "Uses kwargs.setdefault for 'required' (False) and 'disabled' (True), so callers can still override these via explicit keyword arguments."
+  },
+  {
+   "anchor": "ReadOnlyPasswordHashField",
+   "note": "Its custom bound_data (always returning initial) and has_changed (always False) overrides duplicate what forms.Field already does when disabled=True, because its widget never renders an input element."
+  },
+  {
+   "anchor": "ReadOnlyPasswordHashWidget",
+   "note": "Renders the password hash as a read-only <div> summarizing algorithm/iterations/salt/hash (with masked values) rather than an <input>, so user-submitted data for the field never exists in the form POST."
+  }
+ ],
+ "django/db/migrations/serializer.py": [
+  {
+   "anchor": "EnumSerializer.serialize",
+   "note": "EnumSerializer serializes enum members by value-based construction ('module.EnumClass(value)'), recursively invoking serializer_factory on self.value.value and merging its imports with the enum module's import \u2014 so the emitted migration code breaks if the enum's value changes (e.g. translated strings), whereas name-based indexing ('module.EnumClass[name]') only needs the module import."
+  },
+  {
+   "anchor": "EnumSerializer",
+   "note": "EnumSerializer handles all enum variants (Enum, IntEnum, Flag, IntFlag) through the same code path, and it is also what serializes re.RegexFlag values passed as the `flags` argument to RegexValidator when written into migrations."
+  },
+  {
+   "anchor": "TypeSerializer.serialize",
+   "note": "TypeSerializer serializes classes as '%s.%s' % (module, __name__) rather than __qualname__, so an inner (nested) class is emitted with only its innermost name, silently dropping the enclosing class path."
+  },
+  {
+   "anchor": "TypeSerializer.serialize",
+   "note": "TypeSerializer special-cases models.Model and type(None), returning fixed strings with no imports before falling through to the module-based path."
+  },
+  {
+   "anchor": "TypeSerializer.serialize",
+   "note": "Classes defined inside a function have __qualname__ containing '<locals>' (while __name__ does not), so switching TypeSerializer to __qualname__ unconditionally breaks test_deconstruct_class_arguments which expects function-local classes to serialize as module.ClassName."
+  },
+  {
+   "anchor": "FunctionTypeSerializer",
+   "note": "FunctionTypeSerializer already uses __qualname__ and explicitly rejects paths containing '<locals>' with an error; EnumSerializer was similarly migrated to __qualname__ for nested enum classes, but TypeSerializer never was."
+  },
+  {
+   "anchor": "module-level",
+   "note": "The migrations serializer contains no ForeignKey or app-label handling; lowercasing of string model references for migrations happens earlier, in the field's deconstruct() (related.py), before serialization."
+  }
+ ],
+ "tests/migrations/test_writer.py": [
+  {
+   "anchor": "WriterTests.test_serialize_enums",
+   "note": "Enum serialization expectations are asserted as exact string literals in test_serialize_enums (and in RegexValidator flags tests in the same file), so any change to EnumSerializer's output format requires updating these hardcoded expected strings."
+  }
+ ],
+ "django/db/migrations/migration.py": [
+  {
+   "anchor": "Migration.__init__",
+   "note": "Migration's constructor takes only (name, app_label) \u2014 passing an `initial` keyword argument raises TypeError; `initial` is a class attribute, not a constructor parameter."
+  }
+ ],
+ "django/db/models/base.py": [
+  {
+   "anchor": "Model._check_ordering",
+   "note": "For ordering entries containing LOOKUP_SEP, the method walks each part with `_cls._meta.get_field(part)`, but get_field() does not resolve the 'pk' alias, so a `part == 'pk'` case must be handled via `_cls._meta.pk` or the walk raises FieldDoesNotExist and emits models.E015."
+  },
+  {
+   "anchor": "Model._check_ordering",
+   "note": "Plain 'pk' ordering is skipped early as always-valid, but that skip does not cover 'pk' appearing as a part inside a related-field lookup path (e.g. relation__pk), which goes through the separate related-fields validation loop."
+  },
+  {
+   "anchor": "Model._check_ordering",
+   "note": "When a resolved part is a relation (fld.is_relation), the loop advances `_cls` to the related model so subsequent parts (including trailing 'pk') are validated against that related model's _meta."
+  },
+  {
+   "anchor": "Model._check_ordering",
+   "note": "The descending '-' prefix is stripped from ordering entries before the related-field part-by-part validation, so '-relation__pk' is validated the same as 'relation__pk'."
+  },
+  {
+   "anchor": "Model._get_FIELD_display",
+   "note": "_get_FIELD_display reads the raw value from field.attname, looks it up in dict(field.flatchoices), falls back to the raw value if not found, and wraps the result in force_str() to coerce lazy translation strings."
+  },
+  {
+   "anchor": "Model._save_table",
+   "note": "When the model's pk field has a default and the instance's _state.adding is True, _save_table forces an INSERT (skipping the try-UPDATE-first path) even if the pk value was assigned explicitly by the caller, which raises an IntegrityError if a row with that pk already exists."
+  },
+  {
+   "anchor": "ModelState.adding",
+   "note": "The comment on ModelState.adding claims it 'impacts validation only; it has no effect on the actual save', but _save_table actually consults _state.adding to decide whether to force an INSERT for pk fields with defaults."
+  },
+  {
+   "anchor": "Model._do_insert",
+   "note": "The insert path flows Model.save \u2192 save_base \u2192 _save_table \u2192 _do_insert \u2192 cls._base_manager._insert \u2192 SQLInsertCompiler.execute_sql, with _do_insert always using the base manager rather than the default manager."
+  }
+ ],
+ "django/utils/http.py": [
+  {
+   "anchor": "parse_http_date",
+   "note": "parse_http_date tries three module-level regexes in order (RFC1123_DATE, RFC850_DATE, ASCTIME_DATE); only RFC850_DATE captures a two-digit year (__Y2), while the other two capture four-digit years (__Y)."
+  },
+  {
+   "anchor": "parse_http_date",
+   "note": "The two-digit-year century adjustment fires on `int(m.group('year')) < 100`, so even four-digit inputs with leading zeros like '0037' (valid in asctime format) go through the century-guessing branch rather than being used literally."
+  },
+  {
+   "anchor": "parse_http_date",
+   "note": "Per RFC 7231, two-digit years must be resolved relative to the current year (a candidate year more than 50 years in the future rolls back a century), not via a hardcoded <70 \u2192 2000s / >=70 \u2192 1900s split."
+  }
+ ],
+ "django/db/backends/ddl_references.py": [
+  {
+   "anchor": "Columns.__str__",
+   "note": "Builds each column string by concatenating quote_name(column) with col_suffixes[idx] inside a try/except IndexError, so a missing suffix silently falls back to the bare quoted column name; the suffix must be joined with an explicit space only when non-empty, otherwise an empty-string suffix produces trailing whitespace and a bare concatenation produces output like '\"name\"DESC'."
+  },
+  {
+   "anchor": "IndexColumns.__str__",
+   "note": "Appends the opclass and then the col_suffix per column; since col_suffixes commonly contains empty strings for ascending order, unconditionally joining with spaces yields trailing whitespace, so empty suffixes must be skipped when assembling the SQL fragment."
+  }
+ ],
+ "django/db/backends/base/schema.py": [
+  {
+   "anchor": "BaseDatabaseSchemaEditor._index_columns",
+   "note": "Returns a plain Columns object and silently ignores the opclasses argument; only backend-specific schema editors (e.g. postgresql) override it to return IndexColumns when opclasses are given."
+  },
+  {
+   "anchor": "BaseDatabaseSchemaEditor._create_index_sql",
+   "note": "Accepts keyword-only col_suffixes and opclasses tuples and delegates column rendering to _index_columns, so index SQL formatting bugs originate in the ddl_references Columns/IndexColumns __str__ methods rather than here."
+  },
+  {
+   "anchor": "BaseDatabaseSchemaEditor._delete_composed_index",
+   "note": "Raises ValueError unless _constraint_names returns exactly one matching constraint after excluding names from Meta.constraints and Meta.indexes, so any ambiguity between constraints on the same columns crashes the schema alteration."
+  },
+  {
+   "anchor": "BaseDatabaseSchemaEditor._constraint_names",
+   "note": "Database introspection can report a unique constraint with both unique=True and index=True (observed via get_constraints output), so filtering with only {'index': True} matches unique constraints on the same columns too \u2014 you must also pass unique=False (or similar) to disambiguate."
+  },
+  {
+   "anchor": "BaseDatabaseSchemaEditor.alter_unique_together / alter_index_together",
+   "note": "Both compute set differences of old/new field tuples and delegate deletions to _delete_composed_index, passing constraint_kwargs ({'unique': True} vs index kwargs) plus the appropriate sql_delete_* template; the kwargs alone decide which introspected constraint gets dropped."
+  }
+ ],
+ "django/forms/widgets.py": [
+  {
+   "anchor": "CheckboxInput.get_context",
+   "note": "CheckboxInput.get_context() mutates the caller's attrs dict in place (sets attrs['checked'] = True when check_test(value) passes) before delegating to super(), so any attrs dict shared across multiple render calls will retain 'checked' for later renders."
+  },
+  {
+   "anchor": "Widget.use_required_attribute",
+   "note": "The base Widget.use_required_attribute(initial) ignores its `initial` argument and just returns `not self.is_hidden`; subclasses like ClearableFileInput override it with `super().use_required_attribute(initial) and not initial` to suppress the HTML `required` attribute when initial data (e.g. an existing file) is present."
+  },
+  {
+   "anchor": "FileInput",
+   "note": "FileInput.format_value always returns None (file inputs never render a value), and value_from_datadict/value_omitted_from_data read from the `files` dict rather than `data`, so POST data is never consulted for file widgets."
+  },
+  {
+   "anchor": "ClearableFileInput.value_from_datadict",
+   "note": "ClearableFileInput.value_from_datadict returns the sentinel FILE_INPUT_CONTRADICTION when both a clear checkbox and an upload are submitted, and returns False (distinct from None) to explicitly signal clearing an existing value."
+  }
+ ],
+ "django/contrib/postgres/forms/array.py": [
+  {
+   "anchor": "SplitArrayWidget.get_context",
+   "note": "SplitArrayWidget.get_context() builds one final_attrs dict via build_attrs(attrs) and reuses it for every subwidget iteration, so it must pass a copy to self.widget.get_context() to prevent widgets that mutate attrs (e.g., CheckboxInput) from leaking state into subsequent subwidgets."
+  },
+  {
+   "anchor": "SplitArrayWidget.get_context",
+   "note": "SplitArrayWidget.get_context() only creates a fresh attrs dict per iteration ({**final_attrs, 'id': ...}) when an 'id' attr is present; without an id the same dict object is shared across all subwidgets."
+  }
+ ],
+ "django/template/library.py": [
+  {
+   "anchor": "parse_bits",
+   "note": "parse_bits builds `unhandled_kwargs` containing only keyword-only params WITHOUT defaults (filtered via `kwarg not in kwonly_defaults`), so kwonly params that have defaults never appear in that list."
+  },
+  {
+   "anchor": "parse_bits",
+   "note": "When a kwarg token is extracted, the 'unexpected keyword argument' check must test membership against the full `kwonly` list rather than `unhandled_kwargs`, otherwise keyword-only params with defaults are wrongly rejected (and repeated-kwarg errors report the wrong message)."
+  },
+  {
+   "anchor": "Library.simple_tag",
+   "note": "simple_tag/inclusion_tag introspect the decorated function via getfullargspec(unwrap(func)) and pass params, varargs, varkw, defaults, kwonly, and kwonly_defaults straight into parse_bits, where kwonly_defaults can be None (not an empty dict) when no kwonly param has a default."
+  }
+ ],
+ "django/db/models/enums.py": [
+  {
+   "anchor": "ChoicesMeta.__new__",
+   "note": "ChoicesMeta.__new__ dynamically attaches a `label` property to the enum class (looking up the member's value in the choices dict), so class-level attributes like `do_not_call_in_templates` must also be set here on `cls` rather than on the Choices base class body."
+  }
+ ],
+ "django/template/base.py": [
+  {
+   "anchor": "Variable._resolve_lookup",
+   "note": "Template variable resolution invokes any callable it resolves (so enum classes like TextChoices get called as constructors) unless the callable has a truthy `do_not_call_in_templates` attribute, in which case it is left as-is and further attribute lookup (e.g. members) works."
+  },
+  {
+   "anchor": "render_value_in_context",
+   "note": "render_value_in_context calls formats.localize(), which for numeric output hits number_format() and reads settings.USE_L10N \u2014 so rendering an IntegerChoices member/value requires configured Django settings even when using a standalone Engine."
+  }
+ ],
+ "django/contrib/admin/utils.py": [
+  {
+   "anchor": "display_for_field",
+   "note": "display_for_field dispatches on field type via ordered isinstance checks (flatchoices first, BooleanField before the general None test); any field type without an explicit branch falls through to str()-style rendering, which produces Python repr rather than a proper serialized form for structured values like dicts."
+  },
+  {
+   "anchor": "display_for_field",
+   "note": "For model JSONField values, display_for_field delegates serialization to field.get_prep_value(value), so admin change-list display formatting is controlled by the db-level JSONField, not the form field."
+  },
+  {
+   "anchor": "display_for_field",
+   "note": "When a JSONField value is not JSON-serializable (e.g., a dict with tuple keys), display_for_field falls back to showing the Python repr-style string rather than raising."
+  }
+ ],
+ "django/db/models/fields/json.py": [
+  {
+   "anchor": "JSONField",
+   "note": "The model-level JSONField has no prepare_value method \u2014 JSON serialization for display/editing lives only in the form-level django.forms.JSONField, so display code must call field.formfield().prepare_value() to get valid JSON output."
+  },
+  {
+   "anchor": "KeyTransformExact.process_rhs",
+   "note": "KeyTransformExact only works on SQLite because process_rhs wraps each rhs param in JSON_EXTRACT(%s, '$'), which converts the JSON-string-prepared value back to its native type before comparison; lookups that don't wrap rhs this way compare raw JSON strings and mismatch."
+  },
+  {
+   "anchor": "JSONField.get_prep_value",
+   "note": "get_prep_value serializes via json.dumps(value, cls=self.encoder); without passing ensure_ascii=False, non-ASCII characters get escaped to \\uXXXX sequences everywhere this output is displayed (e.g., admin)."
+  },
+  {
+   "anchor": "JSONField.validate",
+   "note": "validate() calls json.dumps(value, cls=self.encoder) purely to check serializability (result is discarded), so its ensure_ascii behavior is irrelevant unlike the display-facing json.dumps in get_prep_value; other json.dumps calls in this file are for key transforms and lookup rhs construction."
+  }
+ ],
+ "django/middleware/security.py": [
+  {
+   "anchor": "SecurityMiddleware.process_response",
+   "note": "The Referrer-Policy header is only added when `self.referrer_policy` is truthy, so setting SECURE_REFERRER_POLICY to None (or any falsy value) silently disables the header entirely."
+  },
+  {
+   "anchor": "SecurityMiddleware.__init__",
+   "note": "SECURE_REFERRER_POLICY (and other SECURE_* settings) is read once into instance attributes in __init__, not per-request."
+  },
+  {
+   "anchor": "SecurityMiddleware.process_response",
+   "note": "SECURE_REFERRER_POLICY accepts a comma-separated string (with or without spaces) or a list/tuple, and the middleware normalizes all forms into a comma-joined header value with whitespace stripped (e.g. 'strict-origin, origin' -> 'strict-origin,origin')."
+  }
+ ],
+ "django/core/checks/security/base.py": [
+  {
+   "anchor": "check_referrer_policy",
+   "note": "Valid values are enumerated in the module-level REFERRER_POLICY_VALUES set (the 8 standard referrer policy tokens), and the referrer-policy check is registered with deploy=True so it only runs during deployment checks."
+  }
+ ],
+ "django/utils/functional.py": [
+  {
+   "anchor": "LazyObject",
+   "note": "LazyObject stores its resolved value in the _wrapped attribute (None until first access), and its method wrappers call self._setup() then delegate to self._wrapped, which is how a SimpleLazyObject is forced."
+  }
+ ],
+ "django/contrib/auth/admin.py": [
+  {
+   "anchor": "UserAdmin.formfield_for_manytomany",
+   "note": "For the 'permissions' field it only rewrites kwargs['queryset'] with select_related('content_type') to avoid per-permission content_type loads, then delegates to super() without touching the widget."
+  }
+ ],
+ "django/db/backends/base/operations.py": [
+  {
+   "anchor": "BaseDatabaseOperations.execute_sql_flush",
+   "note": "Wraps the SQL execution in transaction.atomic(using=self.connection.alias, savepoint=self.connection.features.can_rollback_ddl) and runs each statement through self.connection.cursor(), so the target database alias comes from the operations object's own connection rather than any caller argument."
+  },
+  {
+   "anchor": "BaseDatabaseOperations.sql_flush",
+   "note": "The base sql_flush() raises NotImplementedError and must be provided by each backend subclass; execute_sql_flush() just executes whatever statement list it is given."
+  },
+  {
+   "anchor": "BaseDatabaseOperations.cache_key_culling_sql",
+   "note": "cache_key_culling_sql returns 'SELECT cache_key FROM %s ORDER BY cache_key LIMIT 1 OFFSET %%s' \u2014 a single-row boundary query used by the db cache backend to find where to start culling, and it is overridable per database backend."
+  },
+  {
+   "anchor": "BaseDatabaseOperations.convert_durationfield_value",
+   "note": "The base implementation assumes the DB value is an integer count of microseconds and returns datetime.timedelta(0, 0, value); it crashes if the backend returns a string (as SQLite/MySQL do for duration arithmetic expressions)."
+  }
+ ],
+ "django/core/management/commands/flush.py": [
+  {
+   "anchor": "Command.handle",
+   "note": "The flush management command is the only in-tree production caller of connection.ops.execute_sql_flush (verified via repo-wide grep), so signature changes to that method only affect this call site outside tests."
+  }
+ ],
+ "django/db/models/options.py": [
+  {
+   "anchor": "Options.total_unique_constraints",
+   "note": "Options.total_unique_constraints is a cached_property that filters self.constraints down to UniqueConstraint instances whose condition is None, i.e. constraints guaranteed to be unique across all rows (partial/conditional unique constraints are excluded)."
+  }
+ ],
+ "django/db/models/query_utils.py": [
+  {
+   "anchor": "RegisterLookupMixin.get_lookup",
+   "note": "If a lookup isn't found locally and the instance has an `output_field`, it delegates to `output_field.get_lookup(lookup_name)`, and returns None when the found class is not a Lookup subclass."
+  },
+  {
+   "anchor": "RegisterLookupMixin.get_transform",
+   "note": "Regular model fields don't define get_transform themselves; they inherit it (along with get_lookup) from RegisterLookupMixin in query_utils.py."
+  }
+ ],
+ "django/db/models/sql/subqueries.py": [
+  {
+   "anchor": "DeleteQuery.do_query",
+   "note": "do_query trims self.alias_map to only the target table before compiling, replaces self.where wholesale with the passed where clause, and returns cursor.rowcount as the deleted-row count."
+  },
+  {
+   "anchor": "DeleteQuery.delete_batch",
+   "note": "delete_batch builds its WHERE clause via add_q with a pk__in filter over the batched pk list rather than reusing any existing filter on the query."
+  }
+ ],
+ "django/core/cache/backends/db.py": [
+  {
+   "anchor": "DatabaseCache._cull",
+   "note": "_cull runs cache_key_culling_sql and feeds cursor.fetchone()[0] into a 'DELETE ... WHERE cache_key < %s'; fetchone() can return None when the OFFSET query yields no rows (empty/concurrently-shrunk table), so the result must be None-checked before subscripting."
+  },
+  {
+   "anchor": "DatabaseCache._cull",
+   "note": "When _cull_frequency is 0, _cull short-circuits to self.clear() and skips the SQL culling path entirely; otherwise it first deletes expired rows, then only culls further if the remaining COUNT(*) exceeds _max_entries."
+  }
+ ],
+ "tests/cache/tests.py": [
+  {
+   "anchor": "_perform_cull_test",
+   "note": "_perform_cull_test asserts an exact surviving key count after overflowing the cache, and skips with InvalidCacheBackendError if the named cull cache backend isn't configured."
+  }
+ ],
+ "django/db/models/fields/related_descriptors.py": [
+  {
+   "anchor": "ManyRelatedManager",
+   "note": "Many-to-many descriptor operations (through-model delete, values_list, bulk_create around lines 980-1130) intentionally use the through model's _default_manager, separate from FK validation's existence check."
+  }
+ ],
+ "django/core/checks/model_checks.py": [
+  {
+   "anchor": "field_error",
+   "note": "The \"The field %(field)s was declared with a lazy reference to '%(model)s'\" Error is built here from pending lazy model operations registered via Apps.lazy_model_operation(), joining model_key with '.' \u2014 so an app label that was lowercased upstream surfaces here as an unresolved lazy reference."
+  }
+ ],
+ "django/db/backends/mysql/operations.py": [
+  {
+   "anchor": "DatabaseOperations.get_db_converters",
+   "note": "The MySQL backend also defines no convert_durationfield_value override and its get_db_converters has no DurationField branch, so duration expression values go through the base microseconds-integer converter."
+  }
+ ],
+ "django/conf/global_settings.py": [
+  {
+   "anchor": "SESSION_COOKIE_SAMESITE",
+   "note": "Global defaults include SESSION_COOKIE_SAMESITE='Lax', SESSION_COOKIE_HTTPONLY=True, and SESSION_COOKIE_SECURE=False, but response.py does not reference these settings itself\u2014callers must pass cookie attributes explicitly."
+  }
+ ],
+ "django/core/validators.py": [
+  {
+   "anchor": "BaseValidator.__call__",
+   "note": "BaseValidator resolves callable limit_value at call time and raises ValidationError with params {'limit_value', 'show_value' (the cleaned value, e.g. len(x)), 'value' (the raw input)}, so all Min/Max value/length validators share this params contract."
+  },
+  {
+   "anchor": "RegexValidator.__call__",
+   "note": "RegexValidator matches via self.regex.search(str(value)) and treats input as invalid when the match result XORed with inverse_match indicates failure, so non-string values are coerced to str before matching."
+  },
+  {
+   "anchor": "FileExtensionValidator.__call__",
+   "note": "FileExtensionValidator extracts the extension via Path(value.name).suffix[1:].lower(), so it expects a file-like object with a .name attribute, not a plain string path."
+  }
+ ],
+ "django/contrib/auth/validators.py": [
+  {
+   "anchor": "ASCIIUsernameValidator",
+   "note": "The auth username validators contain no `raise ValidationError` of their own; they subclass RegexValidator, so error raising and params come entirely from RegexValidator.__call__ in django/core/validators.py."
+  }
+ ],
+ "django/contrib/sessions/backends/base.py": [
+  {
+   "anchor": "SessionBase.encode",
+   "note": "Since the #31274 change, encode() serializes via django.core.signing (signing.dumps with salt 'django.contrib.sessions.backends.base'), and the fix makes it fall back to the legacy pre-3.1 encoding when settings.DEFAULT_HASHING_ALGORITHM == 'sha1' so mixed-version deployments can share sessions."
+  },
+  {
+   "anchor": "SessionBase._hash",
+   "note": "_hash() implements the legacy pre-Django-3.1 session format using salted_hmac with key_salt 'django.contrib.sessions' + the backend class name, and is scheduled for removal (RemovedInDjango40Warning)."
+  },
+  {
+   "anchor": "SessionBase.decode",
+   "note": "decode() tries the new signing.loads format first and silently falls back to the legacy hash-based decoding on failure, so old-format session data remains readable during the transition."
+  }
+ ],
+ "django/core/signing.py": [
+  {
+   "anchor": "Signer.__init__",
+   "note": "Signer defaults its algorithm to settings.DEFAULT_HASHING_ALGORITHM when no algorithm argument is passed, so that transitional setting changes the signature of everything built on the signing infrastructure."
+  }
+ ],
+ "django/views/generic/base.py": [
+  {
+   "anchor": "TemplateView.get",
+   "note": "TemplateView.get passes URL kwargs through _wrap_url_kwargs_with_deprecation_warning, which wraps each value in a SimpleLazyObject that emits a deprecation warning on first access \u2014 so kwargs reaching get_context_data are lazy proxies, not plain strings, and can break code (e.g. ORM filters) expecting raw string values."
+  }
+ ],
+ "tests/model_forms/models.py": [
+  {
+   "anchor": "StumpJoke",
+   "note": "StumpJoke's relations to Character (FK most_recently_fooled, M2M has_fooled_today) use limit_choices_to=today_callable_dict and were originally declared with related_name='+', so reverse accessors are unavailable unless the related_name is changed."
+  }
+ ],
+ "tests/model_forms/tests.py": [
+  {
+   "anchor": "LimitChoicesToTests",
+   "note": "LimitChoicesToTests covers callable limit_choices_to for FK and M2M rels plus fields_for_model application, and is where duplicate-option regressions from joined limit_choices_to are asserted (via assertQuerysetEqual on the formfield queryset)."
+  }
+ ],
+ "django/db/models/fields/files.py": [
+  {
+   "anchor": "FileField.__init__",
+   "note": "FileField.__init__ evaluates a callable storage argument immediately (self.storage = storage() when callable), so self.storage always holds the evaluated Storage instance at runtime; the original callable is preserved separately in self._storage_callable for deconstruction."
+  },
+  {
+   "anchor": "FileField.deconstruct",
+   "note": "FileField.deconstruct silently drops the 'max_length' kwarg when it equals 100 (the implicit default) and only includes 'storage' in kwargs when self.storage is not default_storage."
+  },
+  {
+   "anchor": "FileField.deconstruct",
+   "note": "When storage was passed as a callable, deconstruct must emit the original callable (via self._storage_callable) rather than self.storage, since self.storage was already replaced by the evaluated Storage instance in __init__."
+  }
+ ],
+ "django/core/handlers/base.py": [
+  {
+   "anchor": "BaseHandler.load_middleware",
+   "note": "Inside the middleware loop `handler_is_async` is reassigned to each middleware's `middleware_is_async`, so after the loop it reflects the FIRST-listed (outermost) middleware's declared mode and is passed to the final `adapt_method_mode(is_async, handler, handler_is_async)` \u2014 this declared mode can mismatch the handler's actual coroutine-ness, wrapping/skipping adaptation incorrectly."
+  },
+  {
+   "anchor": "BaseHandler.adapt_method_mode",
+   "note": "When `method_is_async=None` it auto-detects the mode via `asyncio.iscoroutinefunction(method)`; passing an explicit (possibly wrong) `method_is_async` overrides this detection, so it may leave a sync callable un-awaited or vice versa."
+  },
+  {
+   "anchor": "BaseHandler.get_response_async",
+   "note": "The ASGI path uses a fully separate async pipeline: `get_response_async` does `response = await self._middleware_chain(request)` (called from ASGIHandler.__call__), so if the top of the middleware chain is not actually a coroutine function the awaited result can be a coroutine object instead of an HttpResponse."
+  }
+ ],
+ "django/core/handlers/exception.py": [
+  {
+   "anchor": "convert_exception_to_response",
+   "note": "Checks `asyncio.iscoroutinefunction(get_response)` and returns an async inner wrapper if the wrapped callable is async, otherwise a sync one \u2014 so it mirrors the async-ness of its input rather than the middleware's declared capability."
+  }
+ ],
+ "django/db/models/lookups.py": [
+  {
+   "anchor": "FieldGetDbPrepValueIterableMixin.get_prep_lookup",
+   "note": "When prepare_rhs is True, this mixin (used by In and Range) calls self.lhs.output_field.get_prep_value() on each rhs item, so with a KeyTransform lhs the output_field is JSONField and every value gets JSON-serialized into a string (e.g. int 0 becomes '0')."
+  },
+  {
+   "anchor": "In",
+   "note": "In inherits FieldGetDbPrepValueIterableMixin while Exact inherits only FieldGetDbPrepValueMixin, so Exact uses the base Lookup.get_prep_lookup and In uses the iterable-specific override that per-value prepares the rhs."
+  },
+  {
+   "anchor": "FieldGetDbPrepValueMixin.get_db_prep_lookup",
+   "note": "get_db_prep_lookup prefers the 'target_field' attribute of lhs.output_field (present on relational fields) for get_db_prep_value, falling back to output_field.get_db_prep_value otherwise."
+  }
+ ],
+ "django/db/models/functions/datetime.py": [
+  {
+   "anchor": "TruncDate.as_sql",
+   "note": "TruncDate.as_sql and TruncTime.as_sql override TruncBase.as_sql entirely: they compile self.lhs themselves and call connection.ops.datetime_cast_date_sql/datetime_cast_time_sql (a cast, not a truncation), so changes to TruncBase.as_sql's tzname handling do not automatically apply to them."
+  },
+  {
+   "anchor": "TruncDate.as_sql",
+   "note": "The timezone name passed into the SQL cast is gated on settings.USE_TZ (tzname is None when USE_TZ is False), and must come from TimezoneMixin.get_tzname() rather than timezone.get_current_timezone_name() or the self.tzinfo constructor argument is silently ignored."
+  },
+  {
+   "anchor": "TruncBase.as_sql",
+   "note": "TruncBase.as_sql dispatches on the resolved output_field type to connection.ops.datetime_trunc_sql/date_trunc_sql/time_trunc_sql and raises ValueError for anything other than DateField, TimeField, or DateTimeField."
+  }
+ ],
+ "django/core/files/locks.py": [
+  {
+   "anchor": "lock/unlock (POSIX branch)",
+   "note": "fcntl.flock() returns None on success and raises OSError (e.g. EAGAIN with LOCK_NB on a contended lock) on failure, so any success check comparing its return value to 0 is always False; success must be detected via try/except OSError."
+  },
+  {
+   "anchor": "module structure",
+   "note": "The module defines lock/unlock three ways at import time: a Windows ctypes implementation, a POSIX fcntl.flock implementation, and a no-op fallback (when fcntl is unavailable) whose lock() always returns False and unlock() always returns True."
+  },
+  {
+   "anchor": "module consumers",
+   "note": "locks.lock/unlock are consumed by django/core/files/move.py (locks.lock(fd, locks.LOCK_EX)) and django/core/files/storage.py, and the module has no dedicated tests in the Django test suite."
+  }
+ ],
+ "django/db/models/functions/window.py": [
+  {
+   "anchor": "LagLeadFunction",
+   "note": "Lag/Lead inherit from LagLeadFunction, which resolves its output_field from the first source expression (_resolve_output_field returns the source expression's output field), so a DecimalField column makes the whole window function's output DecimalField and triggers DecimalField-specific backend handling."
+  },
+  {
+   "anchor": "window functions",
+   "note": "All window functions here (CumeDist, Rank, Lag, Lead, etc.) are plain Func subclasses distinguished only by the class attribute window_compatible=True, which is the flag backends can check to detect window-function context."
+  }
+ ],
+ "django/views/debug.py": [
+  {
+   "anchor": "ExceptionReporter.get_traceback_frames",
+   "note": "The nested helper explicit_or_implicit_cause returns `explicit or (None if suppress_context else implicit)` (reading __cause__, __suppress_context__, __context__ via getattr) and is used both to walk the exception chain and to populate each frame's 'exc_cause' entry."
+  },
+  {
+   "anchor": "ExceptionReporter.get_traceback_frames",
+   "note": "It first collects the full exception chain into a list, then pops from it; when only one exception remains, the traceback is taken from self.tb rather than from exc_value.__traceback__."
+  },
+  {
+   "anchor": "ExceptionReporter.get_traceback_frames",
+   "note": "The returned frames are call-stack traceback frames (one per tb frame across all chained exceptions), not one per exception, so suppressing chained context reduces which exceptions' tracebacks are walked, not the stack depth of the remaining exception."
+  }
+ ],
+ "django/core/management/commands/migrate.py": [
+  {
+   "anchor": "Command.migration_progress_callback",
+   "note": "The migrate command relies on self.stdout.flush() (called at several points in its progress callback) to show incremental 'Applying...' output, so buffering behavior depends on OutputWrapper actually forwarding flush() to the underlying stream."
+  },
+  {
+   "anchor": "Command.handle",
+   "note": "migrate demonstrates the pattern for commands with requires_system_checks = []: it manually adds a --skip-checks argument in add_arguments and guards its own self.check(databases=[database]) call in handle() with `if not options['skip_checks']`."
+  }
+ ],
+ "django/contrib/auth/tokens.py": [
+  {
+   "anchor": "PasswordResetTokenGenerator._make_hash_value",
+   "note": "The hash value is built only from user.pk, user.password, user.last_login (with microseconds/tzinfo normalized), and the timestamp, so any user field not included here (e.g. email) does not invalidate existing tokens when changed."
+  },
+  {
+   "anchor": "PasswordResetTokenGenerator.check_token",
+   "note": "check_token contains a fallback path that re-verifies the token via _make_token_with_timestamp(user, ts, legacy=True), so any new keyword added to _make_token_with_timestamp/_make_hash_value must be threaded through both the normal and legacy call sites."
+  }
+ ],
+ "django/contrib/auth/base_user.py": [
+  {
+   "anchor": "AbstractBaseUser",
+   "note": "AbstractBaseUser defines password and last_login but no email field; the email field name is resolved dynamically via the get_email_field_name() classmethod, so code consuming a user's email must handle custom user models lacking that field or with the field set to None."
+  }
+ ],
+ "tests/auth_tests/models/__init__.py": [
+  {
+   "anchor": "module imports",
+   "note": "Importing anything from tests/auth_tests/models triggers a chain of model class definitions (e.g. CustomUser via custom_permissions) that raise RuntimeError unless auth_tests is in INSTALLED_APPS, so these models can't be imported from standalone scripts."
+  }
+ ],
+ "django/contrib/auth/checks.py": [
+  {
+   "anchor": "check_user_model",
+   "note": "When app_configs is None, check_user_model resolves the user model directly via apps.get_model(settings.AUTH_USER_MODEL); otherwise it parses AUTH_USER_MODEL's app_label to find the model in the given configs."
+  },
+  {
+   "anchor": "check_user_model (auth.E003/auth.W004)",
+   "note": "The USERNAME_FIELD uniqueness check downgrades from Error auth.E003 to Warning auth.W004 when AUTHENTICATION_BACKENDS is set to a non-default backend."
+  },
+  {
+   "anchor": "check_user_model (auth.E003)",
+   "note": "Uniqueness of USERNAME_FIELD is now satisfied either by field.unique or by a constraint in cls._meta.total_unique_constraints covering exactly that field; conditional (partial) UniqueConstraints are excluded by total_unique_constraints and still raise auth.E003."
+  }
+ ],
+ "django/utils/dateformat.py": [
+  {
+   "anchor": "DateFormat.__init__",
+   "note": "DateFormat.__init__ calls timezone.get_default_timezone(), so even the standalone dateformat.format() helper raises ImproperlyConfigured unless Django settings (TIME_ZONE) are configured."
+  },
+  {
+   "anchor": "DateFormat.y",
+   "note": "The 'y' (2-digit year) specifier is computed via `str(self.data.year % 100).zfill(2)`; it was previously implemented with naive string slicing `str(year)[2:]`, which silently returned wrong/empty output for years < 1000."
+  },
+  {
+   "anchor": "DateFormat",
+   "note": "Each format character maps to a same-named method on DateFormat/TimeFormat that returns the formatted string fragment, so behavior fixes for a specifier are localized to that single method."
+  }
+ ],
+ "django/template/defaultfilters.py": [
+  {
+   "anchor": "add",
+   "note": "The add filter first tries int(value) + int(arg) and only on ValueError/TypeError falls back to value + arg, so numeric-looking string inputs are added arithmetically rather than concatenated."
+  },
+  {
+   "anchor": "add",
+   "note": "In the string-concatenation fallback, add catches bare Exception and returns '' silently, so any TypeError from incompatible operands (e.g., concatenating str with a lazy __proxy__ object) produces an empty string with no visible error."
+  }
+ ],
+ "tests/runtests.py": [
+  {
+   "anchor": "django_tests",
+   "note": "Passing a package-level test label with the 'tests.' prefix (e.g. tests.template_tests.filter_tests) crashes unittest discovery with AttributeError: module 'tests' has no attribute '__file__', while fully-qualified individual test module labels with the same prefix run fine."
+  }
+ ],
+ "django/db/backends/sqlite3/base.py": [
+  {
+   "anchor": "DatabaseWrapper.check_constraints",
+   "note": "The PRAGMA foreign_key_check(%s) and PRAGMA foreign_key_list(%s) statements here take table names interpolated into the SQL string, so table names must be wrapped with self.ops.quote_name() or tables named after SQL keywords break; the other PRAGMAs in this file take no table argument."
+  },
+  {
+   "anchor": "DatabaseWrapper.disable_constraint_checking",
+   "note": "disable_constraint_checking executes 'PRAGMA foreign_keys = OFF' but foreign key checks cannot be disabled inside a multi-statement transaction, so it re-reads the pragma's current state to detect whether the disable actually took effect."
+  },
+  {
+   "anchor": "check_sqlite_version",
+   "note": "check_sqlite_version() is a module-level function comparing Database.sqlite_version_info (the sqlite3 stdlib module's tuple) against the minimum supported version and raising ImproperlyConfigured if too old; it is importable and callable without Django settings configured."
+  }
+ ],
+ "django/db/backends/sqlite3/introspection.py": [
+  {
+   "anchor": "DatabaseIntrospection",
+   "note": "All PRAGMA calls that accept a table name (table_info, foreign_key_list, index_list) already pass the name through self.connection.ops.quote_name(), establishing the expected pattern for PRAGMA table-name arguments in the sqlite3 backend."
+  },
+  {
+   "anchor": "FieldInfo",
+   "note": "This module defines its own FieldInfo namedtuple that extends the base introspection FieldInfo with extra 'pk' and 'has_json_constraint' fields."
+  }
+ ],
+ "django/core/management/commands/runserver.py": [
+  {
+   "anchor": "Command.inner_run",
+   "note": "runserver sets requires_system_checks = [] and instead calls self.check(display_num_errors=True) and self.check_migrations() explicitly in inner_run, so the base class's requires_system_checks/skip_checks machinery never applies to it."
+  }
+ ],
+ "django/contrib/staticfiles/management/commands/runserver.py": [
+  {
+   "anchor": "Command",
+   "note": "The staticfiles runserver subclasses the core runserver Command, so arguments added to the core command's add_arguments automatically appear in the staticfiles runserver's option parser."
+  }
+ ],
+ "django/db/backends/sqlite3/features.py": [
+  {
+   "anchor": "DatabaseFeatures",
+   "note": "DatabaseFeatures imports Database from .base and gates several feature flags on SQLite version tuples (via operator comparisons and cached_property), so raising the minimum supported SQLite version can make some of these conditional flags always-true and simplifiable."
+  }
+ ],
+ "django/utils/autoreload.py": [
+  {
+   "anchor": "get_child_arguments",
+   "note": "Detects `python -m <pkg>` launches via __main__.__spec__.parent (the package name) rather than comparing sys.argv[0] to django.__main__.__file__, so it works for any package and in environments where __file__ is unset; an empty spec.parent means a directory/zipfile entry point and falls through to script-path logic."
+  },
+  {
+   "anchor": "get_child_arguments",
+   "note": "Always prepends sys.executable plus '-W<opt>' for each entry in sys.warnoptions to the child argument list, so warning filters are propagated to the reloaded child process."
+  },
+  {
+   "anchor": "get_child_arguments",
+   "note": "Contains Windows fallbacks: if sys.argv[0] doesn't exist but sys.argv[0]+'.exe' does it uses the .exe path directly (without sys.executable), and if a sibling '<name>-script.py' exists it runs that via sys.executable; otherwise it raises RuntimeError('Script ... does not exist.')."
+  },
+  {
+   "anchor": "restart_with_reloader",
+   "note": "restart_with_reloader obtains the full child command line from get_child_arguments(), so any change to how the executable/module invocation is reconstructed affects every autoreload restart."
+  }
+ ],
+ "tests/check_framework/test_model_checks.py": [
+  {
+   "anchor": "ModelDefaultAutoFieldTests",
+   "note": "These tests must mock.patch UserSettingsHolder.is_overridden (via mocked_is_overridden) and use isolate_apps with the CheckDefaultPKConfig app config, because _check_default_pk's behavior depends on whether DEFAULT_AUTO_FIELD is considered 'overridden' rather than on its value alone."
+  }
+ ]
+}

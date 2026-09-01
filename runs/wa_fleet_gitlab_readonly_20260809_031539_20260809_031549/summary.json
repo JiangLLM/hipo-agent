@@ -1,0 +1,25 @@
+{
+  "n_tasks": 67,
+  "site": "gitlab",
+  "arms": [
+    "nomem",
+    "withmem"
+  ],
+  "nomem": {
+    "n": 67,
+    "reward_sr": 0.6567,
+    "layer1_writes": 0,
+    "layer2_writes": 0
+  },
+  "withmem": {
+    "n": 67,
+    "reward_sr": 0.6716,
+    "layer1_writes": 164,
+    "layer2_writes": 26
+  },
+  "learned_memory": {
+    "n_reasoning": 190,
+    "n_fact": 0
+  },
+  "spent_usd": 544.5615
+}

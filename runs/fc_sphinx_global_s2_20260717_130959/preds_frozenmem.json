@@ -1,0 +1,72 @@
+{
+  "sphinx-doc__sphinx-9230": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9230",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-8721": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-8721",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9229": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9229",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9258": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9258",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9367": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9367",
+    "model_patch": "diff --git a/sphinx/pycode/ast.py b/sphinx/pycode/ast.py\nindex f541ec0a9..5cd964bd1 100644\n--- a/sphinx/pycode/ast.py\n+++ b/sphinx/pycode/ast.py\n@@ -214,7 +214,12 @@ class _UnparseVisitor(ast.NodeVisitor):\n \n     def visit_Tuple(self, node: ast.Tuple) -> str:\n         if node.elts:\n-            return \"(\" + \", \".join(self.visit(e) for e in node.elts) + \")\"\n+            elts_str = \", \".join(self.visit(e) for e in node.elts)\n+            # Add trailing comma for single-element tuples\n+            if len(node.elts) == 1:\n+                return \"(\" + elts_str + \",)\"\n+            else:\n+                return \"(\" + elts_str + \")\"\n         else:\n             return \"()\"\n \n"
+  },
+  "sphinx-doc__sphinx-9281": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9281",
+    "model_patch": "diff --git a/sphinx/util/inspect.py b/sphinx/util/inspect.py\nindex a415a7074..9cad4bcc2 100644\n--- a/sphinx/util/inspect.py\n+++ b/sphinx/util/inspect.py\n@@ -432,6 +432,10 @@ def safe_getattr(obj: Any, name: str, *defargs: Any) -> Any:\n \n def object_description(object: Any) -> str:\n     \"\"\"A repr() implementation that returns text safe to use in reST context.\"\"\"\n+    # Handle Enum members specially to show them nicely (e.g., \"MyEnum.ValueA\" instead of \"<MyEnum.ValueA: 10>\")\n+    if isinstance(object, enum.Enum):\n+        return f\"{object.__class__.__qualname__}.{object.name}\"\n+    \n     if isinstance(object, dict):\n         try:\n             sorted_keys = sorted(object)\n"
+  },
+  "sphinx-doc__sphinx-9461": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9461",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9320": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9320",
+    "model_patch": "diff --git a/sphinx/cmd/quickstart.py b/sphinx/cmd/quickstart.py\nindex a40a21073..0acd3efe3 100644\n--- a/sphinx/cmd/quickstart.py\n+++ b/sphinx/cmd/quickstart.py\n@@ -94,6 +94,13 @@ def is_path(x: str) -> str:\n         raise ValidationError(__(\"Please enter a valid path name.\"))\n     return x\n \n+def is_path_or_empty(x: str) -> str:\n+    \"\"\"Allow empty string (to exit) or a valid path.\"\"\"\n+    if not x:\n+        return x\n+    return is_path(x)\n+\n+\n \n def allow_empty(x: str) -> str:\n     return x\n@@ -223,7 +230,7 @@ def ask_user(d: Dict) -> None:\n         print(__('sphinx-quickstart will not overwrite existing Sphinx projects.'))\n         print()\n         d['path'] = do_prompt(__('Please enter a new root path (or just Enter to exit)'),\n-                              '', is_path)\n+                              '', is_path_or_empty)\n         if not d['path']:\n             sys.exit(1)\n \n"
+  },
+  "sphinx-doc__sphinx-9591": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9591",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9698": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9698",
+    "model_patch": "diff --git a/sphinx/domains/python.py b/sphinx/domains/python.py\nindex cd02eaad5..1a3bd60c7 100644\n--- a/sphinx/domains/python.py\n+++ b/sphinx/domains/python.py\n@@ -796,7 +796,7 @@ class PyMethod(PyObject):\n         if 'classmethod' in self.options:\n             return _('%s() (%s class method)') % (methname, clsname)\n         elif 'property' in self.options:\n-            return _('%s() (%s property)') % (methname, clsname)\n+            return _('%s (%s property)') % (methname, clsname)\n         elif 'staticmethod' in self.options:\n             return _('%s() (%s static method)') % (methname, clsname)\n         else:\ndiff --git a/tests/test_domain_py.py b/tests/test_domain_py.py\nindex 682ea76e1..5ba63d0e3 100644\n--- a/tests/test_domain_py.py\n+++ b/tests/test_domain_py.py\n@@ -756,7 +756,7 @@ def test_pymethod_options(app):\n \n     # :property:\n     assert_node(doctree[1][1][8], addnodes.index,\n-                entries=[('single', 'meth5() (Class property)', 'Class.meth5', '', None)])\n+                entries=[('single', 'meth5 (Class property)', 'Class.meth5', '', None)])\n     assert_node(doctree[1][1][9], ([desc_signature, ([desc_annotation, (\"property\", desc_sig_space)],\n                                                      [desc_name, \"meth5\"])],\n                                    [desc_content, ()]))\n"
+  },
+  "sphinx-doc__sphinx-9658": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9658",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9602": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9602",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9673": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9673",
+    "model_patch": "diff --git a/sphinx/ext/autodoc/typehints.py b/sphinx/ext/autodoc/typehints.py\nindex af4b47bb0..97fe2d670 100644\n--- a/sphinx/ext/autodoc/typehints.py\n+++ b/sphinx/ext/autodoc/typehints.py\n@@ -149,7 +149,7 @@ def augment_descriptions_with_types(\n         elif parts[0] == 'type':\n             name = ' '.join(parts[1:])\n             has_type.add(name)\n-        elif parts[0] == 'return':\n+        elif parts[0] in ('return', 'returns'):\n             has_description.add('return')\n         elif parts[0] == 'rtype':\n             has_type.add('return')\n"
+  },
+  "sphinx-doc__sphinx-9711": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sphinx-doc__sphinx-9711",
+    "model_patch": "diff --git a/sphinx/extension.py b/sphinx/extension.py\nindex 7ec6c8518..0c88139f1 100644\n--- a/sphinx/extension.py\n+++ b/sphinx/extension.py\n@@ -10,6 +10,8 @@\n \n from typing import TYPE_CHECKING, Any, Dict\n \n+from packaging.version import parse as parse_version\n+\n from sphinx.config import Config\n from sphinx.errors import VersionRequirementError\n from sphinx.locale import __\n@@ -51,7 +53,14 @@ def verify_needs_extensions(app: \"Sphinx\", config: Config) -> None:\n                               'but it is not loaded.'), extname)\n             continue\n \n-        if extension.version == 'unknown version' or reqversion > extension.version:\n+        if extension.version == 'unknown version':\n+            raise VersionRequirementError(__('This project needs the extension %s at least in '\n+                                             'version %s and therefore cannot be built with '\n+                                             'the loaded version (%s).') %\n+                                          (extname, reqversion, extension.version))\n+\n+        # Use proper version comparison instead of string comparison\n+        if parse_version(reqversion) > parse_version(extension.version):\n             raise VersionRequirementError(__('This project needs the extension %s at least in '\n                                              'version %s and therefore cannot be built with '\n                                              'the loaded version (%s).') %\n"
+  }
+}

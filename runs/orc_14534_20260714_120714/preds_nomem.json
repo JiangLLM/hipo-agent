@@ -1,0 +1,7 @@
+{
+  "django__django-14534": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "django__django-14534",
+    "model_patch": "diff --git a/django/forms/boundfield.py b/django/forms/boundfield.py\nindex 2ff8b0ee26..7e14aa2945 100644\n--- a/django/forms/boundfield.py\n+++ b/django/forms/boundfield.py\n@@ -277,6 +277,12 @@ class BoundWidget:\n \n     @property\n     def id_for_label(self):\n+        # Use the id from attrs if it exists (set by widgets like CheckboxSelectMultiple\n+        # and RadioSelect that properly format it with the auto_id format).\n+        # Otherwise, fall back to the old behavior for backward compatibility.\n+        id_value = self.data['attrs'].get('id')\n+        if id_value:\n+            return id_value\n         return 'id_%s_%s' % (self.data['name'], self.data['index'])\n \n     @property\n"
+  }
+}

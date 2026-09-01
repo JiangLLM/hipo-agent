@@ -1,0 +1,7 @@
+{
+  "django__django-16642": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "django__django-16642",
+    "model_patch": "diff --git a/django/http/response.py b/django/http/response.py\nindex f62dec8ce9..393330dba1 100644\n--- a/django/http/response.py\n+++ b/django/http/response.py\n@@ -610,6 +610,8 @@ class FileResponse(StreamingHttpResponse):\n                 # uncompressing files.\n                 content_type = {\n                     \"bzip2\": \"application/x-bzip\",\n+                    \"br\": \"application/x-br\",\n+                    \"compress\": \"application/x-compress\",\n                     \"gzip\": \"application/gzip\",\n                     \"xz\": \"application/x-xz\",\n                 }.get(encoding, content_type)\n"
+  }
+}

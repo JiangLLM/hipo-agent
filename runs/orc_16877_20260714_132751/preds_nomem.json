@@ -1,0 +1,7 @@
+{
+  "django__django-16877": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "django__django-16877",
+    "model_patch": "diff --git a/django/template/defaultfilters.py b/django/template/defaultfilters.py\nindex 5289ef34a0..b6c64a4434 100644\n--- a/django/template/defaultfilters.py\n+++ b/django/template/defaultfilters.py\n@@ -497,6 +497,16 @@ def safeseq(value):\n     \"\"\"\n     return [mark_safe(obj) for obj in value]\n \n+@register.filter(is_safe=True)\n+def escapeseq(value):\n+    \"\"\"\n+    A \"escape\" filter for sequences. Mark each element in the sequence,\n+    individually, as safe after escaping, after converting them to strings.\n+    Return a list with the results.\n+    \"\"\"\n+    return [mark_safe(conditional_escape(obj)) for obj in value]\n+\n+\n \n @register.filter(is_safe=True)\n @stringfilter\n"
+  }
+}

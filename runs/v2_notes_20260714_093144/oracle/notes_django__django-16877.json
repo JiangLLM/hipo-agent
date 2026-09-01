@@ -1,0 +1,1 @@
+{"django/template/defaultfilters.py": [{"anchor": "escapeseq", "note": "The `escapeseq` filter must be registered with `is_safe=True` because it returns a list of already-escaped strings; without this flag, the template engine would double-escape them when autoescape is enabled. This mirrors the design of `safeseq` which marks sequences as safe to prevent re-escaping."}]}

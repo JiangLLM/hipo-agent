@@ -1,0 +1,208 @@
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+[info] run_id=wa_gitlab_20260720_020100_20260720_020102 site=gitlab tasks=43 arms=['nomem', 'withmem']
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 1/43 t132 reward=1 nc=1/1 cumSR=1.00 win10=1.00 mem=0 spent=$0.14
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 2/43 t133 reward=1 nc=1/1 cumSR=1.00 win10=1.00 mem=0 spent=$0.29
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 3/43 t134 reward=1 nc=1/1 cumSR=1.00 win10=1.00 mem=0 spent=$0.44
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 4/43 t135 reward=0 nc=0/1 cumSR=0.75 win10=0.75 mem=0 spent=$0.59
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 5/43 t136 reward=0 nc=0/1 cumSR=0.60 win10=0.60 mem=0 spent=$0.72
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 6/43 t168 reward=1 nc=1/1 cumSR=0.67 win10=0.67 mem=0 spent=$1.38
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 7/43 t169 reward=1 nc=1/1 cumSR=0.71 win10=0.71 mem=0 spent=$1.41
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 8/43 t170 reward=1 nc=1/1 cumSR=0.75 win10=0.75 mem=0 spent=$1.45
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 9/43 t171 reward=1 nc=1/1 cumSR=0.78 win10=0.78 mem=0 spent=$1.51
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 10/43 t172 reward=1 nc=1/1 cumSR=0.80 win10=0.80 mem=0 spent=$1.55
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 11/43 t205 reward=1 nc=1/1 cumSR=0.82 win10=0.80 mem=0 spent=$1.66
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 12/43 t206 reward=1 nc=1/1 cumSR=0.83 win10=0.80 mem=0 spent=$1.78
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 13/43 t207 reward=0 nc=0/1 cumSR=0.77 win10=0.70 mem=0 spent=$1.90
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 14/43 t259 reward=1 nc=1/1 cumSR=0.79 win10=0.80 mem=0 spent=$2.06
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 15/43 t293 reward=1 nc=1/1 cumSR=0.80 win10=0.90 mem=0 spent=$2.23
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 16/43 t294 reward=1 nc=1/1 cumSR=0.81 win10=0.90 mem=0 spent=$2.45
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 17/43 t295 reward=1 nc=1/1 cumSR=0.82 win10=0.90 mem=0 spent=$2.61
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 18/43 t296 reward=0 nc=0/1 cumSR=0.78 win10=0.80 mem=0 spent=$2.84
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 19/43 t297 reward=0 nc=0/1 cumSR=0.74 win10=0.70 mem=0 spent=$3.06
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 20/43 t303 reward=1 nc=1/1 cumSR=0.75 win10=0.70 mem=0 spent=$3.46
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 21/43 t304 reward=1 nc=1/1 cumSR=0.76 win10=0.70 mem=0 spent=$3.77
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 22/43 t305 reward=1 nc=1/1 cumSR=0.77 win10=0.70 mem=0 spent=$4.04
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 23/43 t306 reward=0 nc=0/1 cumSR=0.74 win10=0.70 mem=0 spent=$6.07
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 24/43 t307 reward=0 nc=0/1 cumSR=0.71 win10=0.60 mem=0 spent=$6.65
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 25/43 t308 reward=1 nc=1/1 cumSR=0.72 win10=0.60 mem=0 spent=$6.93
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 26/43 t309 reward=1 nc=1/1 cumSR=0.73 win10=0.60 mem=0 spent=$7.32
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 27/43 t310 reward=1 nc=1/1 cumSR=0.74 win10=0.60 mem=0 spent=$7.72
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 28/43 t311 reward=1 nc=1/1 cumSR=0.75 win10=0.70 mem=0 spent=$8.07
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 29/43 t312 reward=1 nc=1/1 cumSR=0.76 win10=0.80 mem=0 spent=$8.34
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 30/43 t314 reward=1 nc=1/1 cumSR=0.77 win10=0.80 mem=0 spent=$8.67
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 31/43 t315 reward=1 nc=1/1 cumSR=0.77 win10=0.80 mem=0 spent=$9.06
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 32/43 t316 reward=1 nc=1/1 cumSR=0.78 win10=0.80 mem=0 spent=$9.37
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 33/43 t317 reward=0 nc=0/1 cumSR=0.76 win10=0.80 mem=0 spent=$9.67
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 34/43 t318 reward=1 nc=1/1 cumSR=0.76 win10=0.90 mem=0 spent=$9.87
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 35/43 t349 reward=1 nc=1/1 cumSR=0.77 win10=0.90 mem=0 spent=$9.97
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 36/43 t350 reward=1 nc=1/1 cumSR=0.78 win10=0.90 mem=0 spent=$10.07
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 37/43 t783 reward=1 nc=1/1 cumSR=0.78 win10=0.90 mem=0 spent=$10.10
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 38/43 t784 reward=1 nc=1/1 cumSR=0.79 win10=0.90 mem=0 spent=$10.61
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 39/43 t785 reward=1 nc=1/1 cumSR=0.79 win10=0.90 mem=0 spent=$10.89
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 40/43 t786 reward=0 nc=0/1 cumSR=0.78 win10=0.80 mem=0 spent=$11.38
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 41/43 t787 reward=1 nc=1/1 cumSR=0.78 win10=0.80 mem=0 spent=$11.58
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 42/43 t788 reward=1 nc=1/1 cumSR=0.79 win10=0.80 mem=0 spent=$11.82
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 43/43 t789 reward=1 nc=1/1 cumSR=0.79 win10=0.90 mem=0 spent=$11.86
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 1/43 t132 reward=1 nc=1/1 cumSR=1.00 win10=1.00 mem=0 spent=$12.00
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 2/43 t133 reward=1 nc=1/1 cumSR=1.00 win10=1.00 mem=0 spent=$12.15
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 3/43 t134 reward=1 nc=1/1 cumSR=1.00 win10=1.00 mem=0 spent=$12.31
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 4/43 t135 reward=1 nc=1/1 cumSR=1.00 win10=1.00 mem=0 spent=$12.47
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 5/43 t136 reward=0 nc=0/1 cumSR=0.80 win10=0.80 mem=1 spent=$12.64
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 6/43 t168 reward=0 nc=0/1 cumSR=0.67 win10=0.67 mem=3 spent=$14.27
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 7/43 t169 reward=1 nc=1/1 cumSR=0.71 win10=0.71 mem=3 spent=$14.32
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 8/43 t170 reward=1 nc=1/1 cumSR=0.75 win10=0.75 mem=3 spent=$14.35
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 9/43 t171 reward=1 nc=1/1 cumSR=0.78 win10=0.78 mem=3 spent=$14.41
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 10/43 t172 reward=1 nc=1/1 cumSR=0.80 win10=0.80 mem=3 spent=$14.44
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 11/43 t205 reward=1 nc=1/1 cumSR=0.82 win10=0.80 mem=3 spent=$14.56
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 12/43 t206 reward=1 nc=1/1 cumSR=0.83 win10=0.80 mem=3 spent=$14.78
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 13/43 t207 reward=0 nc=0/1 cumSR=0.77 win10=0.70 mem=4 spent=$14.93
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 14/43 t259 reward=1 nc=1/1 cumSR=0.79 win10=0.70 mem=4 spent=$15.10
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 15/43 t293 reward=1 nc=1/1 cumSR=0.80 win10=0.80 mem=4 spent=$15.31
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 16/43 t294 reward=1 nc=1/1 cumSR=0.81 win10=0.90 mem=4 spent=$15.51
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 17/43 t295 reward=1 nc=1/1 cumSR=0.82 win10=0.90 mem=4 spent=$15.73
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 18/43 t296 reward=0 nc=0/1 cumSR=0.78 win10=0.80 mem=6 spent=$15.99
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 19/43 t297 reward=0 nc=0/1 cumSR=0.74 win10=0.70 mem=8 spent=$16.25
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 20/43 t303 reward=1 nc=1/1 cumSR=0.75 win10=0.70 mem=8 spent=$16.71
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 21/43 t304 reward=1 nc=1/1 cumSR=0.76 win10=0.70 mem=8 spent=$17.07
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 22/43 t305 reward=1 nc=1/1 cumSR=0.77 win10=0.70 mem=8 spent=$18.08
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 23/43 t306 reward=0 nc=0/1 cumSR=0.74 win10=0.70 mem=10 spent=$22.49
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 24/43 t307 reward=0 nc=0/1 cumSR=0.71 win10=0.60 mem=12 spent=$25.69
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 25/43 t308 reward=1 nc=1/1 cumSR=0.72 win10=0.60 mem=12 spent=$25.97
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+An error occurred while extracting the dom and axtree. Retrying (4/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (3/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (2/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (1/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+Cannot mark a child frame without a bid. Skipping frame.
+AXTree merging: extracted AXTree does not contain frameId '4AEF0A0B2D47AF0539D2C9B4C1FC332E', skipping
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 26/43 t309 reward=0 nc=0/1 cumSR=0.69 win10=0.50 mem=13 spent=$26.08
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 27/43 t310 reward=1 nc=1/1 cumSR=0.70 win10=0.50 mem=13 spent=$26.62
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 28/43 t311 reward=1 nc=1/1 cumSR=0.71 win10=0.60 mem=13 spent=$26.97
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 29/43 t312 reward=1 nc=1/1 cumSR=0.72 win10=0.70 mem=13 spent=$27.31
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 30/43 t314 reward=1 nc=1/1 cumSR=0.73 win10=0.70 mem=13 spent=$27.62
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 31/43 t315 reward=1 nc=1/1 cumSR=0.74 win10=0.70 mem=13 spent=$27.97
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 32/43 t316 reward=1 nc=1/1 cumSR=0.75 win10=0.70 mem=13 spent=$28.44
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 33/43 t317 reward=0 nc=0/1 cumSR=0.73 win10=0.70 mem=15 spent=$28.81
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 34/43 t318 reward=1 nc=1/1 cumSR=0.74 win10=0.80 mem=15 spent=$29.10
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 35/43 t349 reward=0 nc=0/1 cumSR=0.71 win10=0.70 mem=16 spent=$29.22
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 36/43 t350 reward=1 nc=1/1 cumSR=0.72 win10=0.80 mem=16 spent=$29.34
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 37/43 t783 reward=1 nc=1/1 cumSR=0.73 win10=0.80 mem=16 spent=$29.40
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 38/43 t784 reward=1 nc=1/1 cumSR=0.74 win10=0.80 mem=16 spent=$30.42
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+An error occurred while extracting the dom and axtree. Retrying (4/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (3/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (2/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+An error occurred while extracting the dom and axtree. Retrying (1/5 tries left).
+MarkingError('Cannot mark a child frame without a bid.')
+Cannot mark a child frame without a bid. Skipping frame.
+AXTree merging: extracted AXTree does not contain frameId '62346CD48A2FEFC897A9355E5926905F', skipping
+[info] [withmem] 39/43 t785 reward=0 nc=0/1 cumSR=0.72 win10=0.70 mem=18 spent=$32.20
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 40/43 t786 reward=0 nc=0/1 cumSR=0.70 win10=0.60 mem=20 spent=$33.20
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 41/43 t787 reward=1 nc=1/1 cumSR=0.71 win10=0.60 mem=20 spent=$33.50
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 42/43 t788 reward=1 nc=1/1 cumSR=0.71 win10=0.60 mem=20 spent=$33.74
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [withmem] 43/43 t789 reward=1 nc=1/1 cumSR=0.72 win10=0.70 mem=20 spent=$33.81
+[info] DONE {'n_tasks': 43, 'site': 'gitlab', 'arms': ['nomem', 'withmem'], 'nomem': {'n': 43, 'reward_sr': 0.7907, 'layer1_writes': 0, 'layer2_writes': 0}, 'withmem': {'n': 43, 'reward_sr': 0.7209, 'layer1_writes': 20, 'layer2_writes': 0}, 'learned_memory': {'n_reasoning': 20, 'n_fact': 0}, 'spent_usd': 33.8072}
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/litellm/llms/custom_httpx/async_client_cleanup.py:96: RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback

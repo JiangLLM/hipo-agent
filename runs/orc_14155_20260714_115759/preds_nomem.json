@@ -1,0 +1,7 @@
+{
+  "django__django-14155": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "django__django-14155",
+    "model_patch": "diff --git a/django/urls/resolvers.py b/django/urls/resolvers.py\nindex 9b00e24509..434da59037 100644\n--- a/django/urls/resolvers.py\n+++ b/django/urls/resolvers.py\n@@ -45,12 +45,17 @@ class ResolverMatch:\n         self.namespaces = [x for x in namespaces if x] if namespaces else []\n         self.namespace = ':'.join(self.namespaces)\n \n-        if not hasattr(func, '__name__'):\n+        # Unwrap functools.partial objects to get the underlying function\n+        callback = func\n+        if isinstance(callback, functools.partial):\n+            callback = callback.func\n+\n+        if not hasattr(callback, '__name__'):\n             # A class-based view\n-            self._func_path = func.__class__.__module__ + '.' + func.__class__.__name__\n+            self._func_path = callback.__class__.__module__ + '.' + callback.__class__.__name__\n         else:\n             # A function-based view\n-            self._func_path = func.__module__ + '.' + func.__name__\n+            self._func_path = callback.__module__ + '.' + callback.__name__\n \n         view_path = url_name or self._func_path\n         self.view_name = ':'.join(self.namespaces + [view_path])\n"
+  }
+}

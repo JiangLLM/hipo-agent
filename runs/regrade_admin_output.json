@@ -1,0 +1,205 @@
+[
+ {
+  "i": 0,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "exact_match requires \"Yoga ball\", but the agent answer is \"Dash Digital Watch, Quest Lumaflex™ Band\" — entirely different product entities, no mention of Yoga ball. Wrong entity, missing required value."
+ },
+ {
+  "i": 1,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "exact_match requires the answer to contain \"Yoga ball\". The agent answered \"Quest Lumaflex™ Band, Dash Digital Watch\", which are entirely different products and do not include \"Yoga ball\". Wrong entity, missing required value."
+ },
+ {
+  "i": 2,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "Gold exact_match is the product TYPE \"Duffle\". The agent answer instead lists three specific product names (\"Impulse Duffle, Overnight Duffle, Hawkeye Yoga Short-32-Blue\"), answering a different question (top individual products, not top product type). Although \"Duffle\" appears as a substring, the answer is semantically different and even includes a non-Duffle item (Hawkeye Yoga Short), so it does not convey the same factual content as the gold reference."
+ },
+ {
+  "i": 3,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "Gold requires exact_match \"Duffle\" as the single top-1 best-selling product type. The agent answer is a list of three specific product names (\"Overnight Duffle, Hawkeye Yoga Short-32-Blue, Impulse Duffle\") rather than identifying the single product type \"Duffle\". This is semantically different: it presents multiple distinct products, one of which is not even a Duffle, instead of naming \"Duffle\" as the top-1 answer. INCORRECT."
+ },
+ {
+  "i": 4,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "must_include requires all 5 items. The answer contains \"Sprite Yoga Strap 6 foot\", \"Overnight Duffle\", \"Ida Workout Parachute Pant-29-Purple\", and \"Sprite Stasis Ball 65 cm\", but is MISSING \"Hawkeye Yoga Short-32-Blue\" (the answer instead lists \"Impulse Duffle\", which is not in the gold set). A required item is absent, so INCORRECT."
+ },
+ {
+  "i": 5,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "must_include requires all three customers (Adam Garcia, Michael Nguyen, Sarah Miller). The answer lists only \"Sarah Miller, Michael Nguyen\" and is missing Adam Garcia, so a required item is absent."
+ },
+ {
+  "i": 6,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "must_include requires all three customers (Adam Garcia, Michael Nguyen, Sarah Miller). The answer 'Grace Nguyen' matches none of them (wrong entity) and is missing every required item."
+ },
+ {
+  "i": 7,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "The gold must_include list has 5 customers: Lisa Kim, Lisa Green, Julia Williams, Brian Smith, and Alexander Thomas. The agent answer lists only 4 (Lisa Kim, Brian Smith, Julia Williams, Lisa Green) and is missing Alexander Thomas. Any missing required item makes the answer INCORRECT."
+ },
+ {
+  "i": 8,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "must_include requires all five customers: Lisa Kim, Lisa Green, Julia Williams, Brian Smith, Alexander Thomas. The answer lists only Lisa Kim, Brian Smith, and Lisa Green — missing Julia Williams and Alexander Thomas. Missing required items = INCORRECT."
+ },
+ {
+  "i": 9,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "The gold must_include requires \"Jane Doe\". The agent answer is \"Jason Miller, Jennifer White\", which does not contain Jane Doe — it names entirely different (and wrong) customers. Required item missing, so INCORRECT."
+ },
+ {
+  "i": 10,
+  "corrected": true,
+  "graded_correct": true,
+  "refuted": false,
+  "reason": "exact_match 'Hannah Lim' is present verbatim in the answer 'Hannah Lim, customer'; the trailing ', customer' is extra prose that is ignored per formatting rules."
+ },
+ {
+  "i": 11,
+  "corrected": true,
+  "graded_correct": true,
+  "refuted": false,
+  "reason": "exact_match requires \"Hannah Lim\"; the answer \"Hannah Lim, customer\" contains this value exactly. The trailing \", customer\" is a descriptive label/prose, which is ignored per the formatting rules. Match confirmed."
+ },
+ {
+  "i": 12,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "The agent answer is empty (''), so none of the required must_include customer names (Alexander, Carma, Dominic, Merrie, Monroe, Scotty, Shaunte, Teofila, Valorie) are present. Empty answer is INCORRECT."
+ },
+ {
+  "i": 13,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "must_include requires Hollister, Joust, and Antonia. The answer \"hollister, nike\" contains Hollister but is missing both Joust and Antonia (and instead lists Nike, which is not a required item). Missing required items means INCORRECT."
+ },
+ {
+  "i": 14,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "must_include requires Hollister, Joust, and Antonia. The answer \"hollister, nike\" contains only Hollister; Joust and Antonia are both missing, and \"nike\" is an extraneous/incorrect brand. Missing required items makes this INCORRECT."
+ },
+ {
+  "i": 15,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "Gold must_include requires 25; agent answered 19. Different number, so INCORRECT."
+ },
+ {
+  "i": 16,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "The agent answer is empty (''), but the gold reference requires exact_match 'Sinbad Fitness Tank'. An empty answer contains none of the required content, so it is INCORRECT."
+ },
+ {
+  "i": 17,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "Gold exact_match requires \"Sinbad Fitness Tank\" but the agent answer is empty (''), so the required value is missing. Empty answer = INCORRECT."
+ },
+ {
+  "i": 18,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "The gold reference requires must_include items ['Eos', 'Minerva'], but the agent answer is empty (''). No required items are present, so the answer is INCORRECT."
+ },
+ {
+  "i": 19,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "Gold must_include requires '182.4', but the agent answer is '$0.00'. The required value is absent and the number is different, so the answer is incorrect."
+ },
+ {
+  "i": 20,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "Gold requires must_include ['182.4'], but the agent answer is '$0.00'. The required value 182.4 is not present; the answer is a different (zero) number. INCORRECT."
+ },
+ {
+  "i": 21,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "Gold must_include requires '555.2' (total of last 5 completed orders). Agent answered '$452.00', which is a different number and does not contain 555.2. Wrong value."
+ },
+ {
+  "i": 22,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "Gold must_include is 555.2, but the agent answer is $0.00. The required value 555.2 is not present; the answer is a different (zero) number."
+ },
+ {
+  "i": 23,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "Gold must_include is 885.4 (total payment of last 5 pending orders). Agent answered $0.00, which is a different number and misses the required value 885.4."
+ },
+ {
+  "i": 24,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "The gold reference requires the value 194.25 (must_include: ['194.25']), representing the payment difference. The agent answer is '$0.00', which is a completely different number and does not contain 194.25. Missing required item."
+ },
+ {
+  "i": 25,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "Gold requires must_include '778.2'. Agent answer is '$0.00', which does not contain 778.2 and is semantically a different (zero) value. Missing required item."
+ },
+ {
+  "i": 26,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "The agent answer is empty (''), but the gold reference requires both must_include items 'Veronica Costello' and 'roni_cost@example.com'. Empty answer contains neither, so it is INCORRECT."
+ },
+ {
+  "i": 27,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "exact_match requires 'Teofila' but the agent answered 'Emerald', a different customer name entirely. Wrong entity."
+ },
+ {
+  "i": 28,
+  "corrected": false,
+  "graded_correct": false,
+  "refuted": false,
+  "reason": "The gold reference requires exact_match 'Samantha Jones', but the agent answer is an empty string, so the required value is missing. Empty answer is INCORRECT."
+ }
+]

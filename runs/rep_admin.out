@@ -1,0 +1,18 @@
+== [replicate:shopping_admin] nomem vs frozenmem  rollouts=5  bank=runs/wa_shopping_admin_20260719_182647_20260719_182649/memory.json  -> runs/wa_rep_shopping_admin_20260720_152924
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+[info] run_id=wa_rep_shopping_admin_20260720_152924_20260720_152927 site=shopping_admin tasks=88 arms=['nomem', 'frozenmem']
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+[info] [nomem] 1/88 t0 reward=1 nc=5/5 cumSR=1.00 win10=1.00 mem=0 spent=$0.68
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+Overriding the task's timeout parameter (10000 => 10000). This might change the task's behaviour and difficulty.
+scripts/run_wa_replicate.sh: line 44: 35576 Terminated: 15          caffeinate -i .venv-wa/bin/python -m hippo.wa.run --llm.model "$MODEL" --llm.embed_model local/BAAI/bge-small-en-v1.5 --wa.base_url "$BASE" --wa.site "$SITE" --wa.limit 0 --wa.readonly_only true --wa.arms nomem,frozenmem --wa.memory_in "$BANK" --wa.eval_rollouts "$ROLLOUTS" --memory.retrieve_k_reasoning 1 --wa.max_steps 30 --wa.step_timeout 90 --wa.reset_timeout 120 --run.budget_usd 500 --run.name "$RUN" 2>&1
+     35577                       | tee "$LOG"

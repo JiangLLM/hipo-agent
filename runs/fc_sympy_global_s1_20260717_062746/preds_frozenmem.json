@@ -1,0 +1,177 @@
+{
+  "sympy__sympy-18211": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-18211",
+    "model_patch": "diff --git a/sympy/core/relational.py b/sympy/core/relational.py\nindex f581bfa3c4..e304313e0c 100644\n--- a/sympy/core/relational.py\n+++ b/sympy/core/relational.py\n@@ -389,10 +389,16 @@ def __nonzero__(self):\n     def _eval_as_set(self):\n         # self is univariate and periodicity(self, x) in (0, None)\n         from sympy.solvers.inequalities import solve_univariate_inequality\n+        from sympy.solvers.solveset import solveset\n         syms = self.free_symbols\n         assert len(syms) == 1\n         x = syms.pop()\n-        return solve_univariate_inequality(self, x, relational=False)\n+        try:\n+            return solve_univariate_inequality(self, x, relational=False)\n+        except NotImplementedError:\n+            # If solve_univariate_inequality can't solve it, try solveset\n+            # which may return a ConditionSet\n+            return solveset(self, x, S.Reals)\n \n     @property\n     def binary_symbols(self):\n"
+  },
+  "sympy__sympy-18763": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-18763",
+    "model_patch": ""
+  },
+  "sympy__sympy-18698": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-18698",
+    "model_patch": "diff --git a/sympy/polys/polytools.py b/sympy/polys/polytools.py\nindex c9e77a901f..8539f9ae59 100644\n--- a/sympy/polys/polytools.py\n+++ b/sympy/polys/polytools.py\n@@ -5895,6 +5895,46 @@ def _factors_product(factors):\n     return Mul(*[f.as_expr()**k for f, k in factors])\n \n \n+\n+def _merge_factors(factors):\n+    \"\"\"Merge factors with the same multiplicity.\n+    \n+    Parameters\n+    ==========\n+    factors : list of tuples\n+        List of (factor, multiplicity) pairs\n+    \n+    Returns\n+    =======\n+    list\n+        List of (factor, multiplicity) pairs with factors merged by multiplicity\n+    \"\"\"\n+    if not factors:\n+        return factors\n+    \n+    from collections import defaultdict\n+    \n+    # Group factors by multiplicity\n+    by_mult = defaultdict(list)\n+    for f, k in factors:\n+        by_mult[k].append(f)\n+    \n+    # Merge factors with the same multiplicity\n+    merged = []\n+    for k in sorted(by_mult.keys()):\n+        polys = by_mult[k]\n+        if len(polys) == 1:\n+            merged.append((polys[0], k))\n+        else:\n+            # Multiply all polys together\n+            combined = polys[0]\n+            for p in polys[1:]:\n+                combined = combined * p\n+            merged.append((combined, k))\n+    \n+    return merged\n+\n+\n def _symbolic_factor_list(expr, opt, method):\n     \"\"\"Helper function for :func:`_symbolic_factor`. \"\"\"\n     coeff, factors = S.One, []\n@@ -5996,7 +6036,9 @@ def _generic_factor_list(expr, gens, args, method):\n                     factors[i] = (f, k)\n \n         fp = _sorted_factors(fp, method)\n+        fp = _merge_factors(fp)\n         fq = _sorted_factors(fq, method)\n+        fq = _merge_factors(fq)\n \n         if not opt.polys:\n             fp = [(f.as_expr(), k) for f, k in fp]\n"
+  },
+  "sympy__sympy-19040": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-19040",
+    "model_patch": ""
+  },
+  "sympy__sympy-19637": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-19637",
+    "model_patch": "diff --git a/sympy/core/sympify.py b/sympy/core/sympify.py\nindex a3f1ce2851..cc76b36915 100644\n--- a/sympy/core/sympify.py\n+++ b/sympy/core/sympify.py\n@@ -513,7 +513,9 @@ def kernS(s):\n             while kern in s:\n                 kern += choice(string.ascii_letters + string.digits)\n             s = s.replace(' ', kern)\n-        hit = kern in s\n+            hit = kern in s\n+        else:\n+            hit = False\n \n     for i in range(2):\n         try:\n"
+  },
+  "sympy__sympy-19346": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-19346",
+    "model_patch": "diff --git a/sympy/printing/repr.py b/sympy/printing/repr.py\nindex c936a692c0..23fd6201da 100644\n--- a/sympy/printing/repr.py\n+++ b/sympy/printing/repr.py\n@@ -250,6 +250,28 @@ def _print_tuple(self, expr):\n         else:\n             return \"(%s)\" % self.reprify(expr, \", \")\n \n+    def _print_set(self, expr):\n+        if len(expr) == 0:\n+            return \"set()\"\n+        # Sort elements by their string representation for consistent output\n+        items = sorted(expr, key=lambda x: str(x))\n+        return \"{%s}\" % self.reprify(items, \", \")\n+\n+    def _print_frozenset(self, expr):\n+        if len(expr) == 0:\n+            return \"frozenset()\"\n+        # Sort elements by their string representation for consistent output\n+        items = sorted(expr, key=lambda x: str(x))\n+        return \"frozenset({%s})\" % self.reprify(items, \", \")\n+\n+    def _print_dict(self, expr):\n+        if len(expr) == 0:\n+            return \"{}\"\n+        # Sort items by key string representation for consistent output\n+        items = sorted(expr.items(), key=lambda x: str(x[0]))\n+        item_strs = [\"%s: %s\" % (self._print(k), self._print(v)) for k, v in items]\n+        return \"{%s}\" % \", \".join(item_strs)\n+\n     def _print_WildFunction(self, expr):\n         return \"%s('%s')\" % (expr.__class__.__name__, expr.name)\n \n"
+  },
+  "sympy__sympy-19783": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-19783",
+    "model_patch": ""
+  },
+  "sympy__sympy-19954": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-19954",
+    "model_patch": "diff --git a/sympy/combinatorics/perm_groups.py b/sympy/combinatorics/perm_groups.py\nindex de94ddabb4..1ce3ee6689 100644\n--- a/sympy/combinatorics/perm_groups.py\n+++ b/sympy/combinatorics/perm_groups.py\n@@ -2198,15 +2198,15 @@ def _number_blocks(blocks):\n                 for i, r in enumerate(rep_blocks):\n                     if len(r) > len(rep) and rep.issubset(r):\n                         # i-th block system is not minimal\n-                        del num_blocks[i], blocks[i]\n-                        to_remove.append(rep_blocks[i])\n+                        to_remove.append(i)\n                     elif len(r) < len(rep) and r.issubset(rep):\n                         # the system being checked is not minimal\n                         minimal = False\n                         break\n                 # remove non-minimal representative blocks\n-                rep_blocks = [r for r in rep_blocks if r not in to_remove]\n-\n+                to_remove_indices = sorted(to_remove, reverse=True)\n+                for idx in to_remove_indices:\n+                    del rep_blocks[idx], num_blocks[idx], blocks[idx]\n                 if minimal and num_block not in num_blocks:\n                     blocks.append(block)\n                     num_blocks.append(num_block)\n"
+  },
+  "sympy__sympy-20154": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-20154",
+    "model_patch": "diff --git a/sympy/utilities/iterables.py b/sympy/utilities/iterables.py\nindex dd36dea304..bb8c47122e 100644\n--- a/sympy/utilities/iterables.py\n+++ b/sympy/utilities/iterables.py\n@@ -1738,19 +1738,9 @@ def partitions(n, m=None, k=None, size=False):\n     {2: 1, 4: 1}\n     {3: 2}\n \n-    Note that the _same_ dictionary object is returned each time.\n-    This is for speed:  generating each partition goes quickly,\n-    taking constant time, independent of n.\n-\n-    >>> [p for p in partitions(6, k=2)]\n-    [{1: 6}, {1: 6}, {1: 6}, {1: 6}]\n-\n-    If you want to build a list of the returned dictionaries then\n-    make a copy of them:\n-\n-    >>> [p.copy() for p in partitions(6, k=2)]  # doctest: +SKIP\n+    >>> [p for p in partitions(6, k=2)]  # doctest: +SKIP\n     [{2: 3}, {1: 2, 2: 2}, {1: 4, 2: 1}, {1: 6}]\n-    >>> [(M, p.copy()) for M, p in partitions(6, k=2, size=True)]  # doctest: +SKIP\n+    >>> [(M, p) for M, p in partitions(6, k=2, size=True)]  # doctest: +SKIP\n     [(3, {2: 3}), (4, {1: 2, 2: 2}), (5, {1: 4, 2: 1}), (6, {1: 6})]\n \n     References\n@@ -1802,9 +1792,9 @@ def partitions(n, m=None, k=None, size=False):\n         keys.append(r)\n     room = m - q - bool(r)\n     if size:\n-        yield sum(ms.values()), ms\n+        yield sum(ms.values()), ms.copy()\n     else:\n-        yield ms\n+        yield ms.copy()\n \n     while keys != [1]:\n         # Reuse any 1's.\n@@ -1842,9 +1832,9 @@ def partitions(n, m=None, k=None, size=False):\n             break\n         room -= need\n         if size:\n-            yield sum(ms.values()), ms\n+            yield sum(ms.values()), ms.copy()\n         else:\n-            yield ms\n+            yield ms.copy()\n \n \n def ordered_partitions(n, m=None, sort=True):\n"
+  },
+  "sympy__sympy-20590": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-20590",
+    "model_patch": "diff --git a/sympy/core/_print_helpers.py b/sympy/core/_print_helpers.py\nindex 96d7e72676..f7875b9eec 100644\n--- a/sympy/core/_print_helpers.py\n+++ b/sympy/core/_print_helpers.py\n@@ -17,6 +17,8 @@ class Printable:\n     This also adds support for LaTeX printing in jupyter notebooks.\n     \"\"\"\n \n+    __slots__ = ()\n+\n     # Note, we always use the default ordering (lex) in __str__ and __repr__,\n     # regardless of the global setting. See issue 5487.\n     def __str__(self):\n"
+  },
+  "sympy__sympy-19495": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-19495",
+    "model_patch": ""
+  },
+  "sympy__sympy-20438": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-20438",
+    "model_patch": ""
+  },
+  "sympy__sympy-20428": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-20428",
+    "model_patch": "diff --git a/sympy/polys/densearith.py b/sympy/polys/densearith.py\nindex bce08bb356..7f7a88b10a 100644\n--- a/sympy/polys/densearith.py\n+++ b/sympy/polys/densearith.py\n@@ -269,7 +269,7 @@ def dup_mul_ground(f, c, K):\n     if not c or not f:\n         return []\n     else:\n-        return [ cf * c for cf in f ]\n+        return dup_strip([ cf * c for cf in f ])\n \n \n def dmp_mul_ground(f, c, u, K):\n@@ -291,7 +291,7 @@ def dmp_mul_ground(f, c, u, K):\n \n     v = u - 1\n \n-    return [ dmp_mul_ground(cf, c, v, K) for cf in f ]\n+    return dmp_strip([ dmp_mul_ground(cf, c, v, K) for cf in f ], u)\n \n \n def dup_quo_ground(f, c, K):\n"
+  },
+  "sympy__sympy-20916": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-20916",
+    "model_patch": "diff --git a/sympy/printing/conventions.py b/sympy/printing/conventions.py\nindex 9a3be6bbe9..f41386f7fd 100644\n--- a/sympy/printing/conventions.py\n+++ b/sympy/printing/conventions.py\n@@ -7,7 +7,7 @@\n from collections.abc import Iterable\n from sympy import Derivative\n \n-_name_with_digits_p = re.compile(r'^([a-zA-Z]+)([0-9]+)$')\n+_name_with_digits_p = re.compile(r'^([a-zA-Z\\u0100-\\uffff]+)([0-9]+)$')\n \n \n def split_super_sub(text):\n"
+  },
+  "sympy__sympy-20801": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-20801",
+    "model_patch": ""
+  },
+  "sympy__sympy-21379": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-21379",
+    "model_patch": ""
+  },
+  "sympy__sympy-21596": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-21596",
+    "model_patch": ""
+  },
+  "sympy__sympy-21847": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-21847",
+    "model_patch": "diff --git a/sympy/polys/monomials.py b/sympy/polys/monomials.py\nindex 0e84403307..2ff762f563 100644\n--- a/sympy/polys/monomials.py\n+++ b/sympy/polys/monomials.py\n@@ -127,7 +127,7 @@ def itermonomials(variables, max_degrees, min_degrees=None):\n                 for variable in item:\n                     if variable != 1:\n                         powers[variable] += 1\n-                if max(powers.values()) >= min_degree:\n+                if min_degree <= sum(powers.values()) <= max_degree:\n                     monomials_list_comm.append(Mul(*item))\n             yield from set(monomials_list_comm)\n         else:\n@@ -139,7 +139,7 @@ def itermonomials(variables, max_degrees, min_degrees=None):\n                 for variable in item:\n                     if variable != 1:\n                         powers[variable] += 1\n-                if max(powers.values()) >= min_degree:\n+                if min_degree <= sum(powers.values()) <= max_degree:\n                     monomials_list_non_comm.append(Mul(*item))\n             yield from set(monomials_list_non_comm)\n     else:\n"
+  },
+  "sympy__sympy-21612": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-21612",
+    "model_patch": ""
+  },
+  "sympy__sympy-21930": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-21930",
+    "model_patch": "diff --git a/sympy/physics/secondquant.py b/sympy/physics/secondquant.py\nindex d19ee2fc63..c1ba9d9acc 100644\n--- a/sympy/physics/secondquant.py\n+++ b/sympy/physics/secondquant.py\n@@ -478,7 +478,7 @@ def __repr__(self):\n         return \"CreateBoson(%s)\" % self.state\n \n     def _latex(self, printer):\n-        return \"b^\\\\dagger_{%s}\" % self.state.name\n+        return \"{b^\\\\dagger_{%s}}\" % self.state.name\n \n B = AnnihilateBoson\n Bd = CreateBoson\n@@ -939,7 +939,7 @@ def __repr__(self):\n         return \"CreateFermion(%s)\" % self.state\n \n     def _latex(self, printer):\n-        return \"a^\\\\dagger_{%s}\" % self.state.name\n+        return \"{a^\\\\dagger_{%s}}\" % self.state.name\n \n Fd = CreateFermion\n F = AnnihilateFermion\ndiff --git a/sympy/physics/tests/test_secondquant.py b/sympy/physics/tests/test_secondquant.py\nindex 39662ee318..c4ad0d9d41 100644\n--- a/sympy/physics/tests/test_secondquant.py\n+++ b/sympy/physics/tests/test_secondquant.py\n@@ -94,7 +94,7 @@ def test_operator():\n def test_create():\n     i, j, n, m = symbols('i,j,n,m')\n     o = Bd(i)\n-    assert latex(o) == \"b^\\\\dagger_{i}\"\n+    assert latex(o) == \"{b^\\\\dagger_{i}}\"\n     assert isinstance(o, CreateBoson)\n     o = o.subs(i, j)\n     assert o.atoms(Symbol) == {j}\n@@ -258,7 +258,7 @@ def test_commutation():\n     c1 = Commutator(F(a), Fd(a))\n     assert Commutator.eval(c1, c1) == 0\n     c = Commutator(Fd(a)*F(i),Fd(b)*F(j))\n-    assert latex(c) == r'\\left[a^\\dagger_{a} a_{i},a^\\dagger_{b} a_{j}\\right]'\n+    assert latex(c) == r'\\left[{a^\\dagger_{a}} a_{i},{a^\\dagger_{b}} a_{j}\\right]'\n     assert repr(c) == 'Commutator(CreateFermion(a)*AnnihilateFermion(i),CreateFermion(b)*AnnihilateFermion(j))'\n     assert str(c) == '[CreateFermion(a)*AnnihilateFermion(i),CreateFermion(b)*AnnihilateFermion(j)]'\n \n@@ -288,7 +288,7 @@ def test_create_f():\n     assert Dagger(B(p)).apply_operator(q) == q*CreateBoson(p)\n     assert repr(Fd(p)) == 'CreateFermion(p)'\n     assert srepr(Fd(p)) == \"CreateFermion(Symbol('p'))\"\n-    assert latex(Fd(p)) == r'a^\\dagger_{p}'\n+    assert latex(Fd(p)) == r'{a^\\dagger_{p}}'\n \n \n def test_annihilate_f():\n@@ -426,7 +426,7 @@ def test_NO():\n     assert no.has_q_annihilators == -1\n     assert str(no) == ':CreateFermion(a)*CreateFermion(i):'\n     assert repr(no) == 'NO(CreateFermion(a)*CreateFermion(i))'\n-    assert latex(no) == r'\\left\\{a^\\dagger_{a} a^\\dagger_{i}\\right\\}'\n+    assert latex(no) == r'\\left\\{{a^\\dagger_{a}} {a^\\dagger_{i}}\\right\\}'\n     raises(NotImplementedError, lambda:  NO(Bd(p)*F(q)))\n \n \n"
+  },
+  "sympy__sympy-22714": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-22714",
+    "model_patch": "diff --git a/sympy/geometry/point.py b/sympy/geometry/point.py\nindex 73c20334d0..e8606524d2 100644\n--- a/sympy/geometry/point.py\n+++ b/sympy/geometry/point.py\n@@ -152,7 +152,7 @@ def __new__(cls, *args, **kwargs):\n                         'warn' or 'ignore'.'''))\n         if any(coords[dim:]):\n             raise ValueError('Nonzero coordinates cannot be removed.')\n-        if any(a.is_number and im(a) for a in coords):\n+        if any(a.is_number and not im(a).is_zero for a in coords):\n             raise ValueError('Imaginary coordinates are not permitted.')\n         if not all(isinstance(a, Expr) for a in coords):\n             raise TypeError('Coordinates must be valid SymPy expressions.')\n"
+  },
+  "sympy__sympy-22080": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-22080",
+    "model_patch": ""
+  },
+  "sympy__sympy-22456": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-22456",
+    "model_patch": ""
+  },
+  "sympy__sympy-23534": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-23534",
+    "model_patch": "diff --git a/sympy/core/symbol.py b/sympy/core/symbol.py\nindex f4a555c13f..2aca8bab27 100644\n--- a/sympy/core/symbol.py\n+++ b/sympy/core/symbol.py\n@@ -791,7 +791,7 @@ def literal(s):\n         return tuple(result)\n     else:\n         for name in names:\n-            result.append(symbols(name, **args))\n+            result.append(symbols(name, cls=cls, **args))\n \n         return type(names)(result)\n \n"
+  },
+  "sympy__sympy-22914": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-22914",
+    "model_patch": "diff --git a/sympy/printing/pycode.py b/sympy/printing/pycode.py\nindex 3a72ab606c..7d5ca243df 100644\n--- a/sympy/printing/pycode.py\n+++ b/sympy/printing/pycode.py\n@@ -470,6 +470,12 @@ def _print_Symbol(self, expr):\n     _print_fresnelc = CodePrinter._print_not_supported\n     _print_fresnels = CodePrinter._print_not_supported\n \n+    def _print_Min(self, expr):\n+        return \"min({})\".format(\", \".join(self._print(arg) for arg in expr.args))\n+\n+    def _print_Max(self, expr):\n+        return \"max({})\".format(\", \".join(self._print(arg) for arg in expr.args))\n+\n \n for k in PythonCodePrinter._kf:\n     setattr(PythonCodePrinter, '_print_%s' % k, _print_known_func)\n"
+  },
+  "sympy__sympy-23262": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-23262",
+    "model_patch": "diff --git a/sympy/utilities/lambdify.py b/sympy/utilities/lambdify.py\nindex da67263b19..093253a57e 100644\n--- a/sympy/utilities/lambdify.py\n+++ b/sympy/utilities/lambdify.py\n@@ -961,7 +961,11 @@ def _recursive_to_string(doprint, arg):\n             left, right = \"()\"\n         else:\n             raise NotImplementedError(\"unhandled type: %s, %s\" % (type(arg), arg))\n-        return left +', '.join(_recursive_to_string(doprint, e) for e in arg) + right\n+        # For single-element tuples, add trailing comma\n+        if isinstance(arg, tuple) and len(arg) == 1:\n+            return left + _recursive_to_string(doprint, arg[0]) + \",\" + right\n+        else:\n+            return left +', '.join(_recursive_to_string(doprint, e) for e in arg) + right\n     elif isinstance(arg, str):\n         return arg\n     else:\n"
+  },
+  "sympy__sympy-23824": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-23824",
+    "model_patch": "diff --git a/sympy/physics/hep/gamma_matrices.py b/sympy/physics/hep/gamma_matrices.py\nindex 23284e4a92..bf43facfb1 100644\n--- a/sympy/physics/hep/gamma_matrices.py\n+++ b/sympy/physics/hep/gamma_matrices.py\n@@ -694,7 +694,7 @@ def kahane_simplify(expression):\n \n     # If `first_dum_pos` is not zero, it means that there are trailing free gamma\n     # matrices in front of `expression`, so multiply by them:\n-    for i in range(0, first_dum_pos):\n+    for i in range(first_dum_pos - 1, -1, -1):\n         [ri.insert(0, free_pos[i]) for ri in resulting_indices]\n \n     resulting_expr = S.Zero\n"
+  },
+  "sympy__sympy-23950": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-23950",
+    "model_patch": "diff --git a/sympy/sets/contains.py b/sympy/sets/contains.py\nindex b2d4268d12..997a4d8e16 100644\n--- a/sympy/sets/contains.py\n+++ b/sympy/sets/contains.py\n@@ -45,4 +45,4 @@ def binary_symbols(self):\n             isinstance(i, (Eq, Ne))])\n \n     def as_set(self):\n-        raise NotImplementedError()\n+        return self.args[1]\ndiff --git a/sympy/sets/tests/test_contains.py b/sympy/sets/tests/test_contains.py\nindex 1973fed19c..8b675f385f 100644\n--- a/sympy/sets/tests/test_contains.py\n+++ b/sympy/sets/tests/test_contains.py\n@@ -41,10 +41,10 @@ def test_binary_symbols():\n def test_as_set():\n     x = Symbol('x')\n     y = Symbol('y')\n-    # Contains is a BooleanFunction whose value depends on an arg's\n-    # containment in a Set -- rewriting as a Set is not yet implemented\n-    raises(NotImplementedError, lambda:\n-           Contains(x, FiniteSet(y)).as_set())\n+    assert Contains(x, FiniteSet(y)).as_set() == FiniteSet(y)\n+    assert Contains(x, S.Integers).as_set() == S.Integers\n+    assert Contains(x, S.Reals).as_set() == S.Reals\n+\n \n def test_type_error():\n     # Pass in a parameter not of type \"set\"\n"
+  },
+  "sympy__sympy-23413": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-23413",
+    "model_patch": "diff --git a/sympy/matrices/tests/test_normalforms.py b/sympy/matrices/tests/test_normalforms.py\nindex 8e7dc0469d..0dbc484d6d 100644\n--- a/sympy/matrices/tests/test_normalforms.py\n+++ b/sympy/matrices/tests/test_normalforms.py\n@@ -77,5 +77,11 @@ def test_hermite_normal():\n     assert hermite_normal_form(m) == hnf\n \n     m = Matrix([[2, 7], [0, 0], [0, 0]])\n-    hnf = Matrix(3, 0, [])\n+    hnf = Matrix([[1], [0], [0]])\n     assert hermite_normal_form(m) == hnf\n+\n+\n+def test_issue_23410():\n+    A = Matrix([[1, 12], [0, 8], [0, 5]])\n+    H = Matrix([[1, 0], [0, 8], [0, 5]])\n+    assert hermite_normal_form(A) == H\ndiff --git a/sympy/polys/matrices/normalforms.py b/sympy/polys/matrices/normalforms.py\nindex 30f5534b08..e2c0546857 100644\n--- a/sympy/polys/matrices/normalforms.py\n+++ b/sympy/polys/matrices/normalforms.py\n@@ -205,16 +205,19 @@ def _hermite_normal_form(A):\n     if not A.domain.is_ZZ:\n         raise DMDomainError('Matrix must be over domain ZZ.')\n     # We work one row at a time, starting from the bottom row, and working our\n-    # way up. The total number of rows we will consider is min(m, n), where\n-    # A is an m x n matrix.\n+    # way up.\n     m, n = A.shape\n-    rows = min(m, n)\n     A = A.to_dense().rep.copy()\n     # Our goal is to put pivot entries in the rightmost columns.\n     # Invariant: Before processing each row, k should be the index of the\n     # leftmost column in which we have so far put a pivot.\n     k = n\n-    for i in range(m - 1, m - 1 - rows, -1):\n+    for i in range(m - 1, -1, -1):\n+        if k == 0:\n+            # This case can arise when n < m and we've already found n pivots.\n+            # We don't need to consider any more rows, because this is already\n+            # the maximum possible number of pivots.\n+            break\n         k -= 1\n         # k now points to the column in which we want to put a pivot.\n         # We want zeros in all entries to the left of the pivot column.\ndiff --git a/sympy/polys/matrices/tests/test_normalforms.py b/sympy/polys/matrices/tests/test_normalforms.py\nindex 1b6bdd0d6b..6a419dcae7 100644\n--- a/sympy/polys/matrices/tests/test_normalforms.py\n+++ b/sympy/polys/matrices/tests/test_normalforms.py\n@@ -62,7 +62,7 @@ def test_hermite_normal():\n     assert hermite_normal_form(m) == hnf\n \n     m = DM([[2, 7], [0, 0], [0, 0]], ZZ)\n-    hnf = DM([[], [], []], ZZ)\n+    hnf = DM([[1], [0], [0]], ZZ)\n     assert hermite_normal_form(m) == hnf\n \n     m = DM([[-2, 1], [0, 1]], ZZ)\n@@ -73,3 +73,9 @@ def test_hermite_normal():\n     raises(DMDomainError, lambda: hermite_normal_form(m))\n     raises(DMDomainError, lambda: _hermite_normal_form(m))\n     raises(DMDomainError, lambda: _hermite_normal_form_modulo_D(m, ZZ(1)))\n+\n+\n+def test_issue_23410():\n+    A = DM([[1, 12], [0, 8], [0, 5]], ZZ)\n+    H = DM([[1, 0], [0, 8], [0, 5]], ZZ)\n+    assert hermite_normal_form(A) == H\n"
+  },
+  "sympy__sympy-24213": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-24213",
+    "model_patch": "diff --git a/sympy/physics/units/unitsystem.py b/sympy/physics/units/unitsystem.py\nindex a436880c4b..5705c821c2 100644\n--- a/sympy/physics/units/unitsystem.py\n+++ b/sympy/physics/units/unitsystem.py\n@@ -175,7 +175,7 @@ def _collect_factor_and_dimension(self, expr):\n             for addend in expr.args[1:]:\n                 addend_factor, addend_dim = \\\n                     self._collect_factor_and_dimension(addend)\n-                if dim != addend_dim:\n+                if not self.get_dimension_system().equivalent_dims(dim, addend_dim):\n                     raise ValueError(\n                         'Dimension of \"{}\" is {}, '\n                         'but it should be {}'.format(\n"
+  },
+  "sympy__sympy-24539": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-24539",
+    "model_patch": "diff --git a/sympy/polys/rings.py b/sympy/polys/rings.py\nindex 12bd2fc920..f48260566c 100644\n--- a/sympy/polys/rings.py\n+++ b/sympy/polys/rings.py\n@@ -616,10 +616,10 @@ def set_ring(self, new_ring):\n             return new_ring.from_dict(self, self.ring.domain)\n \n     def as_expr(self, *symbols):\n-        if symbols and len(symbols) != self.ring.ngens:\n-            raise ValueError(\"not enough symbols, expected %s got %s\" % (self.ring.ngens, len(symbols)))\n-        else:\n+        if not symbols:\n             symbols = self.ring.symbols\n+        elif len(symbols) != self.ring.ngens:\n+            raise ValueError(\"not enough symbols, expected %s got %s\" % (self.ring.ngens, len(symbols)))\n \n         return expr_from_dict(self.as_expr_dict(), *symbols)\n \n"
+  },
+  "sympy__sympy-24443": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-24443",
+    "model_patch": "diff --git a/sympy/combinatorics/homomorphisms.py b/sympy/combinatorics/homomorphisms.py\nindex bb7bdf32ba..5ec1b9b468 100644\n--- a/sympy/combinatorics/homomorphisms.py\n+++ b/sympy/combinatorics/homomorphisms.py\n@@ -333,8 +333,13 @@ def _image(r):\n             # both indices\n             while i < len(r):\n                 power = r_arr[j][1]\n-                if isinstance(domain, PermutationGroup) and r[i] in gens:\n-                    s = domain.generators[gens.index(r[i])]\n+                if isinstance(domain, PermutationGroup):\n+                    if r[i] in gens:\n+                        s = domain.generators[gens.index(r[i])]\n+                    elif r[i]**-1 in gens:\n+                        s = domain.generators[gens.index(r[i]**-1)]\n+                    else:\n+                        s = r[i]\n                 else:\n                     s = r[i]\n                 if s in images:\n"
+  },
+  "sympy__sympy-24066": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-24066",
+    "model_patch": ""
+  },
+  "sympy__sympy-24661": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-24661",
+    "model_patch": "diff --git a/sympy/parsing/sympy_parser.py b/sympy/parsing/sympy_parser.py\nindex 52711d1324..d8d8cbd00d 100644\n--- a/sympy/parsing/sympy_parser.py\n+++ b/sympy/parsing/sympy_parser.py\n@@ -1186,6 +1186,73 @@ def visit_BinOp(self, node):\n             return new_node\n         return node\n \n+    def visit_Compare(self, node):\n+        \"\"\"Visit a Compare node and convert comparison operators to SymPy equivalents.\"\"\"\n+        # Comparison operators mapping\n+        comparison_operators = {\n+            ast.Lt: 'Lt',\n+            ast.Gt: 'Gt',\n+            ast.LtE: 'Le',\n+            ast.GtE: 'Ge',\n+            ast.Eq: 'Eq',\n+            ast.NotEq: 'Ne',\n+        }\n+        \n+        # For chained comparisons like 'a < b < c', we need to handle multiple operators\n+        # and create And(Lt(a, b), Lt(b, c), ...)\n+        \n+        if len(node.ops) == 1:\n+            # Single comparison: a < b\n+            op = node.ops[0]\n+            if type(op) in comparison_operators:\n+                sympy_class = comparison_operators[type(op)]\n+                left = self.visit(node.left)\n+                right = self.visit(node.comparators[0])\n+                \n+                new_node = ast.Call(\n+                    func=ast.Name(id=sympy_class, ctx=ast.Load()),\n+                    args=[left, right],\n+                    keywords=[ast.keyword(arg='evaluate', value=ast.NameConstant(value=False, ctx=ast.Load()))],\n+                    starargs=None,\n+                    kwargs=None\n+                )\n+                return new_node\n+        else:\n+            # Chained comparison: a < b < c becomes And(Lt(a, b), Lt(b, c))\n+            comparisons = []\n+            left = self.visit(node.left)\n+            \n+            for i, (op, right) in enumerate(zip(node.ops, node.comparators)):\n+                right = self.visit(right)\n+                \n+                if type(op) in comparison_operators:\n+                    sympy_class = comparison_operators[type(op)]\n+                    \n+                    comparison = ast.Call(\n+                        func=ast.Name(id=sympy_class, ctx=ast.Load()),\n+                        args=[left, right],\n+                        keywords=[ast.keyword(arg='evaluate', value=ast.NameConstant(value=False, ctx=ast.Load()))],\n+                        starargs=None,\n+                        kwargs=None\n+                    )\n+                    comparisons.append(comparison)\n+                    left = right  # For the next iteration\n+            \n+            if len(comparisons) == 1:\n+                return comparisons[0]\n+            else:\n+                # Create And node\n+                and_node = ast.Call(\n+                    func=ast.Name(id='And', ctx=ast.Load()),\n+                    args=comparisons,\n+                    keywords=[ast.keyword(arg='evaluate', value=ast.NameConstant(value=False, ctx=ast.Load()))],\n+                    starargs=None,\n+                    kwargs=None\n+                )\n+                return and_node\n+        \n+        return node\n+\n     def visit_Call(self, node):\n         new_node = self.generic_visit(node)\n         if isinstance(node.func, ast.Name) and node.func.id in self.functions:\n"
+  },
+  "sympy__sympy-24562": {
+    "model_name_or_path": "hippo-frozenmem",
+    "instance_id": "sympy__sympy-24562",
+    "model_patch": "diff --git a/sympy/core/numbers.py b/sympy/core/numbers.py\nindex 52f7ea45ad..2af30e479b 100644\n--- a/sympy/core/numbers.py\n+++ b/sympy/core/numbers.py\n@@ -1627,8 +1627,18 @@ def __new__(cls, p, q=None, gcd=None):\n \n         if not isinstance(p, SYMPY_INTS):\n             p = Rational(p)\n-            q *= p.q\n-            p = p.p\n+            # Ensure q is numeric (convert if needed) before using p.q\n+            if not isinstance(q, (SYMPY_INTS, Rational)):\n+                q = Rational(q)\n+            if isinstance(q, Rational):\n+                # Handle Rational q properly\n+                q_p, q_q = q.p, q.q\n+                q = q_p * p.q\n+                p = p.p * q_q\n+            else:\n+                # q is a plain int\n+                q *= p.q\n+                p = p.p\n         else:\n             p = int(p)\n \n"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "sphinx-doc__sphinx-9230": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9230",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-8721": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-8721",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9258": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9258",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9229": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9229",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9367": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9367",
+    "model_patch": "diff --git a/sphinx/pycode/ast.py b/sphinx/pycode/ast.py\nindex f541ec0a9..23da575bd 100644\n--- a/sphinx/pycode/ast.py\n+++ b/sphinx/pycode/ast.py\n@@ -213,10 +213,12 @@ class _UnparseVisitor(ast.NodeVisitor):\n         return \"%s %s\" % (self.visit(node.op), self.visit(node.operand))\n \n     def visit_Tuple(self, node: ast.Tuple) -> str:\n-        if node.elts:\n-            return \"(\" + \", \".join(self.visit(e) for e in node.elts) + \")\"\n-        else:\n+        if len(node.elts) == 0:\n             return \"()\"\n+        elif len(node.elts) == 1:\n+            return \"(%s,)\" % self.visit(node.elts[0])\n+        else:\n+            return \"(\" + \", \".join(self.visit(e) for e in node.elts) + \")\"\n \n     if sys.version_info < (3, 8):\n         # these ast nodes were deprecated in python 3.8\n"
+  },
+  "sphinx-doc__sphinx-9281": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9281",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9461": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9461",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9320": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9320",
+    "model_patch": "diff --git a/sphinx/cmd/quickstart.py b/sphinx/cmd/quickstart.py\nindex a40a21073..c6163a421 100644\n--- a/sphinx/cmd/quickstart.py\n+++ b/sphinx/cmd/quickstart.py\n@@ -95,6 +95,12 @@ def is_path(x: str) -> str:\n     return x\n \n \n+def allow_empty_or_path(x: str) -> str:\n+    if not x:\n+        return x\n+    return is_path(x)\n+\n+\n def allow_empty(x: str) -> str:\n     return x\n \n@@ -223,7 +229,7 @@ def ask_user(d: Dict) -> None:\n         print(__('sphinx-quickstart will not overwrite existing Sphinx projects.'))\n         print()\n         d['path'] = do_prompt(__('Please enter a new root path (or just Enter to exit)'),\n-                              '', is_path)\n+                              '', allow_empty_or_path)\n         if not d['path']:\n             sys.exit(1)\n \n"
+  },
+  "sphinx-doc__sphinx-9591": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9591",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9658": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9658",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9698": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9698",
+    "model_patch": "diff --git a/sphinx/domains/python.py b/sphinx/domains/python.py\nindex cd02eaad5..1a3bd60c7 100644\n--- a/sphinx/domains/python.py\n+++ b/sphinx/domains/python.py\n@@ -796,7 +796,7 @@ class PyMethod(PyObject):\n         if 'classmethod' in self.options:\n             return _('%s() (%s class method)') % (methname, clsname)\n         elif 'property' in self.options:\n-            return _('%s() (%s property)') % (methname, clsname)\n+            return _('%s (%s property)') % (methname, clsname)\n         elif 'staticmethod' in self.options:\n             return _('%s() (%s static method)') % (methname, clsname)\n         else:\n"
+  },
+  "sphinx-doc__sphinx-9673": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9673",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9602": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9602",
+    "model_patch": ""
+  },
+  "sphinx-doc__sphinx-9711": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sphinx-doc__sphinx-9711",
+    "model_patch": "diff --git a/sphinx/extension.py b/sphinx/extension.py\nindex 7ec6c8518..e7edc6bca 100644\n--- a/sphinx/extension.py\n+++ b/sphinx/extension.py\n@@ -10,6 +10,8 @@\n \n from typing import TYPE_CHECKING, Any, Dict\n \n+from packaging.version import InvalidVersion, Version\n+\n from sphinx.config import Config\n from sphinx.errors import VersionRequirementError\n from sphinx.locale import __\n@@ -51,7 +53,19 @@ def verify_needs_extensions(app: \"Sphinx\", config: Config) -> None:\n                               'but it is not loaded.'), extname)\n             continue\n \n-        if extension.version == 'unknown version' or reqversion > extension.version:\n+        if extension.version == 'unknown version':\n+            raise VersionRequirementError(__('This project needs the extension %s at least in '\n+                                             'version %s and therefore cannot be built with '\n+                                             'the loaded version (%s).') %\n+                                          (extname, reqversion, extension.version))\n+\n+        try:\n+            if Version(extension.version) < Version(reqversion):\n+                raise VersionRequirementError(__('This project needs the extension %s at least in '\n+                                                 'version %s and therefore cannot be built with '\n+                                                 'the loaded version (%s).') %\n+                                              (extname, reqversion, extension.version))\n+        except InvalidVersion:\n             raise VersionRequirementError(__('This project needs the extension %s at least in '\n                                              'version %s and therefore cannot be built with '\n                                              'the loaded version (%s).') %\n"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "n_tasks": 3,
+  "site": "shopping",
+  "arms": [
+    "nomem",
+    "withmem"
+  ],
+  "nomem": {
+    "n": 3,
+    "reward_sr": 0.6667,
+    "layer1_writes": 0,
+    "layer2_writes": 0
+  },
+  "withmem": {
+    "n": 3,
+    "reward_sr": 0.6667,
+    "layer1_writes": 8,
+    "layer2_writes": 1
+  },
+  "learned_memory": {
+    "n_reasoning": 9,
+    "n_fact": 0
+  },
+  "spent_usd": 8.887
+}

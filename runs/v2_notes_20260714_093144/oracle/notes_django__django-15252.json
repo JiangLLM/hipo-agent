@@ -1,0 +1,1 @@
+{"django/db/migrations/executor.py": [{"anchor": "Executor.migrate", "note": "The `migrate()` method unconditionally calls `recorder.ensure_schema()` which creates the migrations table regardless of db_router rules; it should only ensure the schema exists when there are actual migrations to apply, allowing routers to prevent table creation on non-default databases."}]}

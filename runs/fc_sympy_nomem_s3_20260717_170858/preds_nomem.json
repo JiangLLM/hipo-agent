@@ -1,0 +1,177 @@
+{
+  "sympy__sympy-18763": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-18763",
+    "model_patch": ""
+  },
+  "sympy__sympy-19040": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-19040",
+    "model_patch": ""
+  },
+  "sympy__sympy-18698": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-18698",
+    "model_patch": ""
+  },
+  "sympy__sympy-18211": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-18211",
+    "model_patch": ""
+  },
+  "sympy__sympy-19346": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-19346",
+    "model_patch": "diff --git a/sympy/printing/repr.py b/sympy/printing/repr.py\nindex c936a692c0..e871f6e418 100644\n--- a/sympy/printing/repr.py\n+++ b/sympy/printing/repr.py\n@@ -250,6 +250,26 @@ def _print_tuple(self, expr):\n         else:\n             return \"(%s)\" % self.reprify(expr, \", \")\n \n+    def _print_set(self, expr):\n+        if len(expr) == 0:\n+            return \"set()\"\n+        else:\n+            return \"{%s}\" % self.reprify(expr, \", \")\n+\n+    def _print_frozenset(self, expr):\n+        if len(expr) == 0:\n+            return \"frozenset()\"\n+        else:\n+            return \"frozenset({%s})\" % self.reprify(expr, \", \")\n+\n+    def _print_dict(self, expr):\n+        if len(expr) == 0:\n+            return \"{}\"\n+        else:\n+            items = [\"%s: %s\" % (self._print(k), self._print(v))\n+                     for k, v in expr.items()]\n+            return \"{%s}\" % \", \".join(items)\n+\n     def _print_WildFunction(self, expr):\n         return \"%s('%s')\" % (expr.__class__.__name__, expr.name)\n \n"
+  },
+  "sympy__sympy-19637": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-19637",
+    "model_patch": "diff --git a/sympy/core/sympify.py b/sympy/core/sympify.py\nindex a3f1ce2851..4266773dff 100644\n--- a/sympy/core/sympify.py\n+++ b/sympy/core/sympify.py\n@@ -513,7 +513,7 @@ def kernS(s):\n             while kern in s:\n                 kern += choice(string.ascii_letters + string.digits)\n             s = s.replace(' ', kern)\n-        hit = kern in s\n+            hit = kern in s\n \n     for i in range(2):\n         try:\n"
+  },
+  "sympy__sympy-19495": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-19495",
+    "model_patch": ""
+  },
+  "sympy__sympy-19783": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-19783",
+    "model_patch": "diff --git a/sympy/physics/quantum/dagger.py b/sympy/physics/quantum/dagger.py\nindex 17da3cfd2c..13d4373e60 100644\n--- a/sympy/physics/quantum/dagger.py\n+++ b/sympy/physics/quantum/dagger.py\n@@ -85,5 +85,19 @@ def __new__(cls, arg):\n             return obj\n         return Expr.__new__(cls, arg)\n \n+    def __mul__(self, other):\n+        \"\"\"Dagger(A) * B\"\"\"\n+        from sympy.physics.quantum.operator import IdentityOperator\n+        if isinstance(other, IdentityOperator):\n+            return self\n+        return Expr.__mul__(self, other)\n+\n+    def __rmul__(self, other):\n+        \"\"\"B * Dagger(A)\"\"\"\n+        from sympy.physics.quantum.operator import IdentityOperator\n+        if isinstance(other, IdentityOperator):\n+            return self\n+        return Expr.__rmul__(self, other)\n+\n adjoint.__name__ = \"Dagger\"\n adjoint._sympyrepr = lambda a, b: \"Dagger(%s)\" % b._print(a.args[0])\ndiff --git a/sympy/physics/quantum/operator.py b/sympy/physics/quantum/operator.py\nindex 306bfee64f..a8bd9b4337 100644\n--- a/sympy/physics/quantum/operator.py\n+++ b/sympy/physics/quantum/operator.py\n@@ -309,6 +309,9 @@ def __mul__(self, other):\n \n         if isinstance(other, Operator):\n             return other\n+        # Also handle Dagger objects: I * Dagger(A) = Dagger(A)\n+        if isinstance(other, Dagger):\n+            return other\n \n         return Mul(self, other)\n \n"
+  },
+  "sympy__sympy-19954": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-19954",
+    "model_patch": "diff --git a/sympy/combinatorics/perm_groups.py b/sympy/combinatorics/perm_groups.py\nindex de94ddabb4..bc8935ca57 100644\n--- a/sympy/combinatorics/perm_groups.py\n+++ b/sympy/combinatorics/perm_groups.py\n@@ -2194,18 +2194,19 @@ def _number_blocks(blocks):\n                 # check if the system is minimal with\n                 # respect to the already discovere ones\n                 minimal = True\n-                to_remove = []\n+                indices_to_remove = []\n                 for i, r in enumerate(rep_blocks):\n                     if len(r) > len(rep) and rep.issubset(r):\n                         # i-th block system is not minimal\n-                        del num_blocks[i], blocks[i]\n-                        to_remove.append(rep_blocks[i])\n+                        indices_to_remove.append(i)\n                     elif len(r) < len(rep) and r.issubset(rep):\n                         # the system being checked is not minimal\n                         minimal = False\n                         break\n-                # remove non-minimal representative blocks\n-                rep_blocks = [r for r in rep_blocks if r not in to_remove]\n+                # remove non-minimal representative blocks and their corresponding entries\n+                rep_blocks = [r for j, r in enumerate(rep_blocks) if j not in indices_to_remove]\n+                blocks = [b for j, b in enumerate(blocks) if j not in indices_to_remove]\n+                num_blocks = [nb for j, nb in enumerate(num_blocks) if j not in indices_to_remove]\n \n                 if minimal and num_block not in num_blocks:\n                     blocks.append(block)\n"
+  },
+  "sympy__sympy-20154": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-20154",
+    "model_patch": "diff --git a/sympy/utilities/iterables.py b/sympy/utilities/iterables.py\nindex dd36dea304..60dbc6a788 100644\n--- a/sympy/utilities/iterables.py\n+++ b/sympy/utilities/iterables.py\n@@ -1738,19 +1738,11 @@ def partitions(n, m=None, k=None, size=False):\n     {2: 1, 4: 1}\n     {3: 2}\n \n-    Note that the _same_ dictionary object is returned each time.\n-    This is for speed:  generating each partition goes quickly,\n-    taking constant time, independent of n.\n+    Each returned dictionary is independent:\n \n-    >>> [p for p in partitions(6, k=2)]\n-    [{1: 6}, {1: 6}, {1: 6}, {1: 6}]\n-\n-    If you want to build a list of the returned dictionaries then\n-    make a copy of them:\n-\n-    >>> [p.copy() for p in partitions(6, k=2)]  # doctest: +SKIP\n+    >>> [p for p in partitions(6, k=2)]  # doctest: +SKIP\n     [{2: 3}, {1: 2, 2: 2}, {1: 4, 2: 1}, {1: 6}]\n-    >>> [(M, p.copy()) for M, p in partitions(6, k=2, size=True)]  # doctest: +SKIP\n+    >>> [(M, p) for M, p in partitions(6, k=2, size=True)]  # doctest: +SKIP\n     [(3, {2: 3}), (4, {1: 2, 2: 2}), (5, {1: 4, 2: 1}), (6, {1: 6})]\n \n     References\n@@ -1802,9 +1794,9 @@ def partitions(n, m=None, k=None, size=False):\n         keys.append(r)\n     room = m - q - bool(r)\n     if size:\n-        yield sum(ms.values()), ms\n+        yield sum(ms.values()), ms.copy()\n     else:\n-        yield ms\n+        yield ms.copy()\n \n     while keys != [1]:\n         # Reuse any 1's.\n@@ -1842,9 +1834,9 @@ def partitions(n, m=None, k=None, size=False):\n             break\n         room -= need\n         if size:\n-            yield sum(ms.values()), ms\n+            yield sum(ms.values()), ms.copy()\n         else:\n-            yield ms\n+            yield ms.copy()\n \n \n def ordered_partitions(n, m=None, sort=True):\n"
+  },
+  "sympy__sympy-20590": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-20590",
+    "model_patch": "diff --git a/sympy/core/_print_helpers.py b/sympy/core/_print_helpers.py\nindex 96d7e72676..f7875b9eec 100644\n--- a/sympy/core/_print_helpers.py\n+++ b/sympy/core/_print_helpers.py\n@@ -17,6 +17,8 @@ class Printable:\n     This also adds support for LaTeX printing in jupyter notebooks.\n     \"\"\"\n \n+    __slots__ = ()\n+\n     # Note, we always use the default ordering (lex) in __str__ and __repr__,\n     # regardless of the global setting. See issue 5487.\n     def __str__(self):\n"
+  },
+  "sympy__sympy-20438": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-20438",
+    "model_patch": ""
+  },
+  "sympy__sympy-20428": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-20428",
+    "model_patch": ""
+  },
+  "sympy__sympy-20801": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-20801",
+    "model_patch": ""
+  },
+  "sympy__sympy-21379": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-21379",
+    "model_patch": ""
+  },
+  "sympy__sympy-20916": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-20916",
+    "model_patch": ""
+  },
+  "sympy__sympy-21596": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-21596",
+    "model_patch": "diff --git a/sympy/sets/handlers/intersection.py b/sympy/sets/handlers/intersection.py\nindex c54dc8f72a..27cf28bad6 100644\n--- a/sympy/sets/handlers/intersection.py\n+++ b/sympy/sets/handlers/intersection.py\n@@ -280,6 +280,7 @@ def intersection_sets(self, other): # noqa:F811\n         from sympy.core.function import expand_complex\n         from sympy.solvers.solvers import denoms, solve_linear\n         from sympy.core.relational import Eq\n+        from sympy.solvers.solveset import solveset\n         f = self.lamda.expr\n         n = self.lamda.variables[0]\n \n@@ -303,22 +304,17 @@ def intersection_sets(self, other): # noqa:F811\n         elif ifree != {n}:\n             return None\n         else:\n-            # univarite imaginary part in same variable\n-            x, xis = zip(*[solve_linear(i, 0) for i in Mul.make_args(im) if n in i.free_symbols])\n-            if x and all(i == n for i in x):\n-                base_set -= FiniteSet(xis)\n-            else:\n-                base_set -= ConditionSet(n, Eq(im, 0), S.Integers)\n+            # univariate imaginary part in same variable\n+            # Find values of n that make im == 0\n+            im_zero_set = solveset(Eq(im, 0), n)\n+            # Intersect with the base_set to get valid values\n+            base_set = base_set.intersect(im_zero_set)\n         # exclude values that make denominators 0\n         for i in denoms(f):\n             if i.has(n):\n-                sol = list(zip(*[solve_linear(i, 0) for i in Mul.make_args(im) if n in i.free_symbols]))\n-                if sol != []:\n-                    x, xis = sol\n-                    if x and all(i == n for i in x):\n-                        base_set -= FiniteSet(xis)\n-                else:\n-                    base_set -= ConditionSet(n, Eq(i, 0), S.Integers)\n+                denom_zero_set = solveset(Eq(i, 0), n)\n+                # Exclude values that make denominators 0\n+                base_set = base_set - denom_zero_set\n         return imageset(lam, base_set)\n \n     elif isinstance(other, Interval):\n"
+  },
+  "sympy__sympy-21847": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-21847",
+    "model_patch": "diff --git a/sympy/polys/monomials.py b/sympy/polys/monomials.py\nindex 0e84403307..a003e9cb32 100644\n--- a/sympy/polys/monomials.py\n+++ b/sympy/polys/monomials.py\n@@ -120,27 +120,33 @@ def itermonomials(variables, max_degrees, min_degrees=None):\n         variables = list(variables) + [S.One]\n         if all(variable.is_commutative for variable in variables):\n             monomials_list_comm = []\n-            for item in combinations_with_replacement(variables, max_degree):\n-                powers = dict()\n-                for variable in variables:\n-                    powers[variable] = 0\n-                for variable in item:\n-                    if variable != 1:\n-                        powers[variable] += 1\n-                if max(powers.values()) >= min_degree:\n-                    monomials_list_comm.append(Mul(*item))\n+            for d in range(min_degree, max_degree + 1):\n+                for item in combinations_with_replacement(variables, d):\n+                    powers = dict()\n+                    for variable in variables:\n+                        powers[variable] = 0\n+                    for variable in item:\n+                        if variable != 1:\n+                            powers[variable] += 1\n+                    # Total degree is the sum of all powers (excluding 1)\n+                    total_degree = sum(powers.values())\n+                    if min_degree <= total_degree <= max_degree:\n+                        monomials_list_comm.append(Mul(*item))\n             yield from set(monomials_list_comm)\n         else:\n             monomials_list_non_comm = []\n-            for item in product(variables, repeat=max_degree):\n-                powers = dict()\n-                for variable in variables:\n-                    powers[variable] = 0\n-                for variable in item:\n-                    if variable != 1:\n-                        powers[variable] += 1\n-                if max(powers.values()) >= min_degree:\n-                    monomials_list_non_comm.append(Mul(*item))\n+            for d in range(min_degree, max_degree + 1):\n+                for item in product(variables, repeat=d):\n+                    powers = dict()\n+                    for variable in variables:\n+                        powers[variable] = 0\n+                    for variable in item:\n+                        if variable != 1:\n+                            powers[variable] += 1\n+                    # Total degree is the sum of all powers (excluding 1)\n+                    total_degree = sum(powers.values())\n+                    if min_degree <= total_degree <= max_degree:\n+                        monomials_list_non_comm.append(Mul(*item))\n             yield from set(monomials_list_non_comm)\n     else:\n         if any(min_degrees[i] > max_degrees[i] for i in range(n)):\n"
+  },
+  "sympy__sympy-21612": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-21612",
+    "model_patch": ""
+  },
+  "sympy__sympy-21930": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-21930",
+    "model_patch": ""
+  },
+  "sympy__sympy-22080": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-22080",
+    "model_patch": ""
+  },
+  "sympy__sympy-22456": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-22456",
+    "model_patch": ""
+  },
+  "sympy__sympy-22714": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-22714",
+    "model_patch": ""
+  },
+  "sympy__sympy-22914": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-22914",
+    "model_patch": "diff --git a/sympy/printing/pycode.py b/sympy/printing/pycode.py\nindex 3a72ab606c..b4364113c6 100644\n--- a/sympy/printing/pycode.py\n+++ b/sympy/printing/pycode.py\n@@ -465,6 +465,12 @@ def _print_Symbol(self, expr):\n         else:\n             return name\n \n+    def _print_Min(self, expr):\n+        return \"min({})\".format(\", \".join(self._print(arg) for arg in expr.args))\n+\n+    def _print_Max(self, expr):\n+        return \"max({})\".format(\", \".join(self._print(arg) for arg in expr.args))\n+\n     _print_lowergamma = CodePrinter._print_not_supported\n     _print_uppergamma = CodePrinter._print_not_supported\n     _print_fresnelc = CodePrinter._print_not_supported\n"
+  },
+  "sympy__sympy-23262": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-23262",
+    "model_patch": "diff --git a/sympy/utilities/lambdify.py b/sympy/utilities/lambdify.py\nindex da67263b19..5d17bf7a68 100644\n--- a/sympy/utilities/lambdify.py\n+++ b/sympy/utilities/lambdify.py\n@@ -961,7 +961,12 @@ def _recursive_to_string(doprint, arg):\n             left, right = \"()\"\n         else:\n             raise NotImplementedError(\"unhandled type: %s, %s\" % (type(arg), arg))\n-        return left +', '.join(_recursive_to_string(doprint, e) for e in arg) + right\n+        \n+        # Handle single-element tuples: they need a trailing comma\n+        if isinstance(arg, tuple) and len(arg) == 1:\n+            return left + _recursive_to_string(doprint, arg[0]) + ',' + right\n+        else:\n+            return left +', '.join(_recursive_to_string(doprint, e) for e in arg) + right\n     elif isinstance(arg, str):\n         return arg\n     else:\n"
+  },
+  "sympy__sympy-23824": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-23824",
+    "model_patch": "diff --git a/sympy/physics/hep/gamma_matrices.py b/sympy/physics/hep/gamma_matrices.py\nindex 23284e4a92..bf43facfb1 100644\n--- a/sympy/physics/hep/gamma_matrices.py\n+++ b/sympy/physics/hep/gamma_matrices.py\n@@ -694,7 +694,7 @@ def kahane_simplify(expression):\n \n     # If `first_dum_pos` is not zero, it means that there are trailing free gamma\n     # matrices in front of `expression`, so multiply by them:\n-    for i in range(0, first_dum_pos):\n+    for i in range(first_dum_pos - 1, -1, -1):\n         [ri.insert(0, free_pos[i]) for ri in resulting_indices]\n \n     resulting_expr = S.Zero\n"
+  },
+  "sympy__sympy-23534": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-23534",
+    "model_patch": "diff --git a/sympy/core/symbol.py b/sympy/core/symbol.py\nindex f4a555c13f..2aca8bab27 100644\n--- a/sympy/core/symbol.py\n+++ b/sympy/core/symbol.py\n@@ -791,7 +791,7 @@ def literal(s):\n         return tuple(result)\n     else:\n         for name in names:\n-            result.append(symbols(name, **args))\n+            result.append(symbols(name, cls=cls, **args))\n \n         return type(names)(result)\n \n"
+  },
+  "sympy__sympy-23950": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-23950",
+    "model_patch": "diff --git a/sympy/sets/contains.py b/sympy/sets/contains.py\nindex b2d4268d12..c0403d20be 100644\n--- a/sympy/sets/contains.py\n+++ b/sympy/sets/contains.py\n@@ -45,4 +45,16 @@ def binary_symbols(self):\n             isinstance(i, (Eq, Ne))])\n \n     def as_set(self):\n-        raise NotImplementedError()\n+        \"\"\"\n+        Returns the set used in the membership test.\n+\n+        Examples\n+        ========\n+\n+        >>> from sympy import Symbol, Contains, Interval\n+        >>> x = Symbol('x')\n+        >>> c = Contains(x, Interval(0, 1))\n+        >>> c.as_set()\n+        [0, 1]\n+        \"\"\"\n+        return self.args[1]\n"
+  },
+  "sympy__sympy-23413": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-23413",
+    "model_patch": ""
+  },
+  "sympy__sympy-24213": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-24213",
+    "model_patch": "diff --git a/sympy/physics/units/unitsystem.py b/sympy/physics/units/unitsystem.py\nindex a436880c4b..5705c821c2 100644\n--- a/sympy/physics/units/unitsystem.py\n+++ b/sympy/physics/units/unitsystem.py\n@@ -175,7 +175,7 @@ def _collect_factor_and_dimension(self, expr):\n             for addend in expr.args[1:]:\n                 addend_factor, addend_dim = \\\n                     self._collect_factor_and_dimension(addend)\n-                if dim != addend_dim:\n+                if not self.get_dimension_system().equivalent_dims(dim, addend_dim):\n                     raise ValueError(\n                         'Dimension of \"{}\" is {}, '\n                         'but it should be {}'.format(\n"
+  },
+  "sympy__sympy-24066": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-24066",
+    "model_patch": ""
+  },
+  "sympy__sympy-24539": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-24539",
+    "model_patch": "diff --git a/sympy/polys/rings.py b/sympy/polys/rings.py\nindex 12bd2fc920..f48260566c 100644\n--- a/sympy/polys/rings.py\n+++ b/sympy/polys/rings.py\n@@ -616,10 +616,10 @@ def set_ring(self, new_ring):\n             return new_ring.from_dict(self, self.ring.domain)\n \n     def as_expr(self, *symbols):\n-        if symbols and len(symbols) != self.ring.ngens:\n-            raise ValueError(\"not enough symbols, expected %s got %s\" % (self.ring.ngens, len(symbols)))\n-        else:\n+        if not symbols:\n             symbols = self.ring.symbols\n+        elif len(symbols) != self.ring.ngens:\n+            raise ValueError(\"not enough symbols, expected %s got %s\" % (self.ring.ngens, len(symbols)))\n \n         return expr_from_dict(self.as_expr_dict(), *symbols)\n \n"
+  },
+  "sympy__sympy-24443": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-24443",
+    "model_patch": "diff --git a/sympy/combinatorics/homomorphisms.py b/sympy/combinatorics/homomorphisms.py\nindex bb7bdf32ba..5ec1b9b468 100644\n--- a/sympy/combinatorics/homomorphisms.py\n+++ b/sympy/combinatorics/homomorphisms.py\n@@ -333,8 +333,13 @@ def _image(r):\n             # both indices\n             while i < len(r):\n                 power = r_arr[j][1]\n-                if isinstance(domain, PermutationGroup) and r[i] in gens:\n-                    s = domain.generators[gens.index(r[i])]\n+                if isinstance(domain, PermutationGroup):\n+                    if r[i] in gens:\n+                        s = domain.generators[gens.index(r[i])]\n+                    elif r[i]**-1 in gens:\n+                        s = domain.generators[gens.index(r[i]**-1)]\n+                    else:\n+                        s = r[i]\n                 else:\n                     s = r[i]\n                 if s in images:\n"
+  },
+  "sympy__sympy-24562": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-24562",
+    "model_patch": "diff --git a/sympy/core/numbers.py b/sympy/core/numbers.py\nindex 52f7ea45ad..c957f375c7 100644\n--- a/sympy/core/numbers.py\n+++ b/sympy/core/numbers.py\n@@ -1625,9 +1625,10 @@ def __new__(cls, p, q=None, gcd=None):\n             q = 1\n             gcd = 1\n \n+        Q = 1\n         if not isinstance(p, SYMPY_INTS):\n             p = Rational(p)\n-            q *= p.q\n+            Q *= p.q\n             p = p.p\n         else:\n             p = int(p)\n@@ -1635,9 +1636,10 @@ def __new__(cls, p, q=None, gcd=None):\n         if not isinstance(q, SYMPY_INTS):\n             q = Rational(q)\n             p *= q.q\n-            q = q.p\n+            Q *= q.p\n         else:\n-            q = int(q)\n+            Q *= int(q)\n+        q = Q\n \n         # p and q are now ints\n         if q == 0:\n"
+  },
+  "sympy__sympy-24661": {
+    "model_name_or_path": "hippo-nomem",
+    "instance_id": "sympy__sympy-24661",
+    "model_patch": "diff --git a/sympy/parsing/sympy_parser.py b/sympy/parsing/sympy_parser.py\nindex 52711d1324..0df6569a30 100644\n--- a/sympy/parsing/sympy_parser.py\n+++ b/sympy/parsing/sympy_parser.py\n@@ -1192,6 +1192,78 @@ def visit_Call(self, node):\n             new_node.keywords.append(ast.keyword(arg='evaluate', value=ast.NameConstant(value=False, ctx=ast.Load())))\n         return new_node\n \n+    def visit_Compare(self, node):\n+        # Map Python comparison operators to SymPy comparison operators\n+        comp_ops = {\n+            ast.Lt: 'Lt',\n+            ast.Gt: 'Gt',\n+            ast.LtE: 'Le',\n+            ast.GtE: 'Ge',\n+            ast.Eq: 'Eq',\n+            ast.NotEq: 'Ne',\n+        }\n+        \n+        # Handle chained comparisons\n+        # For simple comparisons (one operator), directly convert to SymPy comparison\n+        # For chained comparisons, create an And of multiple comparisons\n+        if len(node.ops) == 1:\n+            # Simple comparison\n+            op_class = node.ops[0].__class__\n+            if op_class not in comp_ops:\n+                return node\n+            \n+            sympy_class = comp_ops[op_class]\n+            left = self.visit(node.left)\n+            right = self.visit(node.comparators[0])\n+            \n+            new_node = ast.Call(\n+                func=ast.Name(id=sympy_class, ctx=ast.Load()),\n+                args=[left, right],\n+                keywords=[ast.keyword(arg='evaluate', value=ast.NameConstant(value=False, ctx=ast.Load()))],\n+                starargs=None,\n+                kwargs=None\n+            )\n+            return new_node\n+        else:\n+            # Chained comparison: a < b < c becomes And(Lt(a, b), Lt(b, c))\n+            comparisons = []\n+            left = self.visit(node.left)\n+            \n+            for op, comparator in zip(node.ops, node.comparators):\n+                op_class = op.__class__\n+                if op_class not in comp_ops:\n+                    return node\n+                \n+                sympy_class = comp_ops[op_class]\n+                right = self.visit(comparator)\n+                \n+                new_comparison = ast.Call(\n+                    func=ast.Name(id=sympy_class, ctx=ast.Load()),\n+                    args=[left, right],\n+                    keywords=[ast.keyword(arg='evaluate', value=ast.NameConstant(value=False, ctx=ast.Load()))],\n+                    starargs=None,\n+                    kwargs=None\n+                )\n+                comparisons.append(new_comparison)\n+                left = right\n+            \n+            # Combine multiple comparisons with And\n+            if len(comparisons) == 1:\n+                return comparisons[0]\n+            else:\n+                # Create And(comp1, comp2, ...)\n+                result = comparisons[0]\n+                for comp in comparisons[1:]:\n+                    result = ast.Call(\n+                        func=ast.Name(id='And', ctx=ast.Load()),\n+                        args=[result, comp],\n+                        keywords=[ast.keyword(arg='evaluate', value=ast.NameConstant(value=False, ctx=ast.Load()))],\n+                        starargs=None,\n+                        kwargs=None\n+                    )\n+                return result\n+\n+\n \n _transformation = {  # items can be added but never re-ordered\n 0: lambda_notation,\n"
+  }
+}

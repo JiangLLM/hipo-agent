@@ -1,0 +1,24 @@
+/Users/yutongs/Projects/hipo-agent/.venv-wa/lib/python3.11/site-packages/beartype/_util/hint/pep/utilpeptest.py:345: BeartypeDecorHintPep585DeprecationWarning: PEP 484 type hint typing.Mapping[str, gymnasium.spaces.space.Space[typing.Any]] deprecated by PEP 585 scheduled for removal in the first Python version released after October 5th, 2025. To resolve this, import this hint from "beartype.typing" rather than "typing". See this discussion for further details and alternatives:
+    https://github.com/beartype/beartype#pep-585-deprecations
+  warn(
+[info] run_id=wa_fleet_reddit_all_20260810_200251_20260810_200304 site=reddit tasks=106 arms=['nomem', 'withmem']
+[info] [nomem] rollout isolation ON: 8 deployments ['http://10.44.12.29', 'http://10.44.12.12', 'http://10.44.12.27', 'http://10.44.12.38', 'http://10.44.12.41', 'http://10.44.12.44', 'http://10.44.12.48', 'http://10.44.12.58']
+[info] [nomem] resetting the fleet from pristine images (a few minutes)
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/yutongs/Projects/hipo-agent/src/hippo/wa/run.py", line 610, in <module>
+    main()
+  File "/Users/yutongs/Projects/hipo-agent/src/hippo/wa/run.py", line 606, in main
+    run(load_config(sys.argv[1:]))
+  File "/Users/yutongs/Projects/hipo-agent/src/hippo/wa/run.py", line 577, in run
+    summary["nomem"] = stream_arm(cfg, llm, brain, Memory(llm.embed, cfg), tasks,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/yutongs/Projects/hipo-agent/src/hippo/wa/run.py", line 269, in stream_arm
+    reset_site(cfg, logger, tag, required=True)
+  File "/Users/yutongs/Projects/hipo-agent/src/hippo/wa/run.py", line 99, in reset_site
+    raise RuntimeError(f"fleet reset failed, refusing to score mutating tasks on dirty "
+RuntimeError: fleet reset failed, refusing to score mutating tasks on dirty state:
+== resetting all sites on 8 boxes, in parallel
+== reset finished (8 boxes reported failure); logs /tmp/wa_reset_<ip>.log
+
