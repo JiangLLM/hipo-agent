@@ -25,8 +25,8 @@ for m, c, lb in (('bm25', ORANGE, 'BM25'), ('dense[bge-small]', BLUE, 'dense bge
 ours = [c for c in S['comparison'] if c['method'] == 'ours(as-run)'][0]['recall']; pool5 = S['recall_at_k']['dense[bge-small]']['5']
 ax.scatter([5], [pool5], s=60, color=BLUE, zorder=5, edgecolors='white'); ax.scatter([1], [ours], s=90, color=BLUE, marker='D', zorder=6, edgecolors='white')
 ax.annotate('', xy=(1.15, ours), xytext=(4.85, pool5), arrowprops=dict(arrowstyle='->', color=BLUE, lw=1.2))
-ax.text(1.0, 0.535, f'◆ ours: LLM picks 1 of the dense top-5\n{pool5:.2f} relevant in pool → {ours:.2f} chosen ({ours/pool5:.0%})', fontsize=7.5, color=INK, ha='left')
-ax.legend(fontsize=7.5, loc='lower right', bbox_to_anchor=(1.0, 0.0), ncol=2)
+ax.text(5.3, 0.535, f'◆ ours: LLM picks 1 of the dense top-5\n{pool5:.2f} relevant in pool → {ours:.2f} chosen ({ours/pool5:.0%})', fontsize=7.5, color=INK, ha='left')
+ax.legend(fontsize=7.5, loc='upper left', ncol=1)
 ax.set_xticks(ks); ax.set_xlim(0.7, 10.6); ax.set_ylim(0.5, 1.0); ax.set_xlabel('k (pool size handed to the selector)'); ax.set_ylabel('relevant lesson within top-k'); ax.grid(axis='x', visible=False)
 ax.set_title('Q2 · Pool size and the LLM step (376 tasks with a relevant lesson)', loc='left'); save(fig, 'R2_pool_size_llm_step')
 # R3: ablations of our read path (bars)
