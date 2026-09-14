@@ -64,7 +64,7 @@ def load_site(site, run):
         elif k == 'wa_write_l2' and e['item']['title'] in items:
             writes.append({'t': e['t'], 'task': e['task'], 'title': e['item']['title'], 'nc': e.get('nc'), 'n': e.get('n')})
         elif k == 'wa_retrieve' and e['tag'] == 'withmem':
-            ret[e['task_id']] = e.get('titles', [])
+            ret[e['task_id']] = {'titles': e.get('titles', []), 't': e['t']}
     for w in writes: w['tpl'] = tpl_of.get(w['task'], META[w['task']].get('intent_template_id'))
     tasks.sort(key=lambda e: e['t'])
     return items, tasks, writes, ret, nomem
@@ -86,7 +86,8 @@ def evaluate(site, run, embedder, taus=(0.55, 0.60, 0.65), online=None):
     rows = []
     for qi, e in enumerate(tasks):
         tid, tpl = e['task_id'], e['template_id']
-        cands = [w for w in writes if w['t'] < e['t']]
+        cut = ret[tid]['t'] if tid in ret and 't' in ret[tid] else e['t']   # the live retrieve moment, not wa_task (same-ms tie leaks the task's own L2)
+        cands = [w for w in writes if w['t'] < cut]
         if not cands:
             for m in methods: S[m]['no_cands'] += 1
             continue
@@ -103,7 +104,7 @@ def evaluate(site, run, embedder, taus=(0.55, 0.60, 0.65), online=None):
         for t in taus: sel[f'dense+thr{t}'] = cands[top]['title'] if cos[top] >= t else None
         ra = {i: r for r, i in enumerate(np.argsort(-bm))}; rb = {i: r for r, i in enumerate(np.argsort(-cos))}
         f = rrf(ra, rb); sel['hybrid@1'] = cands[max(f, key=f.get)]['title']
-        got = ret.get(tid, []); sel['asrun'] = got[0] if got else None
+        got = ret.get(tid, {}).get('titles', []); sel['asrun'] = got[0] if got else None
         sel['random@1'] = cands[int(rng.integers(len(cands)))]['title']
         # ranking diagnostics: is a relevant item inside the top-5 pool each ranker would hand to an LLM gate?
         if has_rel:

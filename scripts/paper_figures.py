@@ -45,31 +45,6 @@ ax.set_xticks(Ns); ax.set_xlabel('N parallel rollouts per task'); ax.set_ylabel(
 ax.set_title('Sensitivity to the number of parallel rollouts N', fontsize=9.5, loc='left'); ax.set_xlim(0.8, 11.5)
 save(fig, 'F2_N_sensitivity')
 
-# ---- F3: retrieval / selection methods (recall vs precision) ----
-R = json.load(open('runs/retrieval_eval_wa.json')); S = collections.defaultdict(collections.Counter)
-for r in R:
-    rel = set(r['rel'])
-    for m, s in r['sel'].items():
-        c = S[m]; c['tasks'] += 1
-        if r['has_rel']: c['with_rel'] += 1
-        else: c['without_rel'] += 1
-        if s is not None:
-            c['inj'] += 1; c['hit'] += int(s in rel)
-        elif not r['has_rel']: c['abstain_ok'] += 1
-labels = {'random@1': 'random', 'bm25@1': 'BM25', 'bm25full@1': 'BM25 (+content)', 'dense@1': 'dense (bge-small)', 'dense+thr0.55': 'dense, abstain <0.55', 'dense+thr0.6': 'dense, abstain <0.60', 'dense+thr0.65': 'dense, abstain <0.65', 'hybrid@1': 'hybrid (RRF)', 'asrun': 'ours: dense top-5 → LLM picks 1 or none'}
-fig, ax = plt.subplots(figsize=(5.4, 3.6))
-for m, c in S.items():
-    if m not in labels: continue
-    rec = c['hit']/c['with_rel']; prec = c['hit']/max(c['inj'],1); ours = m == 'asrun'; abst = 'thr' in m or ours
-    ax.scatter(rec, prec, s=70 if ours else 40, color=BLUE if ours else GRAY, marker='D' if abst else 'o', zorder=4, edgecolors='white', linewidths=1)
-    off = {'bm25@1': (0.035, 0.065), 'bm25full@1': (0.035, 0.115), 'hybrid@1': (0.035, 0.015), 'dense@1': (0.035, -0.035), 'dense+thr0.55': (-0.02, -0.035), 'dense+thr0.6': (-0.02, 0.03), 'dense+thr0.65': (-0.02, 0.03), 'random@1': (0.02, 0.0), 'asrun': (0.0, 0.05)}[m]
-    ha = 'right' if off[0] < 0 else ('center' if off[0] == 0 else 'left')
-    ax.annotate(labels[m], (rec, prec), xytext=(rec+off[0], prec+off[1]), fontsize=7, color=INK if ours else INK2, ha=ha, va='center', arrowprops=dict(arrowstyle='-', color=GRID, lw=0.6) if abs(off[1]) > 0.04 else None)
-ax.set_xlabel('recall@1 (picked a same-template lesson when one existed)'); ax.set_ylabel('precision (injected lesson was same-template)'); ax.set_xlim(0, 0.9); ax.set_ylim(0, 0.72)
-ax.text(0.02, 0.66, '◆ can abstain   ● always injects', fontsize=7.5, color=INK2)
-ax.set_title('Which retrieval picks the right experience (WebArena, 752 tasks)', fontsize=9.5, loc='left')
-save(fig, 'F3_retrieval_methods')
-
 # ---- F4: source-regime attribution (from PAPER_DIRECTION_REVIEW.md, 1258 paired tasks over 9 runs) ----
 reg = [('no lesson (control)', 508, 0.5, -0.5, 1.4), ('all failed', 313, 0.2, -2.7, 3.1), ('majority failed', 197, 2.7, -1.5, 6.9), ('split 50/50', 34, -2.9, -10.5, 4.7), ('majority right', 206, 5.7, 2.7, 8.8)]
 fig, ax = plt.subplots(figsize=(5.4, 2.8)); y = np.arange(len(reg))[::-1]
